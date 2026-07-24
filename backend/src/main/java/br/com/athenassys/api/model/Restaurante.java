@@ -1,13 +1,15 @@
 package br.com.athenassys.api.model;
 
+import br.com.athenassys.api.dto.DadosAtualizacaoRestaurante;
 import br.com.athenassys.api.dto.DadosCadastroRestaurante;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "")
+@Table(name = "restaurantes")
 @Entity(name = "Restaurante")
 
 @Getter
@@ -30,5 +32,17 @@ public class Restaurante {
         this.telefone = dados.telefone();
         this.cnpj = dados.cnpj();
         this.senha = dados.senha();
+    }
+
+    public void atualizarDados(@Valid DadosAtualizacaoRestaurante dados) {
+        if (dados.nome() != null) {
+            this.nome = dados.nome();
+        }
+        if (dados.email() != null) {
+            this.email = dados.email();
+        }
+        if (dados.telefone() != null) {
+            this.telefone = dados.telefone();
+        }
     }
 }

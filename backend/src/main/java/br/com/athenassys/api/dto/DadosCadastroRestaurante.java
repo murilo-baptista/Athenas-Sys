@@ -1,8 +1,10 @@
 package br.com.athenassys.api.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 public record DadosCadastroRestaurante(
 
@@ -10,15 +12,18 @@ public record DadosCadastroRestaurante(
         String nome,
 
         @NotBlank
+        @Column(unique = true)
         @Email
         String email,
 
         @NotBlank
-        @Pattern(regexp = "\\d{11}")
+        @Pattern(regexp = "\\d{10,11}", message = "O telefone deve ter 10 ou 11 digitos, apenas numeros")
         String telefone,
 
         @NotBlank
-        //@Pattern(regexp = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}") //XX.XXX.XXX/XXXX-XX
+        @Column(unique = true)
+        @CNPJ(message = "CNPJ inválido!")
+        //XX.XXX.XXX/XXXX-XX || XXXXXXXXXXXXXX
         String cnpj,
 
         @NotBlank
