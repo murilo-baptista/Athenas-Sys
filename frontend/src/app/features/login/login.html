@@ -1,201 +1,88 @@
-<section class="caixa-login">
-  <!-- 
-  caixa-login: Diz para a página ocupar 100% da altura da tela do celular ou computador do usuário.
-  Também aplica a cor de fundo bege marfim claro (grego) e ativa o alinhamento flexível.
-  -->
+<div class="login-page">
 
-  <div class="ornamento-superior">
-    <img
-      src="assets/imagens/ornamento-h-g.jpeg"
-      alt="Ornamento Grego"
-      class="imagem-ornamento">
-  </div>
+  <!-- Faixa decorativa superior -->
+  <div class="greek-border top"></div>
 
-  <!-- Templo -->
-  <div class="templo-esquerda">
+  <div class="login-content">
 
-    <img
-      src="assets/imagens/templo-grego.jpeg"
-      alt="Templo Grego"
-      class="imagem-templo">
-
-  </div>
-
-  <!-- Banner vermelho -->
-  <div class="painel-vermelho">
-    <img src="assets/imagens/banner-bordo.jpeg" alt="Banner-athenas" class="banner-athena">
-
-    <!-- Espaço para a Logo -->
-    <div class="logo-container">
-      <span class="logo-texto">LOGO</span>
-      <!-- Substituir para: <img src="assets/imagens/logo.png" alt="Logo" class="logo-imagem"> -->
+    <!-- Lado esquerdo: templo + banner Athenas -->
+    <div class="left-panel">
+      <div class="temple-bg">
+        <img src="assets/imagens/templo-grego.jpeg" alt="Templo grego" class="temple-img">
+      </div>
+      <div class="banner">
+        <img src="assets/imagens/banner-bordo.jpeg" alt="Athenas - Gestão inteligente para restaurantes" class="banner-img">
+        <div class="banner-content">
+          <div class="banner-logo-placeholder">logo<br>transparente</div>
+          <h2 class="banner-title">ATHENAS</h2>
+          <p class="banner-subtitle">Gestão inteligente<br>para restaurantes</p>
+        </div>
+      </div>
     </div>
-    <h1 class="titulo-marca">ATHENAS</h1>
-    <p class="subtitulo-marca">Gestão Inteligente para Restaurantes</p>
-  </div>
 
-  <!-- Lado Direito: Área clara que centraliza o formulário -->
-  <div class="area-formulario">
+    <!-- Lado direito: card de login -->
+    <div class="right-panel">
+      <div class="login-card">
 
-    <!-- Formulário (Card de Login com a cor marfim clarinha #fdfbf7 que você escolheu) -->
-    <div class="cartao-formulario">
+        <h1 class="card-title">BEM VINDO DE VOLTA!</h1>
+        <p class="card-subtitle">Faça login para acessar o sistema</p>
 
-      <!-- Ícone Superior -->
-      <div class="icone-login">
+        <img src="assets/imagens/divisor-g.jpeg" alt="" class="divider">
 
-        <img
-          src="assets/imagens/icone-templo.jpeg"
-          alt="Login">
+        <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
 
-      </div>
-
-      <!-- Título de instrução do formulário -->
-      <h2 class="titulo-formulario">Bem-vindo de volta!</h2>
-      <p class="descricao-formulario">Faça login para acessar o sistema.</p>
-
-      <div class="linha-separadora">
-
-        <img
-          src="assets/imagens/divisor-g.jpeg"
-          alt="Divisor">
-
-      </div>
-
-      <!-- Form real do Angular que envelopa os campos -->
-      <form class="formulario-operacional">
-        
-        <!-- Campo Usuário -->
-        <div class="grupo-campo">
-          <label class="rotulo-campo">USUÁRIO</label>
-          <div class="campo-com-icone">
-
-            <img
-              src="assets/imagens/icone-usuario.jpeg"
-              alt="Usuário"
-              class="icone-campo">
-
+          <label class="field-label" for="usuario">USUÁRIO</label>
+          <div class="input-wrapper">
+            <img src="assets/imagens/icone-usuario.jpeg" alt="" class="input-icon">
             <input
-              type="text"
-              [(ngModel)]="usuario"
+              id="usuario"
               name="usuario"
+              type="text"
               placeholder="Digite seu usuário"
+              [(ngModel)]="usuario"
               required
-              class="campo-entrada">
-
-                <!-- 
-                [(ngModel)]="usuario": Esta é uma regra do Angular extremamente importante! Ela diz que tudo o que for digitado ali dentro deve ser enviado instantaneamente para a variável usuario no nosso arquivo de lógica (login.ts).
-
-                required: Garante que o usuário não consiga clicar em entrar se o campo estiver vazio.
-                -->
+            >
           </div>
-        
-        </div>
 
-        <!-- Campo Senha -->
-        <div class="grupo-campo">
-          <label class="rotulo-campo">SENHA</label>
-          <div class="campo-com-icone">
-
-            <img
-              src="assets/imagens/icone-cadeado.jpeg"
-              alt="Senha"
-              class="icone-campo">
-
+          <label class="field-label" for="senha">SENHA</label>
+          <div class="input-wrapper">
+            <img src="assets/imagens/icone-cadeado.jpeg" alt="" class="input-icon">
             <input
-              type="password"
-              [(ngModel)]="senha"
+              id="senha"
               name="senha"
+              type="password"
               placeholder="Digite sua senha"
+              [(ngModel)]="senha"
               required
-              class="campo-entrada">
-
+            >
           </div>
-        </div>
 
-        <!-- Opções -->
-        <div class="opcoes-login">
+          <div class="form-row">
+            <label class="remember-me">
+              <input type="checkbox" name="lembrar" [(ngModel)]="lembrarMe">
+              Lembre-me
+            </label>
+            <a href="#" class="forgot-link" (click)="onForgotPassword($event)">Esqueceu sua senha ou usuário?</a>
+          </div>
 
-          <label class="lembrar-login">
+          <button type="submit" class="btn-entrar">ENTRAR</button>
 
-            <input type="checkbox">
-            
-            Lembrar-me
-          
-          </label>
+          <img src="assets/imagens/divisor-g.jpeg" alt="" class="divider small">
 
-          <a href="#" class="esqueceu-senha">Esqueceu sua senha ou usuário?</a>
+          <p class="first-access">Primeiro acesso?</p>
 
-        </div>
+          <button type="button" class="btn-cadastro" (click)="onRegister()">
+            <img src="assets/imagens/icone-usuario-plus.jpeg" alt="" class="btn-icon">
+            CADASTRE-SE
+          </button>
 
-        <!-- Botão de entrada -->
-        <button type="submit" class="botao-entrar">
-          ENTRAR
-        </button>
-
-        <p class="feedback-login" *ngIf="feedbackMensagem">
-          {{ feedbackMensagem }}
-        </p>
-
-      </form>
-
-       <!-- Linha -->
-      <div class="linha-separadora">
-
-        <img
-          src="assets/imagens/divisor-g.jpeg"
-          alt="Divisor">
-
+        </form>
       </div>
-
-
-          <!-- Cadastro -->
-
-      <div class="primeiro-acesso">
-
-        <p>
-
-          Primeiro acesso?
-
-        </p>
-
-        <button
-          type="button"
-          class="botao-cadastro">
-
-          <img
-            src="assets/imagens/icone-usuario-plus.jpeg"
-            alt="Cadastro"
-            class="icone-botao">
-
-          CADASTRE-SE
-
-        </button>
-
-      </div>
-
     </div>
 
   </div>
 
-  <!-- Rodapé -->
+  <!-- Faixa decorativa inferior -->
+  <div class="greek-border bottom"></div>
 
-  <div class="rodape-decorativo">
-
-    <img
-      src="assets/imagens/ornamento-h-p.jpeg"
-      alt="Ornamento"
-      class="ornamento-esquerdo">
-
-    <img
-      src="assets/imagens/prato.jpeg"
-      alt="Prato"
-      class="prato-centro">
-
-    <img
-      src="assets/imagens/ornamento-h-p.jpeg"
-      alt="Ornamento"
-      class="ornamento-direito">
-
-  </div>
-
-</section>
+</div>
