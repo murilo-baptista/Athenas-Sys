@@ -8,7 +8,6 @@ import br.com.athenassys.api.repository.RestauranteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +28,7 @@ public class RestauranteController {
 
     @GetMapping
     public Page<DadosListagemRestaurante> listar(Pageable paginacao) {
-        return repository.findAll(paginacao)
+        return repository.findAllByAtivoTrue(paginacao)
                 .map(DadosListagemRestaurante::new);
     }
 
@@ -38,5 +37,12 @@ public class RestauranteController {
     public void atualizar(@RequestBody @Valid DadosAtualizacaoRestaurante dados) {
         var restaurante = repository.getReferenceById(dados.id());
         restaurante.atualizarDados(dados);
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public void deletar(@PathVariable Long id) {
+        var restaurante = repository.getReferenceById(id);
+        restaurante.desativar();
     }
 }
