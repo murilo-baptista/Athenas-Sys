@@ -40,7 +40,7 @@ public class Restaurante {
         this.senha = dados.senha();
     }
 
-    public void atualizarDados(@Valid DadosAtualizacaoRestaurante dados) {
+    public void atualizarDados(DadosAtualizacaoRestaurante dados) {
         if (dados.nome() != null) {
             this.nome = dados.nome();
         }
