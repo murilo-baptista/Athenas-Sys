@@ -1,6 +1,9 @@
 package br.com.athenassys.api.controller;
 
-import br.com.athenassys.api.dto.*;
+import br.com.athenassys.api.dto.mesa.DadosAtualizacaoMesa;
+import br.com.athenassys.api.dto.mesa.DadosCadastroMesa;
+import br.com.athenassys.api.dto.mesa.DadosDetalhamentoMesa;
+import br.com.athenassys.api.dto.mesa.DadosListagemMesa;
 import br.com.athenassys.api.service.MesaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

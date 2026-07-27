@@ -1,9 +1,8 @@
 package br.com.athenassys.api.model;
 
-import br.com.athenassys.api.dto.DadosAtualizacaoRestaurante;
-import br.com.athenassys.api.dto.DadosCadastroRestaurante;
+import br.com.athenassys.api.dto.restaurante.DadosAtualizacaoRestaurante;
+import br.com.athenassys.api.dto.restaurante.DadosCadastroRestaurante;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

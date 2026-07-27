@@ -1,8 +1,8 @@
 package br.com.athenassys.api.service;
 
-import br.com.athenassys.api.dto.DadosAtualizacaoMesa;
-import br.com.athenassys.api.dto.DadosCadastroMesa;
-import br.com.athenassys.api.dto.DadosListagemMesa;
+import br.com.athenassys.api.dto.mesa.DadosAtualizacaoMesa;
+import br.com.athenassys.api.dto.mesa.DadosCadastroMesa;
+import br.com.athenassys.api.dto.mesa.DadosListagemMesa;
 import br.com.athenassys.api.model.Mesa;
 import br.com.athenassys.api.repository.MesaRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;

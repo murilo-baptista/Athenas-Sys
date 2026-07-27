@@ -1,7 +1,7 @@
 package br.com.athenassys.api.model;
 
-import br.com.athenassys.api.dto.DadosAtualizacaoMesa;
-import br.com.athenassys.api.dto.DadosCadastroMesa;
+import br.com.athenassys.api.dto.mesa.DadosAtualizacaoMesa;
+import br.com.athenassys.api.dto.mesa.DadosCadastroMesa;
 import br.com.athenassys.api.enums.StatusMesa;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

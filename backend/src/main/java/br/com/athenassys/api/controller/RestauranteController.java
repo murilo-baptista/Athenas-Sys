@@ -1,9 +1,9 @@
 package br.com.athenassys.api.controller;
 
-import br.com.athenassys.api.dto.DadosAtualizacaoRestaurante;
-import br.com.athenassys.api.dto.DadosCadastroRestaurante;
-import br.com.athenassys.api.dto.DadosDetalhamentoRestaurante;
-import br.com.athenassys.api.dto.DadosListagemRestaurante;
+import br.com.athenassys.api.dto.restaurante.DadosAtualizacaoRestaurante;
+import br.com.athenassys.api.dto.restaurante.DadosCadastroRestaurante;
+import br.com.athenassys.api.dto.restaurante.DadosDetalhamentoRestaurante;
+import br.com.athenassys.api.dto.restaurante.DadosListagemRestaurante;
 import br.com.athenassys.api.model.Restaurante;
 import br.com.athenassys.api.repository.RestauranteRepository;
 import lombok.RequiredArgsConstructor;
