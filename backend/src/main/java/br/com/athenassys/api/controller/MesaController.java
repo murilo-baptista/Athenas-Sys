@@ -54,10 +54,23 @@ public class MesaController {
         return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
     }
 
+    @DeleteMapping("/{idMesa}")
+    @Transactional
+    public ResponseEntity desativar(
+            @PathVariable Long idRestaurante,
+            @PathVariable Long idMesa) {
 
-    @GetMapping("/{id}")
-    public ResponseEntity detalhar(@PathVariable Long id) {
-        var mesa = service.buscarPorId(id);
+        service.desativar(idRestaurante, idMesa);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{idMesa}")
+    public ResponseEntity detalhar(
+            @PathVariable Long idRestaurante,
+            @PathVariable Long idMesa) {
+
+        var mesa = service.buscarPorId(idMesa, idRestaurante);
 
         return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
     }

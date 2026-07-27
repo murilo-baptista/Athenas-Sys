@@ -6,6 +6,7 @@ import br.com.athenassys.api.dto.DadosListagemMesa;
 import br.com.athenassys.api.model.Mesa;
 import br.com.athenassys.api.repository.MesaRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,14 +40,30 @@ public class MesaService {
                 .map(DadosListagemMesa::new);
     }
 
-    public Mesa buscarPorId(Long id) {
-        return mesaRepository.getReferenceById(id);
+    public Mesa atualizar(@Valid DadosAtualizacaoMesa dados, Long idRestaurante) {
+
+        var mesa = mesaRepository
+                .findByIdAndRestauranteId(dados.id(), idRestaurante)
+                .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+
+        mesa.atualizarDados(dados);
+        return mesa;
     }
 
-    public Mesa atualizar(@Valid DadosAtualizacaoMesa dados, Long idRestaurante) {
+    public Mesa desativar(Long idRestaurante, Long idMesa) {
+
         var mesa = mesaRepository
-                .getReferenceById(dados.id());
-        mesa.atualizarDados(dados, idRestaurante);
+                .findByIdAndRestauranteId(idMesa, idRestaurante)
+                .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+
+        mesa.desativar();
         return mesa;
+    }
+
+    public Mesa buscarPorId(Long idMesa, Long idRestaurante) {
+
+        return mesaRepository
+                .findByIdAndRestauranteId(idMesa, idRestaurante)
+                .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
     }
 }

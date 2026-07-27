@@ -40,7 +40,7 @@ public class Mesa {
         this.status = dados.status();
     }
 
-    public void atualizarDados(@Valid DadosAtualizacaoMesa dados, Long idRestaurante) {
+    public void atualizarDados(DadosAtualizacaoMesa dados) {
         if (dados.numero() != null) {
             this.numero = dados.numero();
         }
@@ -50,5 +50,9 @@ public class Mesa {
         if (dados.status() != null) {
             this.status = dados.status();
         }
+    }
+
+    public void desativar() {
+        this.ativo = false;
     }
 }
