@@ -1,8 +1,6 @@
 package br.com.athenassys.api.controller;
 
 import br.com.athenassys.api.dto.*;
-import br.com.athenassys.api.model.Mesa;
-import br.com.athenassys.api.repository.MesaRepository;
 import br.com.athenassys.api.service.MesaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("mesas")
+@RequestMapping("restaurantes/{idRestaurante}/mesas")
 @RequiredArgsConstructor
 public class MesaController {
 
@@ -23,13 +21,14 @@ public class MesaController {
     @PostMapping
     @Transactional
     public ResponseEntity cadastrar(
+            @PathVariable Long idRestaurante,
             @RequestBody @Valid DadosCadastroMesa dados,
             UriComponentsBuilder uriBuilder) {
 
-        var mesa = service.cadastrar(dados);
+        var mesa = service.cadastrar(dados, idRestaurante);
 
-        var uri = uriBuilder.path("restaurantes/{id}")
-                .buildAndExpand(mesa.getId())
+        var uri = uriBuilder.path("/restaurantes/{idRestaurante}/mesas/{id}")
+                .buildAndExpand(idRestaurante, mesa.getId())
                 .toUri();
 
         return ResponseEntity.created(uri)
@@ -37,10 +36,23 @@ public class MesaController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemMesa>> listar(Pageable paginacao) {
-        return ResponseEntity.ok(service.listar(paginacao));
+    public ResponseEntity<Page<DadosListagemMesa>> listar(
+            @PathVariable Long idRestaurante,
+            Pageable paginacao) {
+
+        return ResponseEntity.ok(service.listar(idRestaurante, paginacao));
     }
 
+    @PutMapping
+    @Transactional
+    public ResponseEntity atualizar(
+            @PathVariable Long idRestaurante,
+            @RequestBody @Valid DadosAtualizacaoMesa dados) {
+
+        var mesa = service.atualizar(dados, idRestaurante);
+
+        return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
+    }
 
 
     @GetMapping("/{id}")

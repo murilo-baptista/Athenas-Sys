@@ -1,8 +1,10 @@
 package br.com.athenassys.api.model;
 
+import br.com.athenassys.api.dto.DadosAtualizacaoMesa;
 import br.com.athenassys.api.dto.DadosCadastroMesa;
 import br.com.athenassys.api.enums.StatusMesa;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,5 +38,17 @@ public class Mesa {
         this.numero = dados.numero();
         this.capacidade = dados.capacidade();
         this.status = dados.status();
+    }
+
+    public void atualizarDados(@Valid DadosAtualizacaoMesa dados, Long idRestaurante) {
+        if (dados.numero() != null) {
+            this.numero = dados.numero();
+        }
+        if (dados.capacidade() != null) {
+            this.capacidade = dados.capacidade();
+        }
+        if (dados.status() != null) {
+            this.status = dados.status();
+        }
     }
 }
