@@ -20,7 +20,7 @@ public class MesaController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(
+    public ResponseEntity<DadosDetalhamentoMesa> cadastrar(
             @PathVariable Long idRestaurante,
             @RequestBody @Valid DadosCadastroMesa dados,
             UriComponentsBuilder uriBuilder) {
@@ -43,20 +43,21 @@ public class MesaController {
         return ResponseEntity.ok(service.listar(idRestaurante, paginacao));
     }
 
-    @PutMapping
+    @PutMapping("/{idMesa}")
     @Transactional
-    public ResponseEntity atualizar(
+    public ResponseEntity<DadosDetalhamentoMesa> atualizar(
             @PathVariable Long idRestaurante,
+            @PathVariable Long idMesa,
             @RequestBody @Valid DadosAtualizacaoMesa dados) {
 
-        var mesa = service.atualizar(dados, idRestaurante);
+        var mesa = service.atualizar(dados, idMesa, idRestaurante);
 
         return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
     }
 
     @DeleteMapping("/{idMesa}")
     @Transactional
-    public ResponseEntity desativar(
+    public ResponseEntity<Void> desativar(
             @PathVariable Long idRestaurante,
             @PathVariable Long idMesa) {
 
@@ -66,7 +67,7 @@ public class MesaController {
     }
 
     @GetMapping("/{idMesa}")
-    public ResponseEntity detalhar(
+    public ResponseEntity<DadosDetalhamentoMesa> detalhar(
             @PathVariable Long idRestaurante,
             @PathVariable Long idMesa) {
 

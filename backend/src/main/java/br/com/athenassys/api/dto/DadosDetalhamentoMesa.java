@@ -2,11 +2,10 @@ package br.com.athenassys.api.dto;
 
 import br.com.athenassys.api.enums.StatusMesa;
 import br.com.athenassys.api.model.Mesa;
-import br.com.athenassys.api.model.Restaurante;
 
 public record DadosDetalhamentoMesa(
         Long id,
-        Restaurante restaurante,
+        Long restauranteId,
         Integer numero,
         Integer capacidade,
         StatusMesa status,
@@ -15,7 +14,7 @@ public record DadosDetalhamentoMesa(
     public DadosDetalhamentoMesa(Mesa mesa) {
         this(
                 mesa.getId(),
-                mesa.getRestaurante(),
+                mesa.getRestaurante().getId(),
                 mesa.getNumero(),
                 mesa.getCapacidade(),
                 mesa.getStatus(),

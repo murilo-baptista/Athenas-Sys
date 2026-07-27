@@ -4,17 +4,17 @@ import br.com.athenassys.api.enums.StatusMesa;
 import br.com.athenassys.api.model.Mesa;
 
 public record DadosListagemMesa(
+        Long id,
         Integer numero,
         Integer capacidade,
-        StatusMesa status,
-        Boolean ativo
+        StatusMesa status
 ) {
     public DadosListagemMesa(Mesa mesa) {
         this(
+                mesa.getId(),
                 mesa.getNumero(),
                 mesa.getCapacidade(),
-                mesa.getStatus(),
-                mesa.getAtivo()
+                mesa.getStatus()
         );
     }
 }

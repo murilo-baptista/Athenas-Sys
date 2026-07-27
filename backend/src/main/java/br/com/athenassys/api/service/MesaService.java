@@ -40,10 +40,10 @@ public class MesaService {
                 .map(DadosListagemMesa::new);
     }
 
-    public Mesa atualizar(@Valid DadosAtualizacaoMesa dados, Long idRestaurante) {
+    public Mesa atualizar(@Valid DadosAtualizacaoMesa dados, Long idMesa, Long idRestaurante) {
 
         var mesa = mesaRepository
-                .findByIdAndRestauranteId(dados.id(), idRestaurante)
+                .findByIdAndRestauranteId(idMesa, idRestaurante)
                 .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
 
         mesa.atualizarDados(dados);

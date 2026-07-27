@@ -4,7 +4,6 @@ import br.com.athenassys.api.dto.DadosAtualizacaoMesa;
 import br.com.athenassys.api.dto.DadosCadastroMesa;
 import br.com.athenassys.api.enums.StatusMesa;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,7 +21,7 @@ public class Mesa {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurante_id", nullable = false)
     private Restaurante restaurante;
     private Integer numero;
@@ -37,7 +36,7 @@ public class Mesa {
         this.restaurante = restaurante;
         this.numero = dados.numero();
         this.capacidade = dados.capacidade();
-        this.status = dados.status();
+        this.status = StatusMesa.LIVRE;
     }
 
     public void atualizarDados(DadosAtualizacaoMesa dados) {

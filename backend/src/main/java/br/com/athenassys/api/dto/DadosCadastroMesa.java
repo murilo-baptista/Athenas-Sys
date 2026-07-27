@@ -1,17 +1,17 @@
 package br.com.athenassys.api.dto;
 
-import br.com.athenassys.api.enums.StatusMesa;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public record DadosCadastroMesa(
 
         @NotNull
+        @Positive
         Integer numero,
 
         @NotNull
-        Integer capacidade,
+        @Positive
+        Integer capacidade
 
-        @NotNull
-        StatusMesa status
 ) {
 }
