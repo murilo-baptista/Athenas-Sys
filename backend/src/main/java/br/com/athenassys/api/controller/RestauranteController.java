@@ -24,7 +24,6 @@ public class RestauranteController {
 
     @PostMapping
     @Transactional
-    //Devolvendo void *por enquanto*
     public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroRestaurante dados, UriComponentsBuilder uriBuilder) {
         var restaurante = new Restaurante(dados);
         repository.save(restaurante);
