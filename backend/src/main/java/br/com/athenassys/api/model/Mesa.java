@@ -46,12 +46,18 @@ public class Mesa {
         if (dados.capacidade() != null) {
             this.capacidade = dados.capacidade();
         }
-        if (dados.status() != null) {
-            this.status = dados.status();
-        }
     }
 
     public void desativar() {
         this.ativo = false;
+    }
+
+
+    public void ocupar() {
+        this.status = StatusMesa.OCUPADA;
+    }
+
+    public void desocupar() {
+        this.status = StatusMesa.LIVRE;
     }
 }

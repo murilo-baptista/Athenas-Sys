@@ -5,7 +5,6 @@ import br.com.athenassys.api.enums.StatusMesa;
 public record DadosAtualizacaoMesa(
 
         Integer numero,
-        Integer capacidade,
-        StatusMesa status
+        Integer capacidade
 ) {
 }

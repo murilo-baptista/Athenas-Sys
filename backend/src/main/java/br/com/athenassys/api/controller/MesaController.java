@@ -78,4 +78,24 @@ public class MesaController {
 
         return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
     }
+
+    @PatchMapping("/{idMesa}/ocupar")
+    @Transactional
+    public ResponseEntity<DadosDetalhamentoMesa> ocupar(
+            @PathVariable Long idRestaurante,
+            @PathVariable Long idMesa
+    ) {
+        var mesa = service.ocupar(idMesa, idRestaurante);
+        return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
+    }
+
+    @PatchMapping("/{idMesa}/desocupar")
+    @Transactional
+    public ResponseEntity<DadosDetalhamentoMesa> desocupar(
+            @PathVariable Long idRestaurante,
+            @PathVariable Long idMesa
+    ) {
+        var mesa = service.desocupar(idMesa, idRestaurante);
+        return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
+    }
 }

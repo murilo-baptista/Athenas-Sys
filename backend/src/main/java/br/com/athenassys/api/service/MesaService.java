@@ -66,4 +66,24 @@ public class MesaService {
                 .findByIdAndRestauranteId(idMesa, idRestaurante)
                 .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
     }
+
+    public Mesa ocupar(Long idMesa, Long idRestaurante) {
+
+        var mesa = mesaRepository
+                .findByIdAndRestauranteId(idMesa, idRestaurante)
+                .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+
+        mesa.ocupar();
+        return mesa;
+    }
+
+    public Mesa desocupar(Long idMesa, Long idRestaurante) {
+
+        var mesa = mesaRepository
+                .findByIdAndRestauranteId(idMesa, idRestaurante)
+                .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+
+        mesa.desocupar();
+        return mesa;
+    }
 }
