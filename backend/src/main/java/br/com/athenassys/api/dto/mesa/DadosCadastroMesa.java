@@ -1,4 +1,4 @@
-package br.com.athenassys.api.dto;
+package br.com.athenassys.api.dto.mesa;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

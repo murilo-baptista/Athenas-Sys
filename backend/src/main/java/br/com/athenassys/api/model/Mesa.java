@@ -1,7 +1,7 @@
 package br.com.athenassys.api.model;
 
-import br.com.athenassys.api.dto.DadosAtualizacaoMesa;
-import br.com.athenassys.api.dto.DadosCadastroMesa;
+import br.com.athenassys.api.dto.mesa.DadosAtualizacaoMesa;
+import br.com.athenassys.api.dto.mesa.DadosCadastroMesa;
 import br.com.athenassys.api.enums.StatusMesa;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -46,12 +46,18 @@ public class Mesa {
         if (dados.capacidade() != null) {
             this.capacidade = dados.capacidade();
         }
-        if (dados.status() != null) {
-            this.status = dados.status();
-        }
     }
 
     public void desativar() {
         this.ativo = false;
+    }
+
+
+    public void ocupar() {
+        this.status = StatusMesa.OCUPADA;
+    }
+
+    public void desocupar() {
+        this.status = StatusMesa.LIVRE;
     }
 }

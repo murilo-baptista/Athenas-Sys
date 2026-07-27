@@ -1,8 +1,8 @@
 package br.com.athenassys.api.service;
 
-import br.com.athenassys.api.dto.DadosAtualizacaoMesa;
-import br.com.athenassys.api.dto.DadosCadastroMesa;
-import br.com.athenassys.api.dto.DadosListagemMesa;
+import br.com.athenassys.api.dto.mesa.DadosAtualizacaoMesa;
+import br.com.athenassys.api.dto.mesa.DadosCadastroMesa;
+import br.com.athenassys.api.dto.mesa.DadosListagemMesa;
 import br.com.athenassys.api.model.Mesa;
 import br.com.athenassys.api.repository.MesaRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
@@ -65,5 +65,25 @@ public class MesaService {
         return mesaRepository
                 .findByIdAndRestauranteId(idMesa, idRestaurante)
                 .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+    }
+
+    public Mesa ocupar(Long idMesa, Long idRestaurante) {
+
+        var mesa = mesaRepository
+                .findByIdAndRestauranteId(idMesa, idRestaurante)
+                .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+
+        mesa.ocupar();
+        return mesa;
+    }
+
+    public Mesa desocupar(Long idMesa, Long idRestaurante) {
+
+        var mesa = mesaRepository
+                .findByIdAndRestauranteId(idMesa, idRestaurante)
+                .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+
+        mesa.desocupar();
+        return mesa;
     }
 }

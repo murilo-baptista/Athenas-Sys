@@ -1,6 +1,9 @@
 package br.com.athenassys.api.controller;
 
-import br.com.athenassys.api.dto.*;
+import br.com.athenassys.api.dto.mesa.DadosAtualizacaoMesa;
+import br.com.athenassys.api.dto.mesa.DadosCadastroMesa;
+import br.com.athenassys.api.dto.mesa.DadosDetalhamentoMesa;
+import br.com.athenassys.api.dto.mesa.DadosListagemMesa;
 import br.com.athenassys.api.service.MesaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -73,6 +76,26 @@ public class MesaController {
 
         var mesa = service.buscarPorId(idMesa, idRestaurante);
 
+        return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
+    }
+
+    @PatchMapping("/{idMesa}/ocupar")
+    @Transactional
+    public ResponseEntity<DadosDetalhamentoMesa> ocupar(
+            @PathVariable Long idRestaurante,
+            @PathVariable Long idMesa
+    ) {
+        var mesa = service.ocupar(idMesa, idRestaurante);
+        return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
+    }
+
+    @PatchMapping("/{idMesa}/desocupar")
+    @Transactional
+    public ResponseEntity<DadosDetalhamentoMesa> desocupar(
+            @PathVariable Long idRestaurante,
+            @PathVariable Long idMesa
+    ) {
+        var mesa = service.desocupar(idMesa, idRestaurante);
         return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
     }
 }

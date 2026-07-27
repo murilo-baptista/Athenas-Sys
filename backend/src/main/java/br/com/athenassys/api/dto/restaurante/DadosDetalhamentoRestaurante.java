@@ -1,20 +1,23 @@
-package br.com.athenassys.api.dto;
+package br.com.athenassys.api.dto.restaurante;
 
 import br.com.athenassys.api.model.Restaurante;
 
-public record DadosListagemRestaurante(
+public record DadosDetalhamentoRestaurante(
         Long id,
         String nome,
         String email,
         String telefone,
-        String cnpj
+        String cnpj,
+        Boolean ativo
 ) {
-    public DadosListagemRestaurante(Restaurante restaurante) {
+    public DadosDetalhamentoRestaurante(Restaurante restaurante) {
         this(
                 restaurante.getId(),
                 restaurante.getNome(),
                 restaurante.getEmail(),
                 restaurante.getTelefone(),
-                restaurante.getCnpj());
+                restaurante.getCnpj(),
+                restaurante.getAtivo()
+        );
     }
 }
