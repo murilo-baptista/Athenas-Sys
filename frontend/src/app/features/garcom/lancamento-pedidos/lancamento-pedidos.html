@@ -108,6 +108,7 @@
 
                   <!-- Passo 1: Novo -->
                   <div class="status-step" [ngClass]="'estado-' + stepEstado(pedido, 0)">
+                    <span class="status-sphere" aria-hidden="true"></span>
                     <span class="status-icon status-icon-novo" aria-hidden="true"></span>
                     <span class="status-rotulo">Novo</span>
                   </div>
@@ -116,6 +117,7 @@
 
                   <!-- Passo 2: Em andamento -->
                   <div class="status-step" [ngClass]="'estado-' + stepEstado(pedido, 1)">
+                    <span class="status-sphere" aria-hidden="true"></span>
                     <span class="status-icon status-icon-andamento" aria-hidden="true"></span>
                     <span class="status-rotulo">Em andamento</span>
                   </div>
@@ -124,6 +126,7 @@
 
                   <!-- Passo 3: Pronto -->
                   <div class="status-step" [ngClass]="'estado-' + stepEstado(pedido, 2)">
+                    <span class="status-sphere" aria-hidden="true"></span>
                     <span class="status-icon status-icon-pronto" aria-hidden="true"></span>
                     <span class="status-rotulo">Pronto</span>
                   </div>
@@ -137,6 +140,7 @@
 
                   <!-- Passo 4: Entregue -->
                   <div class="status-step" [ngClass]="'estado-' + stepEstado(pedido, 3)">
+                    <span class="status-sphere" aria-hidden="true"></span>
                     <span class="status-icon status-icon-entregue" aria-hidden="true"></span>
                     <span class="status-rotulo" *ngIf="stepEstado(pedido, 3) !== 'completo'">Entregue</span>
                   </div>

@@ -373,6 +373,7 @@
 }
 
 .status-step {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -381,8 +382,37 @@
   flex-shrink: 0;
 }
 
-/* Ícones embutidos via SVG em data-uri (não dependem de assets externos) */
+/* Esfera atrás do ícone: fica centralizada no ícone, acima da linha
+   e por baixo dele. É ela quem muda de cor conforme o andamento. */
+.status-sphere {
+  position: absolute;
+  top: 13px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--cor-cinza-claro);
+  border: 1.5px solid var(--cor-cinza);
+  z-index: 1;
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.status-step.estado-atual .status-sphere {
+  background-color: var(--cor-dourado);
+  border-color: var(--cor-dourado);
+  box-shadow: 0 0 0 4px rgba(201, 164, 106, 0.22);
+}
+
+.status-step.estado-completo .status-sphere {
+  background-color: var(--cor-bordo);
+  border-color: var(--cor-bordo);
+}
+
+/* Ícone: fica por cima da esfera (z-index maior) */
 .status-icon {
+  position: relative;
+  z-index: 2;
   display: block;
   width: 26px;
   height: 26px;
@@ -393,7 +423,7 @@
   mask-position: center;
   -webkit-mask-size: contain;
   mask-size: contain;
-  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+  transition: background-color 0.25s ease;
 }
 
 .status-icon-novo {
@@ -416,18 +446,16 @@
   mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l2.4 1.3L17 3l1 2.4 2.4 1L20 9l1.1 2-1.7 2 .3 2.6-2.6.6-1 2.4-2.4-.6L12 20l-2.4 1.3-1.6-2-2.6-.6.3-2.6-1.9-2L5 11.4l-1-2.4 2.4-1L7.6 3.3 10 4 12 2zm-1.1 12.5l5-5-1.4-1.4-3.6 3.6-1.5-1.5-1.4 1.4 2.9 2.9z'/></svg>");
 }
 
-/* Estado de cada passo: pendente (cinza) -> atual (dourado, em destaque) -> completo (bordô) */
 .status-step.estado-pendente .status-icon {
   background-color: var(--cor-cinza);
 }
 
 .status-step.estado-atual .status-icon {
-  background-color: var(--cor-dourado);
-  box-shadow: 0 0 0 5px rgba(201, 164, 106, 0.22);
+  background-color: var(--cor-creme);
 }
 
 .status-step.estado-completo .status-icon {
-  background-color: var(--cor-bordo);
+  background-color: var(--cor-creme);
 }
 
 .status-rotulo {
@@ -448,80 +476,49 @@
   font-weight: 700;
 }
 
-/* Linha conectora, com a esfera embutida no meio.
-   As esferas vão se colorindo conforme o pedido avança: cinza -> dourado -> bordô */
+/* Linha conectora entre os passos: fica ATRÁS das esferas (z-index menor,
+   sem posicionamento) e se estende por baixo dos ícones/esferas vizinhas
+   via margem negativa, para que pareça "encostar" nelas. */
 .status-linha {
   position: relative;
   flex: 1;
   height: 0;
   margin-top: 13px;
+  margin-left: -16px;
+  margin-right: -16px;
   border-top: 2px dashed var(--cor-cinza-claro);
   min-width: 20px;
+  z-index: 0;
   transition: border-color 0.25s ease;
 }
 
-.status-linha::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background-color: var(--cor-cinza-claro);
-  border: 1.5px solid var(--cor-cinza);
-  z-index: 1;
-  transition: background-color 0.25s ease, border-color 0.25s ease, width 0.25s ease, height 0.25s ease;
-}
-
-/* trecho ainda não alcançado */
 .status-linha.estado-pendente {
   border-top-style: dashed;
   border-top-color: var(--cor-cinza-claro);
 }
 
-/* trecho que está sendo percorrido agora: esfera dourada em destaque */
 .status-linha.estado-atual {
   border-top-style: solid;
   border-top-color: var(--cor-dourado);
 }
 
-.status-linha.estado-atual::before {
-  background-color: var(--cor-dourado);
-  border-color: var(--cor-dourado);
-  width: 11px;
-  height: 11px;
-  box-shadow: 0 0 0 4px rgba(201, 164, 106, 0.22);
-}
-
-/* trecho já concluído: esfera cheia em bordô */
 .status-linha.estado-completo {
   border-top-style: solid;
   border-top-color: var(--cor-bordo);
 }
 
-.status-linha.estado-completo::before {
-  background-color: var(--cor-bordo);
-  border-color: var(--cor-bordo);
-}
-
 /* Linha final (Pronto -> Entregue): vira seta quando o pedido está pronto,
-   sinalizando para o garçom que já pode entregar */
+   sinalizando para o garçom que já pode entregar. Também encosta na esfera. */
 .status-linha-final.seta {
   border-top: none;
   height: 2px;
   background-color: var(--cor-bordo);
 }
 
-.status-linha-final.seta::before {
-  display: none;
-}
-
 .status-linha-final.seta::after {
   content: "";
   position: absolute;
-  right: -1px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
   width: 0;

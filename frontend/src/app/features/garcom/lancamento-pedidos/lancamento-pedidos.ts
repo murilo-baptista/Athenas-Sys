@@ -124,7 +124,6 @@ export class LancamentoPedidosComponent {
 
   /**
    * Estado de cada um dos 4 passos (Novo, Em andamento, Pronto, Entregue).
-   * idx vai de 0 a 3, na mesma ordem de etapasOrdem.
    */
   stepEstado(pedido: Pedido, idx: number): EstadoEtapa {
     const atual = this.statusIndex(pedido.status);
@@ -138,8 +137,6 @@ export class LancamentoPedidosComponent {
    * idx 0 = Novo -> Em andamento
    * idx 1 = Em andamento -> Pronto
    * idx 2 = Pronto -> Entregue
-   * A esfera da linha vai se colorindo (cinza -> dourado -> bordô)
-   * conforme o pedido avança nas etapas.
    */
   linhaEstado(pedido: Pedido, idx: number): EstadoEtapa {
     const atual = this.statusIndex(pedido.status);
