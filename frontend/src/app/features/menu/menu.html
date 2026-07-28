@@ -1,0 +1,63 @@
+<div class="menu-page">
+
+  <div class="greek-border top"></div>
+
+  <div class="menu-content">
+
+    <div class="left-panel">
+      <div class="banner">
+        <img src="assets/imagens/banner-bordo.jpeg" alt="Athenas - Gestão inteligente para restaurantes" class="banner-img">
+        <div class="banner-content">
+          <div class="banner-logo-placeholder">logo<br>transparente</div>
+          <h2 class="banner-title">ATHENAS</h2>
+          <p class="banner-subtitle">Gestão inteligente<br>para restaurantes</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="center-panel">
+      <div class="menu-card">
+        <h1 class="menu-title">SELECIONE UMA ÁREA</h1>
+
+        <img src="assets/imagens/divisor-g.png" alt="" class="divider">
+
+        <p class="menu-subtitle">Selecione a área que deseja acessar<br>para realizar suas atividades.</p>
+
+        <div class="area-grid">
+          <button type="button" class="area-item" (click)="onSelectArea('gerente')">
+            <img src="assets/imagens/icone-gerente.png" alt="Gerente" class="area-icon">
+            <span class="area-label">GERENTE</span>
+          </button>
+
+          <button type="button" class="area-item" (click)="onSelectArea('recepcionista')">
+            <img src="assets/imagens/icone-recepcionista.png" alt="Recepcionista" class="area-icon">
+            <span class="area-label">RECEPCIONISTA</span>
+          </button>
+
+          <button type="button" class="area-item" (click)="onSelectArea('garcom')">
+            <img src="assets/imagens/icone-garçom.png" alt="Garçom" class="area-icon">
+            <span class="area-label">GARÇOM</span>
+          </button>
+
+          <button type="button" class="area-item" (click)="onSelectArea('cozinha')">
+            <img src="assets/imagens/icone-cozinha.png" alt="Cozinha" class="area-icon">
+            <span class="area-label">COZINHA</span>
+          </button>
+
+          <button type="button" class="area-item" (click)="onSelectArea('estoque')">
+            <img src="assets/imagens/icone-estoque.png" alt="Estoque" class="area-icon">
+            <span class="area-label">ESTOQUE</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-decoration">
+      <img src="assets/imagens/pilar.png" alt="" class="pilar-img">
+    </div>
+
+  </div>
+
+  <div class="greek-border bottom"></div>
+
+</div>
