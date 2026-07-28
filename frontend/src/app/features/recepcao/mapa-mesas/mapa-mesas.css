@@ -1,0 +1,418 @@
+/* ==========================================================
+   Athenas - Mapa de Mesas (Recepção)
+   Paleta: bordô #7B0F12 | dourado #C9A46A | creme #FFF8EE
+   ========================================================== */
+
+:host {
+  --cor-creme: #FFF8EE;
+  --cor-creme-escuro: #F5EEE0;
+  --cor-bordo: #7B0F12;
+  --cor-bordo-escuro: #5A0B0D;
+  --cor-dourado: #C9A46A;
+  --cor-verde: #244A37;
+  --cor-verde-texto: #E1F5EE;
+  --cor-cinza: #B9AF9E;
+  --cor-cinza-claro: #E4DDD0;
+  --cor-texto-secundario: #4A4038;
+
+  display: block;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.mapa-page {
+  height: 100vh;
+  width: 100%;
+  background-color: var(--cor-creme);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ---------- Faixas decorativas (padrão grego) ---------- */
+.greek-border {
+  height: 22px;
+  width: 100%;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='22' viewBox='0 0 40 22'><path d='M0 4 H14 V18 H24 V10 H34 V18 H40' fill='none' stroke='%23C9A46A' stroke-width='2.4'/></svg>");
+  background-repeat: repeat-x;
+  background-size: 40px 22px;
+  background-position: left center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* ---------- Barra superior ---------- */
+.top-bar {
+  position: relative;
+  height: 54px;
+  flex-shrink: 0;
+}
+
+.top-bar .greek-border.top {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+}
+
+.header-info {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: var(--cor-creme);
+  padding-left: 28px;
+  padding-right: 6px;
+}
+
+.mapa-label {
+  color: var(--cor-bordo);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.avatar {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background-color: var(--cor-dourado);
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 3px solid var(--cor-creme);
+  box-shadow: 0 2px 8px rgba(90, 11, 13, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* ---------- Conteúdo principal ---------- */
+.mapa-content {
+  flex: 1;
+  position: relative;
+  padding: 36px 40px;
+  display: flex;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.pillar-decoration {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: auto;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.mapa-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 660px;
+  margin: 0 auto;
+  background-color: var(--cor-creme);
+  border: 1.5px solid var(--cor-dourado);
+  border-radius: 10px;
+  overflow-y: auto;
+  max-height: 100%;
+  box-shadow: 0 12px 34px rgba(90, 11, 13, 0.12);
+}
+
+/* ---------- Tabela ---------- */
+.mesas-tabela {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mesas-tabela thead th {
+  text-align: center;
+  color: var(--cor-bordo);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  padding: 16px 12px;
+  border-bottom: 1.3px solid var(--cor-dourado);
+}
+
+.mesa-linha td {
+  text-align: center;
+  padding: 18px 12px;
+  border-bottom: 1px solid var(--cor-cinza-claro);
+  color: var(--cor-texto-secundario);
+  font-size: 15px;
+  vertical-align: middle;
+}
+
+.mesa-linha.expandida td {
+  border-bottom: none;
+  background-color: var(--cor-creme-escuro);
+}
+
+.valor-mesa {
+  color: var(--cor-bordo);
+  font-weight: 700;
+}
+
+/* ---------- Badge de status ---------- */
+.status-badge {
+  display: inline-block;
+  padding: 8px 22px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.status-ocupada {
+  background-color: var(--cor-bordo);
+  color: var(--cor-creme);
+}
+
+.status-disponivel {
+  background-color: var(--cor-verde);
+  color: var(--cor-verde-texto);
+}
+
+.status-reservada {
+  background-color: var(--cor-dourado);
+  color: var(--cor-bordo-escuro);
+}
+
+/* ---------- Seta de expandir ---------- */
+.coluna-seta {
+  width: 40px;
+}
+
+.seta-btn {
+  background: none;
+  border: none;
+  color: var(--cor-dourado);
+  font-family: 'Georgia', serif;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.mesa-linha.expandida .seta-btn {
+  color: var(--cor-bordo);
+  font-weight: 700;
+}
+
+/* ---------- Painel expandido ---------- */
+.mesa-expandida-linha td {
+  padding: 0;
+  border-bottom: 1px solid var(--cor-cinza-claro);
+}
+
+.painel-expandido {
+  background-color: var(--cor-creme-escuro);
+  border-top: 1px dashed var(--cor-dourado);
+  padding: 20px 28px 26px;
+  text-align: left;
+}
+
+.painel-titulo {
+  margin: 0 0 16px;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  color: var(--cor-texto-secundario);
+  text-transform: uppercase;
+}
+
+.painel-divisor {
+  border-top: 1px solid var(--cor-cinza-claro);
+  margin: 20px 0;
+}
+
+/* ---------- Mudar status da mesa ---------- */
+.status-toggle {
+  display: flex;
+  gap: 14px;
+}
+
+.status-toggle-btn {
+  flex: 1;
+  min-width: 160px;
+  padding: 11px 16px;
+  border: 1.3px solid var(--cor-bordo);
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--cor-bordo);
+  font-family: 'Georgia', serif;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.status-toggle-btn:hover {
+  background-color: rgba(123, 15, 18, 0.06);
+}
+
+.status-toggle-btn.ativo {
+  background-color: var(--cor-bordo);
+  color: var(--cor-creme);
+}
+
+.status-toggle-btn.ativo:hover {
+  background-color: var(--cor-bordo-escuro);
+}
+
+/* ---------- Formulário ---------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.form-campo label {
+  display: block;
+  font-size: 11.5px;
+  color: var(--cor-texto-secundario);
+  margin-bottom: 6px;
+}
+
+.form-campo input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.3px solid var(--cor-dourado);
+  border-radius: 8px;
+  background-color: var(--cor-creme);
+  font-family: 'Georgia', serif;
+  font-size: 13px;
+  color: var(--cor-texto-secundario);
+}
+
+.form-campo input:focus {
+  outline: none;
+  border-color: var(--cor-bordo);
+}
+
+.form-campo-pequeno {
+  max-width: 180px;
+  margin-bottom: 18px;
+}
+
+/* ---------- Detalhes da reserva existente ---------- */
+.detalhes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
+  margin-bottom: 18px;
+}
+
+.detalhe-rotulo {
+  margin: 0 0 4px;
+  font-size: 11px;
+  color: var(--cor-dourado);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.detalhe-valor {
+  margin: 0;
+  font-size: 14px;
+  color: var(--cor-texto-secundario);
+}
+
+/* ---------- Ações do painel ---------- */
+.painel-acoes {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.acao-btn {
+  flex: 1;
+  min-width: 160px;
+  padding: 11px 16px;
+  border-radius: 8px;
+  font-family: 'Georgia', serif;
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.acao-primaria {
+  border: 1.3px solid var(--cor-bordo);
+  background-color: var(--cor-bordo);
+  color: var(--cor-creme);
+}
+
+.acao-primaria:hover {
+  background-color: var(--cor-bordo-escuro);
+}
+
+.acao-secundaria {
+  border: 1.3px solid var(--cor-bordo);
+  background-color: transparent;
+  color: var(--cor-bordo);
+}
+
+.acao-secundaria:hover {
+  background-color: rgba(123, 15, 18, 0.06);
+}
+
+/* ---------- Rodapé decorativo ---------- */
+.bottom-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.pantheon-decoration {
+  position: absolute;
+  left: 24px;
+  bottom: 0;
+  width: 200px;
+  height: auto;
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 720px) {
+  .pillar-decoration {
+    display: none;
+  }
+
+  .mapa-content {
+    padding: 24px 16px;
+  }
+
+  .form-grid,
+  .detalhes-grid,
+  .status-toggle {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .painel-acoes {
+    flex-direction: column;
+  }
+
+  .acao-btn,
+  .status-toggle-btn {
+    min-width: 0;
+  }
+}
