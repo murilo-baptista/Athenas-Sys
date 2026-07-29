@@ -60,7 +60,7 @@
                  *ngFor="let cargo of cargos"
                  [class.is-selected]="cargoSelecionado === cargo.label"
                  (click)="selecionarCargo(cargo.label)">
-              <img [src]="'assets/imagens/' + cargo.icone" [alt]="cargo.label">
+              <img [src]="'assets/imagens/' + cargo.icone" [alt]="cargo.label" (error)="onImgError($event)">
               <span>{{ cargo.label }}</span>
             </div>
           </div>
@@ -71,9 +71,12 @@
 
           <label class="added-label">FUNCIONÁRIOS ADICIONADOS</label>
           <div class="added-list">
-            <div class="added-item" *ngFor="let funcionario of funcionarios">
-              <span class="item-name">{{ funcionario.nome }}</span>
-              <span class="badge" [ngClass]="funcionario.badgeClass">{{ funcionario.cargo }}</span>
+            <div class="added-item" *ngFor="let funcionario of funcionarios; let i = index">
+              <div class="item-info">
+                <span class="item-name">{{ funcionario.nome }}</span>
+                <span class="badge" [ngClass]="funcionario.badgeClass">{{ funcionario.cargo }}</span>
+              </div>
+              <button type="button" class="remove-btn" (click)="removerFuncionario(i)" aria-label="Remover funcionário">✕</button>
             </div>
           </div>
 

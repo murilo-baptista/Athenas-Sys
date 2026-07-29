@@ -426,6 +426,32 @@
   font-family: Arial, sans-serif;
   font-size: 14px;
   color: var(--cor-texto-secundario);
+  gap: 12px;
+}
+
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: var(--cor-bordo);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+}
+
+.remove-btn:hover {
+  background-color: rgba(123, 15, 18, 0.12);
 }
 
 .added-item .item-name {

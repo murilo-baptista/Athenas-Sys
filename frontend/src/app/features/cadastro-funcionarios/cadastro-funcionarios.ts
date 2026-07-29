@@ -63,6 +63,14 @@ export class CadastroFuncionariosComponent {
     this.senhaFuncionario = '';
   }
 
+  removerFuncionario(index: number): void {
+    this.funcionarios.splice(index, 1);
+  }
+
+  onImgError(event: Event): void {
+    (event.target as HTMLImageElement).style.visibility = 'hidden';
+  }
+
   voltar(): void {
     this.router.navigate(['/cadastro-mesas']);
   }
