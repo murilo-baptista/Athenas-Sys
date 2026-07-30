@@ -2,7 +2,6 @@ package br.com.athenassys.api.model;
 
 import br.com.athenassys.api.dto.categoria.DadosAtualizacaoCategoria;
 import br.com.athenassys.api.dto.categoria.DadosCadastroCategoria;
-import br.com.athenassys.api.dto.mesa.DadosAtualizacaoMesa;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
