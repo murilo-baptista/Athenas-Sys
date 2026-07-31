@@ -1,9 +1,12 @@
 <div class="wizard-page">
 
+
   <!-- Faixa decorativa superior -->
   <div class="greek-border top"></div>
 
+
   <div class="wizard-content">
+
 
     <!-- Lado esquerdo: banner Athenas (idêntico à página de autenticação) -->
     <div class="left-panel">
@@ -17,11 +20,14 @@
       </div>
     </div>
 
+
     <!-- Direita: fundo com templo desbotado + card do wizard -->
     <div class="wizard-right">
       <img src="assets/imagens/templo-grego-g.png" alt="" class="temple-watermark">
 
+
       <div class="wizard-card">
+
 
         <!-- Indicador de etapas -->
         <div class="steps-indicator">
@@ -33,12 +39,16 @@
         </div>
         <p class="step-caption">ETAPA 2 DE 3 · <strong>MESAS DO RESTAURANTE</strong></p>
 
+
         <h1 class="wizard-title">CADASTRE SUAS MESAS</h1>
         <p class="wizard-subtitle">Adicione as mesas disponíveis no salão. Você pode<br>adicionar quantas precisar.</p>
 
+
         <img src="assets/imagens/divisor-g.png" alt="" class="divider">
 
+
         <form class="wizard-form" (ngSubmit)="proximo()">
+
 
           <div class="field-row">
             <div class="field-block">
@@ -57,9 +67,11 @@
             </div>
           </div>
 
+
           <button type="button" class="add-button" [disabled]="!numeroMesa || !capacidadeMesa" (click)="adicionarMesa()">
             + Adicionar mesa à lista
           </button>
+
 
           <label class="added-label">MESAS ADICIONADAS</label>
           <div class="added-list">
@@ -70,31 +82,23 @@
           </div>
           <p class="helper-note" *ngIf="mesas.length === 0">Cadastre pelo menos 1 mesa para continuar</p>
 
+
           <div class="wizard-footer">
             <button type="button" class="btn btn-outline" (click)="voltar()">← VOLTAR</button>
             <button type="submit" class="btn btn-solid" [disabled]="mesas.length === 0">PRÓXIMO →</button>
           </div>
 
+
         </form>
       </div>
     </div>
 
+
   </div>
 
+
   <!-- Faixa decorativa inferior -->
-  <div class="greek-border bottom">
-    <span class="utensils-icon">
-      <svg viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="20" cy="15" r="10" fill="none" stroke="#C9A46A" stroke-width="1.6"/>
-        <g stroke="#C9A46A" stroke-width="1.6" stroke-linecap="round">
-          <line x1="7" y1="3" x2="7" y2="12"/>
-          <line x1="4.5" y1="3" x2="4.5" y2="9"/>
-          <line x1="9.5" y1="3" x2="9.5" y2="9"/>
-          <line x1="7" y1="12" x2="7" y2="27"/>
-          <path d="M33 3 C30 6 30 10 33 12 L33 27" fill="none"/>
-        </g>
-      </svg>
-    </span>
-  </div>
+  <div class="greek-border bottom"></div>
+
 
 </div>
