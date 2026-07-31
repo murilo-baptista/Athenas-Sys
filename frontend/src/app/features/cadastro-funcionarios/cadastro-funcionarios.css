@@ -3,6 +3,7 @@
    Paleta: bordô #7B0F12 | dourado #C9A46A | creme #FFF8EE
    ========================================================== */
 
+
 :host {
   --cor-creme: #FFF8EE;
   --cor-bordo: #7B0F12;
@@ -14,17 +15,21 @@
   font-family: 'Georgia', 'Times New Roman', serif;
 }
 
+
 * {
   box-sizing: border-box;
 }
 
+
 .wizard-page {
-  min-height: 100vh;
+  height: 100vh;
   width: 100%;
   background-color: var(--cor-creme);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
+
 
 /* ---------- Faixas decorativas (idênticas à página de autenticação) ---------- */
 .greek-border {
@@ -38,24 +43,6 @@
   position: relative;
 }
 
-.utensils-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 34px;
-  height: 34px;
-  background-color: var(--cor-creme);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.utensils-icon svg {
-  width: 20px;
-  height: 20px;
-}
 
 /* ---------- Layout principal (mesmo esqueleto da página de autenticação) ---------- */
 .wizard-content {
@@ -65,18 +52,24 @@
   min-height: 0;
 }
 
+
 /* ---------- Lado esquerdo: banner (idêntico à página de autenticação) ---------- */
 .left-panel {
   display: flex;
   flex-shrink: 0;
 }
 
+
 .banner {
   position: relative;
-  width: 314px;
-  flex-shrink: 0;
   height: 100%;
+  width: auto;
+  aspect-ratio: 618 / 1536;
+  flex-shrink: 0;
+  background-color: var(--cor-bordo);
+  overflow: hidden;
 }
+
 
 .banner-img {
   width: 100%;
@@ -84,6 +77,7 @@
   object-fit: cover;
   display: block;
 }
+
 
 .banner-content {
   position: absolute;
@@ -94,6 +88,7 @@
   text-align: center;
   padding: 44px 20px 0;
 }
+
 
 .banner-logo-placeholder {
   width: 116px;
@@ -112,6 +107,7 @@
   flex-shrink: 0;
 }
 
+
 .banner-title {
   color: var(--cor-dourado);
   font-size: 40px;
@@ -121,6 +117,7 @@
   margin: -10px 0 4px;
   flex-shrink: 0;
 }
+
 
 .banner-subtitle {
   color: var(--cor-dourado);
@@ -133,6 +130,7 @@
   flex-shrink: 0;
 }
 
+
 /* ---------- Direita: fundo com templo desbotado + card do wizard ---------- */
 .wizard-right {
   flex: 1;
@@ -143,6 +141,7 @@
   justify-content: center;
   padding: 40px 24px;
 }
+
 
 .temple-watermark {
   position: absolute;
@@ -158,6 +157,7 @@
   z-index: 0;
 }
 
+
 .wizard-card {
   position: relative;
   z-index: 1;
@@ -172,6 +172,7 @@
   box-shadow: 0 12px 34px rgba(90, 11, 13, 0.12);
 }
 
+
 /* ---------- Indicador de etapas (steps) ---------- */
 .steps-indicator {
   display: flex;
@@ -180,6 +181,7 @@
   gap: 0;
   margin-bottom: 14px;
 }
+
 
 .step-circle {
   width: 30px;
@@ -197,17 +199,20 @@
   color: var(--cor-dourado);
 }
 
+
 .step-circle.is-done {
   background-color: var(--cor-dourado);
   border-color: var(--cor-dourado);
   color: var(--cor-creme);
 }
 
+
 .step-circle.is-current {
   background-color: var(--cor-bordo);
   border-color: var(--cor-bordo);
   color: var(--cor-creme);
 }
+
 
 .step-line {
   width: 56px;
@@ -216,6 +221,7 @@
   opacity: 0.6;
   flex-shrink: 0;
 }
+
 
 .step-caption {
   text-align: center;
@@ -227,9 +233,11 @@
   margin-bottom: 14px;
 }
 
+
 .step-caption strong {
   color: var(--cor-bordo);
 }
+
 
 /* ---------- Títulos ---------- */
 .wizard-title {
@@ -241,6 +249,7 @@
   text-align: center;
 }
 
+
 .wizard-subtitle {
   color: var(--cor-texto-secundario);
   font-size: 14.5px;
@@ -249,6 +258,7 @@
   font-family: 'Georgia', serif;
   text-align: center;
 }
+
 
 .wizard-card .divider {
   display: block;
@@ -259,11 +269,13 @@
   object-fit: contain;
 }
 
+
 /* ---------- Formulário ---------- */
 .wizard-form {
   display: flex;
   flex-direction: column;
 }
+
 
 .field-label {
   display: block;
@@ -275,12 +287,14 @@
   margin-bottom: 6px;
 }
 
+
 .input-group {
   position: relative;
   display: flex;
   align-items: center;
   margin-bottom: 18px;
 }
+
 
 .input-icon {
   position: absolute;
@@ -291,6 +305,7 @@
   opacity: 0.85;
   pointer-events: none;
 }
+
 
 .input-field {
   width: 100%;
@@ -305,13 +320,16 @@
   outline: none;
 }
 
+
 .input-field::placeholder {
   color: #9C8F7E;
 }
 
+
 .input-field:focus {
   border-color: var(--cor-bordo);
 }
+
 
 /* ---------- Seleção de cargo (grade de botões) ---------- */
 .cargo-label {
@@ -323,12 +341,14 @@
   margin-bottom: 10px;
 }
 
+
 .cargo-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 12px;
   margin-bottom: 20px;
 }
+
 
 .cargo-option {
   display: flex;
@@ -344,11 +364,13 @@
   transition: all 0.15s ease;
 }
 
+
 .cargo-option img {
   width: 26px;
   height: 26px;
   object-fit: contain;
 }
+
 
 .cargo-option span {
   font-family: Arial, sans-serif;
@@ -357,19 +379,23 @@
   text-align: center;
 }
 
+
 .cargo-option:hover {
   border-color: var(--cor-bordo);
 }
+
 
 .cargo-option.is-selected {
   border-color: var(--cor-bordo);
   background-color: rgba(123, 15, 18, 0.06);
 }
 
+
 .cargo-option.is-selected span {
   color: var(--cor-bordo);
   font-weight: 700;
 }
+
 
 /* ---------- Botão "adicionar à lista" ---------- */
 .add-button {
@@ -388,14 +414,17 @@
   transition: background-color 0.15s ease;
 }
 
+
 .add-button:hover {
   background-color: rgba(201, 164, 106, 0.12);
 }
+
 
 .add-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
 
 /* ---------- Lista de itens adicionados ---------- */
 .added-label {
@@ -407,6 +436,7 @@
   margin-bottom: 10px;
 }
 
+
 .added-list {
   display: flex;
   flex-direction: column;
@@ -414,6 +444,7 @@
   margin-bottom: 8px;
   min-height: 4px;
 }
+
 
 .added-item {
   display: flex;
@@ -429,11 +460,13 @@
   gap: 12px;
 }
 
+
 .item-info {
   display: flex;
   align-items: center;
   gap: 12px;
 }
+
 
 .remove-btn {
   background: none;
@@ -450,15 +483,18 @@
   transition: background-color 0.15s ease;
 }
 
+
 .remove-btn:hover {
   background-color: rgba(123, 15, 18, 0.12);
 }
+
 
 .added-item .item-name {
   font-family: 'Georgia', serif;
   font-size: 15px;
   color: var(--cor-texto-secundario);
 }
+
 
 .badge {
   display: inline-block;
@@ -472,9 +508,11 @@
   white-space: nowrap;
 }
 
+
 .badge.badge-bordo {
   background-color: var(--cor-bordo);
 }
+
 
 /* ---------- Botões de rodapé ---------- */
 .wizard-footer {
@@ -482,6 +520,7 @@
   gap: 16px;
   margin-top: 20px;
 }
+
 
 .btn {
   flex: 1;
@@ -496,29 +535,35 @@
   border: none;
 }
 
+
 .btn-outline {
   background-color: transparent;
   border: 1.4px solid var(--cor-bordo);
   color: var(--cor-bordo);
 }
 
+
 .btn-outline:hover {
   background-color: rgba(123, 15, 18, 0.06);
 }
+
 
 .btn-solid {
   background-color: var(--cor-bordo);
   color: var(--cor-creme);
 }
 
+
 .btn-solid:hover {
   background-color: var(--cor-bordo-escuro);
 }
+
 
 .btn-solid:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
 
 /* ---------- Responsividade ---------- */
 @media (max-width: 900px) {
@@ -526,17 +571,21 @@
     display: none;
   }
 
+
   .wizard-right {
     padding: 24px 16px;
   }
+
 
   .wizard-card {
     padding: 26px 22px 30px;
   }
 
+
   .temple-watermark {
     width: 130%;
   }
+
 
   .cargo-grid {
     grid-template-columns: repeat(2, 1fr);
