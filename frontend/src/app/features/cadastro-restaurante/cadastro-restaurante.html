@@ -1,9 +1,12 @@
 <div class="wizard-page">
 
+
   <!-- Faixa decorativa superior -->
   <div class="greek-border top"></div>
 
+
   <div class="wizard-content">
+
 
     <!-- Lado esquerdo: banner Athenas (idêntico à página de autenticação) -->
     <div class="left-panel">
@@ -17,11 +20,14 @@
       </div>
     </div>
 
+
     <!-- Direita: fundo com templo desbotado + card do wizard -->
     <div class="wizard-right">
       <img src="assets/imagens/templo-grego-g.png" alt="" class="temple-watermark">
 
+
       <div class="wizard-card">
+
 
         <!-- Indicador de etapas -->
         <div class="steps-indicator">
@@ -33,12 +39,16 @@
         </div>
         <p class="step-caption">ETAPA 1 DE 3 · <strong>DADOS DO RESTAURANTE</strong></p>
 
+
         <h1 class="wizard-title">CADASTRE SEU RESTAURANTE</h1>
         <p class="wizard-subtitle">Preencha os dados para criar sua conta no Athenas</p>
 
+
         <img src="assets/imagens/divisor-g.png" alt="" class="divider">
 
+
         <form class="wizard-form" (ngSubmit)="proximo()">
+
 
           <label class="field-label" for="nome-restaurante">NOME DO RESTAURANTE</label>
           <div class="input-group">
@@ -46,6 +56,7 @@
             <input type="text" id="nome-restaurante" class="input-field" placeholder="Ex: Restaurante Athenas"
                    name="nome" [(ngModel)]="form.nome">
           </div>
+
 
           <div class="field-row">
             <div class="field-block">
@@ -64,11 +75,13 @@
             </div>
           </div>
 
+
           <label class="field-label" for="cnpj-restaurante">CNPJ</label>
           <div class="input-group">
             <input type="text" id="cnpj-restaurante" class="input-field no-icon" placeholder="00.000.000/0000-00"
                    name="cnpj" [(ngModel)]="form.cnpj">
           </div>
+
 
           <div class="field-row">
             <div class="field-block">
@@ -89,31 +102,23 @@
             </div>
           </div>
 
+
           <div class="wizard-footer">
             <button type="button" class="btn btn-outline" (click)="voltarLogin()">VOLTAR AO LOGIN</button>
             <button type="submit" class="btn btn-solid">PRÓXIMO →</button>
           </div>
 
+
         </form>
       </div>
     </div>
 
+
   </div>
 
+
   <!-- Faixa decorativa inferior -->
-  <div class="greek-border bottom">
-    <span class="utensils-icon">
-      <svg viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="20" cy="15" r="10" fill="none" stroke="#C9A46A" stroke-width="1.6"/>
-        <g stroke="#C9A46A" stroke-width="1.6" stroke-linecap="round">
-          <line x1="7" y1="3" x2="7" y2="12"/>
-          <line x1="4.5" y1="3" x2="4.5" y2="9"/>
-          <line x1="9.5" y1="3" x2="9.5" y2="9"/>
-          <line x1="7" y1="12" x2="7" y2="27"/>
-          <path d="M33 3 C30 6 30 10 33 12 L33 27" fill="none"/>
-        </g>
-      </svg>
-    </span>
-  </div>
+  <div class="greek-border bottom"></div>
+
 
 </div>
