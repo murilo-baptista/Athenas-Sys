@@ -1,21 +1,26 @@
 <div class="mapa-page">
 
+
   <!-- Barra superior com faixa grega + identificação da recepção -->
   <div class="top-bar">
     <div class="greek-border top"></div>
     <div class="header-info">
       <span class="mapa-label">RECEPÇÃO</span>
       <div class="avatar">
-        <img src="assets/imagens/icone-recepcionista.png" alt="Ícone da recepção" class="avatar-img">
+        <img src="assets/imagens/perfil-recepcao.png" alt="Ícone da recepção" class="avatar-img">
       </div>
     </div>
   </div>
 
+
   <div class="mapa-content">
+
 
     <img src="assets/imagens/pilar.png" alt="" class="pillar-decoration">
 
+
     <div class="mapa-card">
+
 
       <table class="mesas-tabela">
         <thead>
@@ -28,6 +33,7 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let mesa of mesas; let i = index">
+
 
             <!-- Linha principal -->
             <tr class="mesa-linha" [class.expandida]="mesaExpandidaIndex === i">
@@ -49,15 +55,19 @@
               </td>
             </tr>
 
+
             <!-- Linha expandida -->
             <tr class="mesa-expandida-linha" *ngIf="mesaExpandidaIndex === i">
               <td colspan="4">
 
+
                 <!-- Mesa sem reserva: status + formulário de nova reserva -->
                 <div class="painel-expandido" *ngIf="!mesa.reserva">
 
+
                   <!-- Mudar status da mesa -->
                   <p class="painel-titulo">Mesa {{ mesa.numero }} &middot; mudar status da mesa</p>
+
 
                   <div class="status-toggle">
                     <button
@@ -76,9 +86,12 @@
                     </button>
                   </div>
 
+
                   <div class="painel-divisor"></div>
 
+
                   <p class="painel-titulo">Mesa {{ mesa.numero }} &middot; nova reserva</p>
+
 
                   <div class="form-grid">
                     <div class="form-campo">
@@ -91,6 +104,7 @@
                     </div>
                   </div>
 
+
                   <div class="form-grid">
                     <div class="form-campo">
                       <label>Data</label>
@@ -102,10 +116,12 @@
                     </div>
                   </div>
 
+
                   <div class="form-campo form-campo-pequeno">
                     <label>Nº de pessoas</label>
                     <input type="number" [(ngModel)]="formReserva.pessoas" min="1">
                   </div>
+
 
                   <div class="painel-acoes">
                     <button type="button" class="acao-btn acao-primaria" (click)="confirmarReserva(mesa)">
@@ -117,11 +133,14 @@
                   </div>
                 </div>
 
+
                 <!-- Mesa com reserva: detalhes ou edição -->
                 <div class="painel-expandido" *ngIf="mesa.reserva">
 
+
                   <ng-container *ngIf="!modoEdicao; else edicaoTpl">
                     <p class="painel-titulo">Mesa {{ mesa.numero }} &middot; reserva atual</p>
+
 
                     <div class="detalhes-grid">
                       <div>
@@ -146,6 +165,7 @@
                       </div>
                     </div>
 
+
                     <div class="painel-acoes">
                       <button type="button" class="acao-btn acao-primaria" (click)="iniciarEdicao(mesa)">
                         Alterar reserva
@@ -156,8 +176,10 @@
                     </div>
                   </ng-container>
 
+
                   <ng-template #edicaoTpl>
                     <p class="painel-titulo">Mesa {{ mesa.numero }} &middot; alterar reserva</p>
+
 
                     <div class="form-grid">
                       <div class="form-campo">
@@ -170,6 +192,7 @@
                       </div>
                     </div>
 
+
                     <div class="form-grid">
                       <div class="form-campo">
                         <label>Data</label>
@@ -181,10 +204,12 @@
                       </div>
                     </div>
 
+
                     <div class="form-campo form-campo-pequeno">
                       <label>Nº de pessoas</label>
                       <input type="number" [(ngModel)]="formReserva.pessoas" min="1">
                     </div>
+
 
                     <div class="painel-acoes">
                       <button type="button" class="acao-btn acao-primaria" (click)="confirmarReserva(mesa)">
@@ -196,23 +221,30 @@
                     </div>
                   </ng-template>
 
+
                 </div>
+
 
               </td>
             </tr>
+
 
           </ng-container>
         </tbody>
       </table>
 
+
     </div>
 
+
   </div>
+
 
   <!-- Rodapé decorativo -->
   <div class="bottom-wrap">
     <img src="assets/imagens/pantheon-pequeno.png" alt="" class="pantheon-decoration">
     <div class="greek-border bottom"></div>
   </div>
+
 
 </div>
