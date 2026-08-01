@@ -6,7 +6,7 @@ import br.com.athenassys.api.model.Funcionario;
 public record DadosDetalhamentoFuncionario(
 
         Long id,
-        Long restaurante,
+        Long restauranteId,
         String nome,
         Cargo cargo,
         Boolean ativo

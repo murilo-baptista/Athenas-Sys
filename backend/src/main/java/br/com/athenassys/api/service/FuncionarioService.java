@@ -25,7 +25,7 @@ public class FuncionarioService {
 
         var restaurante = restauranteRepository
                 .findById(idRestaurante)
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
         var funcionario = new Funcionario(dados, restaurante);
 
         return funcionarioRepository.save(funcionario);

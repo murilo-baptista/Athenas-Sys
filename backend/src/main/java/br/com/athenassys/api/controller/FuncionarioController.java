@@ -53,9 +53,9 @@ public class FuncionarioController {
             @PathVariable Long idFuncionario,
             @RequestBody @Valid DadosAtualizacaoFuncionario dados) {
 
-        var Funcionario = service.atualizar(dados, idFuncionario, idRestaurante);
+        var funcionario = service.atualizar(dados, idFuncionario, idRestaurante);
 
-        return ResponseEntity.ok(new DadosDetalhamentoFuncionario(Funcionario));
+        return ResponseEntity.ok(new DadosDetalhamentoFuncionario(funcionario));
     }
 
     @DeleteMapping("/{idFuncionario}")
