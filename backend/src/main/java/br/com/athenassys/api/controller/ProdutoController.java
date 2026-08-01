@@ -28,7 +28,7 @@ public class ProdutoController {
             @RequestBody @Valid DadosCadastroProduto dados,
             UriComponentsBuilder uriBuilder) {
 
-        var produto = service.cadastrar(dados, idRestaurante, dados.idCategoria());
+        var produto = service.cadastrar(dados, idRestaurante);
 
         var uri = uriBuilder.path("/restaurantes/{idRestaurante}/produtos/{id}")
                 .buildAndExpand(idRestaurante, produto.getId())

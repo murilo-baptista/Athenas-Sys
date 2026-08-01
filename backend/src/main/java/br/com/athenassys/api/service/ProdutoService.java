@@ -24,15 +24,14 @@ public class ProdutoService {
 
     public Produto cadastrar(
             DadosCadastroProduto dados,
-            Long idRestaurante,
-            Long idCategoria) {
+            Long idRestaurante) {
 
         var restaurante = restauranteRepository
                 .findById(idRestaurante)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
 
         var categoria = categoriaRepository
-                .findById(idCategoria)
+                .findByIdAndRestauranteId(dados.idCategoria(), idRestaurante)
                 .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada."));
 
         var produto = new Produto(dados, restaurante, categoria);
@@ -57,7 +56,7 @@ public class ProdutoService {
 
         if (dados.idCategoria() != null) {
             categoria = categoriaRepository
-                    .findById(dados.idCategoria())
+                    .findByIdAndRestauranteId(dados.idCategoria(), idRestaurante)
                     .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada."));
         }
 

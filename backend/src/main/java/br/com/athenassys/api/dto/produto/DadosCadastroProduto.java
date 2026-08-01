@@ -10,8 +10,6 @@ public record DadosCadastroProduto(
 
         @NotBlank
         String nome,
-
-        @NotBlank
         String descricao,
 
         @NotNull
