@@ -1,0 +1,21 @@
+/*Importação do Tailwind CSS*/
+@import "tailwindcss";
+
+/*Cor de fundo*/
+.cor-fundo {
+    background-color: #fff8ee;
+}
+
+/*Meandro Grego Horizontal*/
+.meandro-grego-horizontal {
+    background-image: url("/assets/imagens/meandro-horizontal.png");
+    background-repeat: repeat-x;
+    background-size: contain;
+}
+
+/*Meandro Grego Vertical*/
+.meandro-grego-vertical {
+    background-image: url("/assets/imagens/meandro-vertical.png");
+    background-repeat: repeat-y;
+    background-size: contain;
+}
