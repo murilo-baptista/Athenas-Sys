@@ -1,15 +1,9 @@
 package br.com.athenassys.api.controller;
 
-import br.com.athenassys.api.dto.categoria.DadosAtualizacaoCategoria;
-import br.com.athenassys.api.dto.categoria.DadosCadastroCategoria;
-import br.com.athenassys.api.dto.categoria.DadosDetalhamentoCategoria;
-import br.com.athenassys.api.dto.categoria.DadosListagemCategoria;
 import br.com.athenassys.api.dto.produto.DadosAtualizacaoProduto;
 import br.com.athenassys.api.dto.produto.DadosCadastroProduto;
 import br.com.athenassys.api.dto.produto.DadosDetalhamentoProduto;
 import br.com.athenassys.api.dto.produto.DadosListagemProduto;
-import br.com.athenassys.api.model.Categoria;
-import br.com.athenassys.api.service.CategoriaService;
 import br.com.athenassys.api.service.ProdutoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

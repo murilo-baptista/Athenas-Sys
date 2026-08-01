@@ -1,6 +1,5 @@
 package br.com.athenassys.api.model;
 
-import br.com.athenassys.api.dto.categoria.DadosAtualizacaoCategoria;
 import br.com.athenassys.api.dto.produto.DadosAtualizacaoProduto;
 import br.com.athenassys.api.dto.produto.DadosCadastroProduto;
 import jakarta.persistence.*;
