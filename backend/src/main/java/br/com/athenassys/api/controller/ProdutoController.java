@@ -32,10 +32,9 @@ public class ProdutoController {
     public ResponseEntity<DadosDetalhamentoProduto> cadastrar(
             @PathVariable Long idRestaurante,
             @RequestBody @Valid DadosCadastroProduto dados,
-            Long idCategoria,
             UriComponentsBuilder uriBuilder) {
 
-        var produto = service.cadastrar(dados, idRestaurante, idCategoria);
+        var produto = service.cadastrar(dados, idRestaurante, dados.idCategoria());
 
         var uri = uriBuilder.path("/restaurantes/{idRestaurante}/produtos/{id}")
                 .buildAndExpand(idRestaurante, produto.getId())
