@@ -25,7 +25,7 @@ public class CategoriaService {
 
         var restaurante = restauranteRepository
                 .findById(idRestaurante)
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
         var categoria = new Categoria(dados, restaurante);
 
         return categoriaRepository.save(categoria);
