@@ -7,7 +7,6 @@ import br.com.athenassys.api.model.Mesa;
 import br.com.athenassys.api.repository.MesaRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +25,7 @@ public class MesaService {
 
         var restaurante = restauranteRepository
                 .findById(idRestaurante)
-                .orElseThrow();
+                .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
         var mesa = new Mesa(dados, restaurante);
 
         return mesaRepository.save(mesa);
@@ -40,7 +39,7 @@ public class MesaService {
                 .map(DadosListagemMesa::new);
     }
 
-    public Mesa atualizar(@Valid DadosAtualizacaoMesa dados, Long idMesa, Long idRestaurante) {
+    public Mesa atualizar(DadosAtualizacaoMesa dados, Long idMesa, Long idRestaurante) {
 
         var mesa = mesaRepository
                 .findByIdAndRestauranteId(idMesa, idRestaurante)

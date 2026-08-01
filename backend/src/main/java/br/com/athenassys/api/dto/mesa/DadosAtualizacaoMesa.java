@@ -1,10 +1,13 @@
 package br.com.athenassys.api.dto.mesa;
 
-import br.com.athenassys.api.enums.StatusMesa;
+import jakarta.validation.constraints.Positive;
 
 public record DadosAtualizacaoMesa(
 
+        @Positive
         Integer numero,
+
+        @Positive
         Integer capacidade
 ) {
 }
