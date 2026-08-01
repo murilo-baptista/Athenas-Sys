@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AthenasSysApiApplication {
+public class AthenasApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AthenasSysApiApplication.class, args);
+		SpringApplication.run(AthenasApiApplication.class, args);
 	}
 
 }
