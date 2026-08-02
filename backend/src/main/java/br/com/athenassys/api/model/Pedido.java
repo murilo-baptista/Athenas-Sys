@@ -47,15 +47,12 @@ public class Pedido {
         this.restaurante = restaurante;
         this.mesa = mesa;
         this.funcionario = funcionario;
-        this.dataHora = dados.dataHora();
+        this.dataHora = LocalDateTime.now();
         this.valorTotal = dados.valorTotal();
         this.observacao = dados.observacao();
     }
 
     public void atualizarDados(DadosAtualizacaoPedido dados, Mesa mesa, Funcionario funcionario) {
-        if (dados.dataHora() != null) {
-            this.dataHora = dados.dataHora();
-        }
         if (dados.valorTotal() != null) {
             this.valorTotal = dados.valorTotal();
         }

@@ -3,14 +3,12 @@ package br.com.athenassys.api.service;
 import br.com.athenassys.api.dto.pedido.DadosAtualizacaoPedido;
 import br.com.athenassys.api.dto.pedido.DadosCadastroPedido;
 import br.com.athenassys.api.dto.pedido.DadosListagemPedido;
-import br.com.athenassys.api.dto.produto.DadosCadastroProduto;
 import br.com.athenassys.api.model.*;
 import br.com.athenassys.api.repository.FuncionarioRepository;
 import br.com.athenassys.api.repository.MesaRepository;
 import br.com.athenassys.api.repository.PedidoRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,11 +32,11 @@ public class PedidoService {
                 .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
 
         var mesa = mesaRepository
-                .findByIdAndRestauranteId(dados.idMesa(), idRestaurante)
+                .findByIdAndRestauranteId(dados.mesaId(), idRestaurante)
                 .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
 
         var funcionario = funcionarioRepository
-                .findByIdAndRestauranteId(dados.idFuncionario(), idRestaurante)
+                .findByIdAndRestauranteId(dados.funcionarioId(), idRestaurante)
                 .orElseThrow(() -> new EntityNotFoundException("Funcionario não encontrado."));
 
         var pedido = new Pedido(dados, restaurante, mesa, funcionario);
@@ -61,17 +59,17 @@ public class PedidoService {
 
         var mesa = pedido.getMesa();
 
-        if (dados.idMesa() != null) {
+        if (dados.mesaId() != null) {
             mesa = mesaRepository
-                    .findByIdAndRestauranteId(dados.idMesa(), idRestaurante)
+                    .findByIdAndRestauranteId(dados.mesaId(), idRestaurante)
                     .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
         }
 
         var funcionario = pedido.getFuncionario();
 
-        if (dados.idFuncionario() != null) {
+        if (dados.funcionarioId() != null) {
             funcionario = funcionarioRepository
-                    .findByIdAndRestauranteId(dados.idFuncionario(), idRestaurante)
+                    .findByIdAndRestauranteId(dados.funcionarioId(), idRestaurante)
                     .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado."));
         }
 

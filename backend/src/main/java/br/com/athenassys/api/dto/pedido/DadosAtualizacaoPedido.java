@@ -1,17 +1,15 @@
 package br.com.athenassys.api.dto.pedido;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 public record DadosAtualizacaoPedido(
 
-        Long idMesa,
-        Long idFuncionario,
+        Long mesaId,
+        Long funcionarioId,
 
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-        LocalDateTime dataHora,
+        @Positive
         BigDecimal valorTotal,
         String observacao
 ) {
