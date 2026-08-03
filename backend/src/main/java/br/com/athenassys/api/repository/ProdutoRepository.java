@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
-    Page<Produto> findAllByRestauranteIdAndAtivoTrue(Long restauranteId, Pageable paginacao);
+    Page<Produto> findAllByRestauranteIdAndAtivoTrue(Long idRestaurante, Pageable paginacao);
 
     Optional<Produto> findByIdAndRestauranteId(Long idProduto, Long idRestaurante);
 }

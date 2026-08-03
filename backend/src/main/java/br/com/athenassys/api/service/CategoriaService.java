@@ -32,10 +32,10 @@ public class CategoriaService {
     }
 
     public Page<DadosListagemCategoria> listar(
-            Long restauranteId,
+            Long idRestaurante,
             Pageable paginacao) {
 
-        return categoriaRepository.findAllByRestauranteIdAndAtivoTrue(restauranteId, paginacao)
+        return categoriaRepository.findAllByRestauranteIdAndAtivoTrue(idRestaurante, paginacao)
                 .map(DadosListagemCategoria::new);
     }
 

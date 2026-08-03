@@ -10,8 +10,8 @@ public record DadosDetalhamentoProduto(
         String nome,
         String descricao,
         BigDecimal preco,
-        Long categoriaId,
-        Long restauranteId,
+        Long idCategoria,
+        Long idRestaurante,
         Boolean ativo
 ) {
     public DadosDetalhamentoProduto(Produto produto) {

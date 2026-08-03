@@ -32,10 +32,10 @@ public class MesaService {
     }
 
     public Page<DadosListagemMesa> listar(
-            Long restauranteId,
+            Long idRestaurante,
             Pageable paginacao) {
 
-        return mesaRepository.findAllByRestauranteIdAndAtivoTrue(restauranteId, paginacao)
+        return mesaRepository.findAllByRestauranteIdAndAtivoTrue(idRestaurante, paginacao)
                 .map(DadosListagemMesa::new);
     }
 

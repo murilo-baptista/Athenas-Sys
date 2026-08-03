@@ -39,10 +39,10 @@ public class ProdutoService {
     }
 
     public Page<DadosListagemProduto> listar(
-            Long restauranteId,
+            Long idRestautante,
             Pageable paginacao) {
 
-        return produtoRepository.findAllByRestauranteIdAndAtivoTrue(restauranteId, paginacao)
+        return produtoRepository.findAllByRestauranteIdAndAtivoTrue(idRestautante, paginacao)
                 .map(DadosListagemProduto::new);
     }
 

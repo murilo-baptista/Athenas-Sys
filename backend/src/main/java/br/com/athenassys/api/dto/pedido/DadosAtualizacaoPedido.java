@@ -6,8 +6,8 @@ import java.math.BigDecimal;
 
 public record DadosAtualizacaoPedido(
 
-        Long mesaId,
-        Long funcionarioId,
+        Long idMesa,
+        Long idFuncionario,
 
         @Positive
         BigDecimal valorTotal,

@@ -1,9 +1,11 @@
 package br.com.athenassys.api.dto.pedido;
 
+import br.com.athenassys.api.dto.itempedido.DadosDetalhamentoItemPedido;
 import br.com.athenassys.api.model.Pedido;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record DadosDetalhamentoPedido(
 
@@ -11,9 +13,10 @@ public record DadosDetalhamentoPedido(
         LocalDateTime dataHora,
         BigDecimal valorTotal,
         String observacao,
-        Long restauranteId,
-        Long mesaId,
-        Long funcionarioId
+        Long idRestaurante,
+        Long idMesa,
+        Long idFuncionario,
+        List<DadosDetalhamentoItemPedido> itens
 ) {
     public DadosDetalhamentoPedido(Pedido pedido) {
         this(
@@ -23,7 +26,10 @@ public record DadosDetalhamentoPedido(
                 pedido.getObservacao(),
                 pedido.getRestaurante().getId(),
                 pedido.getMesa().getId(),
-                pedido.getFuncionario().getId()
+                pedido.getFuncionario().getId(),
+                pedido.getItens().stream()
+                        .map(DadosDetalhamentoItemPedido::new)
+                        .toList()
         );
     }
 }

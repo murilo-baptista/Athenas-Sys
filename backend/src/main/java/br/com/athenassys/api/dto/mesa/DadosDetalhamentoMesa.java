@@ -5,7 +5,7 @@ import br.com.athenassys.api.model.Mesa;
 
 public record DadosDetalhamentoMesa(
         Long id,
-        Long restauranteId,
+        Long idRestaurante,
         Integer numero,
         Integer capacidade,
         StatusMesa status,

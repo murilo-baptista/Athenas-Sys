@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "pedidos")
 @Entity(name = "Pedido")
@@ -38,6 +40,9 @@ public class Pedido {
     private BigDecimal valorTotal;
     private String observacao;
 
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<ItemPedido> itens = new ArrayList<>();
+
     public Pedido(
             DadosCadastroPedido dados,
             Restaurante restaurante,
@@ -48,7 +53,6 @@ public class Pedido {
         this.mesa = mesa;
         this.funcionario = funcionario;
         this.dataHora = LocalDateTime.now();
-        this.valorTotal = dados.valorTotal();
         this.observacao = dados.observacao();
     }
 
@@ -61,5 +65,17 @@ public class Pedido {
         }
         this.mesa = mesa;
         this.funcionario = funcionario;
+    }
+
+    public void calcularTotal() {
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (ItemPedido item : itens) {
+            BigDecimal subtotal = item.getValorUnitario()
+                    .multiply(BigDecimal.valueOf(item.getQuantidade()));
+            total = total.add(subtotal);
+        }
+        this.valorTotal = total;
     }
 }
