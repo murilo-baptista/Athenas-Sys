@@ -4,7 +4,7 @@ import br.com.athenassys.api.model.Categoria;
 
 public record DadosDetalhamentoCategoria(
         Long id,
-        Long restauranteId,
+        Long idRestaurante,
         String nome,
         Boolean ativo
 ) {

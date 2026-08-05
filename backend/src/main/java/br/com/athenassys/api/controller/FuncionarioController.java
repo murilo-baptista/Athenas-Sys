@@ -46,7 +46,7 @@ public class FuncionarioController {
         return ResponseEntity.ok(service.listar(idRestaurante, paginacao));
     }
 
-    @PutMapping("/{funcionarioId}")
+    @PutMapping("/{idFuncionario}")
     @Transactional
     public ResponseEntity<DadosDetalhamentoFuncionario> atualizar(
             @PathVariable Long idRestaurante,
