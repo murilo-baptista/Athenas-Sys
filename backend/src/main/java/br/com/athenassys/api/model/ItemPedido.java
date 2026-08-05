@@ -63,8 +63,10 @@ public class ItemPedido {
         if (dados.observacao() != null) {
             this.observacao = dados.observacao();
         }
-        this.valorUnitario = produto.getPreco();
-        this.produto = produto;
+        if (dados.idProduto() != null) {
+            this.produto = produto;
+            this.valorUnitario = produto.getPreco();
+        }
     }
 
     public void preparar() {

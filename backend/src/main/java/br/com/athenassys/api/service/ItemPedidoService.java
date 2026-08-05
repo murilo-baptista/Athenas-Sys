@@ -41,7 +41,10 @@ public class ItemPedidoService {
                 .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
 
         var itemPedido = new ItemPedido(dados, restaurante, pedido, produto);
-        return itemPedidoRepository.save(itemPedido);
+
+        itemPedidoRepository.save(itemPedido);
+        pedido.calcularTotal();
+        return itemPedido;
     }
 
     public Page<DadosListagemItemPedido> listar(
@@ -71,7 +74,12 @@ public class ItemPedidoService {
                     .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
         }
 
+        var pedido = pedidoRepository
+                .findByIdAndRestauranteId(idPedido, idRestaurante)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado."));
+
         itemPedido.atualizarDados(dados, produto);
+        pedido.calcularTotal();
         return itemPedido;
     }
 
@@ -117,8 +125,13 @@ public class ItemPedidoService {
         var itemPedido = itemPedidoRepository
                 .findByIdAndPedidoIdAndRestauranteId(idItemPedido, idPedido, idRestaurante)
                 .orElseThrow(() -> new EntityNotFoundException("Item não encontrado."));
-
         itemPedido.cancelar();
+
+        var pedido = pedidoRepository
+                .findByIdAndRestauranteId(idPedido, idRestaurante)
+                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado."));
+        pedido.calcularTotal();
+
         return itemPedido;
     }
 }

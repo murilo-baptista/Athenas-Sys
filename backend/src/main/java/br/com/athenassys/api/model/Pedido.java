@@ -2,6 +2,7 @@ package br.com.athenassys.api.model;
 
 import br.com.athenassys.api.dto.pedido.DadosAtualizacaoPedido;
 import br.com.athenassys.api.dto.pedido.DadosCadastroPedido;
+import br.com.athenassys.api.enums.StatusItemPedido;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -57,9 +58,6 @@ public class Pedido {
     }
 
     public void atualizarDados(DadosAtualizacaoPedido dados, Mesa mesa, Funcionario funcionario) {
-        if (dados.valorTotal() != null) {
-            this.valorTotal = dados.valorTotal();
-        }
         if (dados.observacao() != null) {
             this.observacao = dados.observacao();
         }
@@ -72,6 +70,8 @@ public class Pedido {
         BigDecimal total = BigDecimal.ZERO;
 
         for (ItemPedido item : itens) {
+            if (item.getStatus() == StatusItemPedido.CANCELADO) continue;
+
             BigDecimal subtotal = item.getValorUnitario()
                     .multiply(BigDecimal.valueOf(item.getQuantidade()));
             total = total.add(subtotal);

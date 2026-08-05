@@ -1,7 +1,6 @@
 package br.com.athenassys.api.dto.produto;
 
 import br.com.athenassys.api.model.Produto;
-import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
