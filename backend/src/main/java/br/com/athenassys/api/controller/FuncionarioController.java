@@ -46,7 +46,7 @@ public class FuncionarioController {
         return ResponseEntity.ok(service.listar(idRestaurante, paginacao));
     }
 
-    @PutMapping("/{funcionarioId}")
+    @PutMapping("/{idFuncionario}")
     @Transactional
     public ResponseEntity<DadosDetalhamentoFuncionario> atualizar(
             @PathVariable Long idRestaurante,
@@ -58,7 +58,7 @@ public class FuncionarioController {
         return ResponseEntity.ok(new DadosDetalhamentoFuncionario(funcionario));
     }
 
-    @DeleteMapping("/{funcionarioId}")
+    @DeleteMapping("/{idFuncionario}")
     @Transactional
     public ResponseEntity<Void> desativar(
             @PathVariable Long idRestaurante,
@@ -69,7 +69,7 @@ public class FuncionarioController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{funcionarioId}")
+    @GetMapping("/{idFuncionario}")
     public ResponseEntity<DadosDetalhamentoFuncionario> detalhar(
             @PathVariable Long idRestaurante,
             @PathVariable Long idFuncionario) {

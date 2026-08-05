@@ -32,10 +32,10 @@ public class FuncionarioService {
     }
 
     public Page<DadosListagemFuncionario> listar(
-            Long restauranteId,
+            Long idRestaurante,
             Pageable paginacao) {
 
-        return funcionarioRepository.findAllByRestauranteIdAndAtivoTrue(restauranteId, paginacao)
+        return funcionarioRepository.findAllByRestauranteIdAndAtivoTrue(idRestaurante, paginacao)
                 .map(DadosListagemFuncionario::new);
     }
 

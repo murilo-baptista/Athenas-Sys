@@ -2,6 +2,7 @@ package br.com.athenassys.api.model;
 
 import br.com.athenassys.api.dto.pedido.DadosAtualizacaoPedido;
 import br.com.athenassys.api.dto.pedido.DadosCadastroPedido;
+import br.com.athenassys.api.enums.StatusItemPedido;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "pedidos")
 @Entity(name = "Pedido")
@@ -38,6 +41,9 @@ public class Pedido {
     private BigDecimal valorTotal;
     private String observacao;
 
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<ItemPedido> itens = new ArrayList<>();
+
     public Pedido(
             DadosCadastroPedido dados,
             Restaurante restaurante,
@@ -48,18 +54,28 @@ public class Pedido {
         this.mesa = mesa;
         this.funcionario = funcionario;
         this.dataHora = LocalDateTime.now();
-        this.valorTotal = dados.valorTotal();
         this.observacao = dados.observacao();
     }
 
     public void atualizarDados(DadosAtualizacaoPedido dados, Mesa mesa, Funcionario funcionario) {
-        if (dados.valorTotal() != null) {
-            this.valorTotal = dados.valorTotal();
-        }
         if (dados.observacao() != null) {
             this.observacao = dados.observacao();
         }
         this.mesa = mesa;
         this.funcionario = funcionario;
+    }
+
+    public void calcularTotal() {
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (ItemPedido item : itens) {
+            if (item.getStatus() == StatusItemPedido.CANCELADO) continue;
+
+            BigDecimal subtotal = item.getValorUnitario()
+                    .multiply(BigDecimal.valueOf(item.getQuantidade()));
+            total = total.add(subtotal);
+        }
+        this.valorTotal = total;
     }
 }

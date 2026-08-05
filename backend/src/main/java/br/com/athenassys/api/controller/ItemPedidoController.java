@@ -83,7 +83,7 @@ public class ItemPedidoController {
         return ResponseEntity.ok(new DadosDetalhamentoItemPedido(itemPedido));
     }
 
-    @PatchMapping("/{idItemPedido}/finalizar")
+    @PatchMapping("/{idItemPedido}/marcarPronto")
     @Transactional
     public ResponseEntity<DadosDetalhamentoItemPedido> marcarPronto(
             @PathVariable Long idRestaurante,

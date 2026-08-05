@@ -1,7 +1,6 @@
 package br.com.athenassys.api.dto.produto;
 
 import br.com.athenassys.api.model.Produto;
-import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
@@ -10,8 +9,8 @@ public record DadosDetalhamentoProduto(
         String nome,
         String descricao,
         BigDecimal preco,
-        Long categoriaId,
-        Long restauranteId,
+        Long idCategoria,
+        Long idRestaurante,
         Boolean ativo
 ) {
     public DadosDetalhamentoProduto(Produto produto) {
