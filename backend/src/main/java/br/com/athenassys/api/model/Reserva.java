@@ -2,6 +2,7 @@ package br.com.athenassys.api.model;
 
 import br.com.athenassys.api.dto.mesa.DadosAtualizacaoMesa;
 import br.com.athenassys.api.dto.mesa.DadosCadastroMesa;
+import br.com.athenassys.api.dto.reserva.DadosAtualizacaoReserva;
 import br.com.athenassys.api.dto.reserva.DadosCadastroReserva;
 import br.com.athenassys.api.enums.StatusMesa;
 import br.com.athenassys.api.enums.StatusReserva;
@@ -52,21 +53,29 @@ public class Reserva {
         this.dataHora = dados.dataHora();
         this.status = StatusReserva.ATIVA;
     }
-/*
-    public void atualizarDados(DadosAtualizacaoReserva dados) {
-        if (dados.numero() != null) {
-            this.numero = dados.numero();
+
+
+    public void atualizarDados(DadosAtualizacaoReserva dados, Mesa mesa) {
+        if (dados.numPessoas() != null) {
+            this.numPessoas = dados.numPessoas();
         }
-        if (dados.capacidade() != null) {
-            this.capacidade = dados.capacidade();
+        if (dados.nomeCliente() != null) {
+            this.nomeCliente = dados.nomeCliente();
         }
+        if (dados.telefone() != null) {
+            this.telefone = dados.telefone();
+        }
+        if (dados.dataHora() != null) {
+            this.dataHora = dados.dataHora();
+        }
+        this.mesa = mesa;
     }
 
-    public void ocupar() {
-        this.status = StatusMesa.OCUPADA;
+    public void concluir() {
+        this.status = StatusReserva.CONCLUIDA;
     }
 
-    public void desocupar() {
-        this.status = StatusMesa.LIVRE;
-    }*/
+    public void cancelar() {
+        this.status = StatusReserva.CANCELADA;
+    }
 }

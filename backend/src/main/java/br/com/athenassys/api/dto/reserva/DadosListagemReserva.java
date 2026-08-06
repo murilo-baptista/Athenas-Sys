@@ -5,22 +5,20 @@ import br.com.athenassys.api.model.Reserva;
 
 import java.time.LocalDateTime;
 
-public record DadosDetalhamentoReserva(
+public record DadosListagemReserva(
 
         Long id,
         Long idMesa,
-        Long idRestaurante,
         Integer numPessoas,
         String nomeCliente,
         String telefone,
         LocalDateTime dataHora,
         StatusReserva status
 ) {
-    public DadosDetalhamentoReserva(Reserva reserva) {
+    public DadosListagemReserva(Reserva reserva) {
         this(
                 reserva.getId(),
                 reserva.getMesa().getId(),
-                reserva.getRestaurante().getId(),
                 reserva.getNumPessoas(),
                 reserva.getNomeCliente(),
                 reserva.getTelefone(),
