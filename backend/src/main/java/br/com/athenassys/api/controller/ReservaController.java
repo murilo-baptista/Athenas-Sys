@@ -1,7 +1,5 @@
 package br.com.athenassys.api.controller;
 
-import br.com.athenassys.api.dto.itempedido.DadosDetalhamentoItemPedido;
-import br.com.athenassys.api.dto.produto.DadosDetalhamentoProduto;
 import br.com.athenassys.api.dto.reserva.DadosAtualizacaoReserva;
 import br.com.athenassys.api.dto.reserva.DadosCadastroReserva;
 import br.com.athenassys.api.dto.reserva.DadosDetalhamentoReserva;

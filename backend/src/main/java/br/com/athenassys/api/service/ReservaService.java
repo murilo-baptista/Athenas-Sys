@@ -1,18 +1,14 @@
 package br.com.athenassys.api.service;
 
-import br.com.athenassys.api.dto.mesa.DadosCadastroMesa;
-import br.com.athenassys.api.dto.produto.DadosListagemProduto;
 import br.com.athenassys.api.dto.reserva.DadosAtualizacaoReserva;
 import br.com.athenassys.api.dto.reserva.DadosCadastroReserva;
 import br.com.athenassys.api.dto.reserva.DadosListagemReserva;
-import br.com.athenassys.api.model.Categoria;
 import br.com.athenassys.api.model.Mesa;
 import br.com.athenassys.api.model.Reserva;
 import br.com.athenassys.api.repository.MesaRepository;
 import br.com.athenassys.api.repository.ReservaRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

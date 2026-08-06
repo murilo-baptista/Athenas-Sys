@@ -1,10 +1,7 @@
 package br.com.athenassys.api.model;
 
-import br.com.athenassys.api.dto.mesa.DadosAtualizacaoMesa;
-import br.com.athenassys.api.dto.mesa.DadosCadastroMesa;
 import br.com.athenassys.api.dto.reserva.DadosAtualizacaoReserva;
 import br.com.athenassys.api.dto.reserva.DadosCadastroReserva;
-import br.com.athenassys.api.enums.StatusMesa;
 import br.com.athenassys.api.enums.StatusReserva;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
