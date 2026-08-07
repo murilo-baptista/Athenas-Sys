@@ -4,7 +4,6 @@ import br.com.athenassys.api.dto.mesa.DadosAtualizacaoMesa;
 import br.com.athenassys.api.dto.mesa.DadosCadastroMesa;
 import br.com.athenassys.api.enums.StatusMesa;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,6 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Mesa {
 

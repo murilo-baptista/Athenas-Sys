@@ -1,0 +1,104 @@
+<div class="wizard-page">
+
+
+  <!-- Faixa decorativa superior -->
+  <div class="greek-border top"></div>
+
+
+  <div class="wizard-content">
+
+
+    <!-- Lado esquerdo: banner Athenas (idêntico à página de autenticação) -->
+    <div class="left-panel">
+      <div class="banner">
+        <img src="assets/imagens/banner-bordo.jpeg" alt="Athenas - Gestão inteligente para restaurantes" class="banner-img">
+        <div class="banner-content">
+          <div class="banner-logo-placeholder">logo<br>transparente</div>
+          <h2 class="banner-title">ATHENAS</h2>
+          <p class="banner-subtitle">Gestão inteligente<br>para restaurantes</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Direita: fundo com templo desbotado + card do wizard -->
+    <div class="wizard-right">
+      <img src="assets/imagens/templo-grego-g.png" alt="" class="temple-watermark">
+
+
+      <div class="wizard-card">
+
+
+        <!-- Indicador de etapas -->
+        <div class="steps-indicator">
+          <div class="step-circle is-done">✓</div>
+          <div class="step-line"></div>
+          <div class="step-circle is-current">2</div>
+          <div class="step-line"></div>
+          <div class="step-circle">3</div>
+        </div>
+        <p class="step-caption">ETAPA 2 DE 3 · <strong>MESAS DO RESTAURANTE</strong></p>
+
+
+        <h1 class="wizard-title">CADASTRE SUAS MESAS</h1>
+        <p class="wizard-subtitle">Adicione as mesas disponíveis no salão. Você pode<br>adicionar quantas precisar.</p>
+
+
+        <img src="assets/imagens/divisor-g.png" alt="" class="divider">
+
+
+        <form class="wizard-form" (ngSubmit)="proximo()">
+
+
+          <div class="field-row">
+            <div class="field-block">
+              <label class="field-label" for="numero-mesa">NÚMERO DA MESA</label>
+              <div class="input-group">
+                <input type="text" id="numero-mesa" class="input-field" placeholder="Ex: 01"
+                       name="numeroMesa" [(ngModel)]="numeroMesa">
+              </div>
+            </div>
+            <div class="field-block">
+              <label class="field-label" for="capacidade-mesa">CAPACIDADE (LUGARES)</label>
+              <div class="input-group">
+                <input type="number" id="capacidade-mesa" class="input-field" placeholder="Ex: 4"
+                       name="capacidadeMesa" [(ngModel)]="capacidadeMesa">
+              </div>
+            </div>
+          </div>
+
+
+          <button type="button" class="add-button" [disabled]="!numeroMesa || !capacidadeMesa" (click)="adicionarMesa()">
+            + Adicionar mesa à lista
+          </button>
+
+
+          <label class="added-label">MESAS ADICIONADAS</label>
+          <div class="added-list">
+            <div class="added-item" *ngFor="let mesa of mesas">
+              <span class="item-name">Mesa {{ mesa.numero }}</span>
+              <span class="badge">{{ mesa.capacidade }} lugares</span>
+            </div>
+          </div>
+          <p class="helper-note" *ngIf="mesas.length === 0">Cadastre pelo menos 1 mesa para continuar</p>
+
+
+          <div class="wizard-footer">
+            <button type="button" class="btn btn-outline" (click)="voltar()">← VOLTAR</button>
+            <button type="submit" class="btn btn-solid" [disabled]="mesas.length === 0">PRÓXIMO →</button>
+          </div>
+
+
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+
+
+  <!-- Faixa decorativa inferior -->
+  <div class="greek-border bottom"></div>
+
+
+</div>
