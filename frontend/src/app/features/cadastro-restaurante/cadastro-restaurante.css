@@ -1,0 +1,422 @@
+/* ==========================================================
+   Athenas - Cadastro do Restaurante (Etapa 1 de 3)
+   Paleta: bordô #7B0F12 | dourado #C9A46A | creme #FFF8EE
+   ========================================================== */
+
+
+:host {
+  --cor-creme: #FFF8EE;
+  --cor-bordo: #7B0F12;
+  --cor-bordo-escuro: #5A0B0D;
+  --cor-dourado: #C9A46A;
+  --cor-texto-titulo: #7B0F12;
+  --cor-texto-secundario: #4A4038;
+  display: block;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+
+.wizard-page {
+  height: 100vh;
+  width: 100%;
+  background-color: var(--cor-creme);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+
+/* ---------- Faixas decorativas (idênticas à página de autenticação) ---------- */
+.greek-border {
+  height: 22px;
+  width: 100%;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='22' viewBox='0 0 40 22'><path d='M0 4 H14 V18 H24 V10 H34 V18 H40' fill='none' stroke='%23C9A46A' stroke-width='2.4'/></svg>");
+  background-repeat: repeat-x;
+  background-size: 40px 22px;
+  background-position: left center;
+  flex-shrink: 0;
+  position: relative;
+}
+
+
+/* ---------- Layout principal (mesmo esqueleto da página de autenticação) ---------- */
+.wizard-content {
+  flex: 1;
+  display: flex;
+  width: 100%;
+  min-height: 0;
+}
+
+
+/* ---------- Lado esquerdo: banner (idêntico à página de autenticação) ---------- */
+.left-panel {
+  display: flex;
+  flex-shrink: 0;
+}
+
+
+.banner {
+  position: relative;
+  height: 100%;
+  width: auto;
+  aspect-ratio: 618 / 1536;
+  flex-shrink: 0;
+  background-color: var(--cor-bordo);
+  overflow: hidden;
+}
+
+
+.banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+.banner-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 44px 20px 0;
+}
+
+
+.banner-logo-placeholder {
+  width: 116px;
+  height: 116px;
+  border-radius: 50%;
+  background-color: var(--cor-dourado);
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cor-bordo);
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  line-height: 1.3;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+
+.banner-title {
+  color: var(--cor-dourado);
+  font-size: 40px;
+  letter-spacing: 5px;
+  font-family: 'Times New Roman', serif;
+  text-transform: uppercase;
+  margin: -10px 0 4px;
+  flex-shrink: 0;
+}
+
+
+.banner-subtitle {
+  color: var(--cor-dourado);
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: 'Georgia', serif;
+  opacity: 0.9;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+
+/* ---------- Direita: fundo com templo desbotado + card do wizard ---------- */
+.wizard-right {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+
+.temple-watermark {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 82%;
+  max-width: none;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+.wizard-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 560px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  background-color: var(--cor-creme);
+  border: 1.5px solid var(--cor-dourado);
+  border-radius: 10px;
+  padding: 32px 44px 36px;
+  box-shadow: 0 12px 34px rgba(90, 11, 13, 0.12);
+}
+
+
+/* ---------- Indicador de etapas (steps) ---------- */
+.steps-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 14px;
+}
+
+
+.step-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: Arial, sans-serif;
+  flex-shrink: 0;
+  border: 1.6px solid var(--cor-dourado);
+  background-color: var(--cor-creme);
+  color: var(--cor-dourado);
+}
+
+
+.step-circle.is-done {
+  background-color: var(--cor-dourado);
+  border-color: var(--cor-dourado);
+  color: var(--cor-creme);
+}
+
+
+.step-circle.is-current {
+  background-color: var(--cor-bordo);
+  border-color: var(--cor-bordo);
+  color: var(--cor-creme);
+}
+
+
+.step-line {
+  width: 56px;
+  height: 1.6px;
+  background-color: var(--cor-dourado);
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+
+.step-caption {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--cor-texto-secundario);
+  margin-bottom: 14px;
+}
+
+
+.step-caption strong {
+  color: var(--cor-bordo);
+}
+
+
+/* ---------- Títulos ---------- */
+.wizard-title {
+  color: var(--cor-texto-titulo);
+  font-size: 23px;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px;
+  font-weight: 700;
+  text-align: center;
+}
+
+
+.wizard-subtitle {
+  color: var(--cor-texto-secundario);
+  font-size: 14.5px;
+  line-height: 1.5;
+  margin: 0 0 18px;
+  font-family: 'Georgia', serif;
+  text-align: center;
+}
+
+
+.wizard-card .divider {
+  display: block;
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+  margin: 0 auto 22px;
+  object-fit: contain;
+}
+
+
+/* ---------- Formulário ---------- */
+.wizard-form {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.field-row {
+  display: flex;
+  gap: 18px;
+}
+
+
+.field-row .field-block {
+  flex: 1;
+  min-width: 0;
+}
+
+
+.field-label {
+  display: block;
+  color: var(--cor-bordo);
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+
+.input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+
+.input-field {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px 0 40px;
+  border: 1.3px solid var(--cor-dourado);
+  border-radius: 8px;
+  background-color: var(--cor-creme);
+  font-family: 'Georgia', serif;
+  font-size: 14.5px;
+  color: var(--cor-texto-secundario);
+  outline: none;
+}
+
+
+.input-field.no-icon {
+  padding-left: 14px;
+}
+
+
+.input-field::placeholder {
+  color: #9C8F7E;
+}
+
+
+.input-field:focus {
+  border-color: var(--cor-bordo);
+}
+
+
+/* ---------- Botões de rodapé ---------- */
+.wizard-footer {
+  display: flex;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+
+.btn {
+  flex: 1;
+  height: 48px;
+  border-radius: 8px;
+  font-family: 'Times New Roman', serif;
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+}
+
+
+.btn-outline {
+  background-color: transparent;
+  border: 1.4px solid var(--cor-bordo);
+  color: var(--cor-bordo);
+}
+
+
+.btn-outline:hover {
+  background-color: rgba(123, 15, 18, 0.06);
+}
+
+
+.btn-solid {
+  background-color: var(--cor-bordo);
+  color: var(--cor-creme);
+}
+
+
+.btn-solid:hover {
+  background-color: var(--cor-bordo-escuro);
+}
+
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 900px) {
+  .left-panel {
+    display: none;
+  }
+
+
+  .wizard-right {
+    padding: 24px 16px;
+  }
+
+
+  .wizard-card {
+    padding: 26px 22px 30px;
+  }
+
+
+  .temple-watermark {
+    width: 130%;
+  }
+
+
+  .field-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}

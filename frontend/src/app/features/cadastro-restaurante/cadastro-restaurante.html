@@ -1,0 +1,124 @@
+<div class="wizard-page">
+
+
+  <!-- Faixa decorativa superior -->
+  <div class="greek-border top"></div>
+
+
+  <div class="wizard-content">
+
+
+    <!-- Lado esquerdo: banner Athenas (idêntico à página de autenticação) -->
+    <div class="left-panel">
+      <div class="banner">
+        <img src="assets/imagens/banner-bordo.jpeg" alt="Athenas - Gestão inteligente para restaurantes" class="banner-img">
+        <div class="banner-content">
+          <div class="banner-logo-placeholder">logo<br>transparente</div>
+          <h2 class="banner-title">ATHENAS</h2>
+          <p class="banner-subtitle">Gestão inteligente<br>para restaurantes</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Direita: fundo com templo desbotado + card do wizard -->
+    <div class="wizard-right">
+      <img src="assets/imagens/templo-grego-g.png" alt="" class="temple-watermark">
+
+
+      <div class="wizard-card">
+
+
+        <!-- Indicador de etapas -->
+        <div class="steps-indicator">
+          <div class="step-circle is-current">1</div>
+          <div class="step-line"></div>
+          <div class="step-circle">2</div>
+          <div class="step-line"></div>
+          <div class="step-circle">3</div>
+        </div>
+        <p class="step-caption">ETAPA 1 DE 3 · <strong>DADOS DO RESTAURANTE</strong></p>
+
+
+        <h1 class="wizard-title">CADASTRE SEU RESTAURANTE</h1>
+        <p class="wizard-subtitle">Preencha os dados para criar sua conta no Athenas</p>
+
+
+        <img src="assets/imagens/divisor-g.png" alt="" class="divider">
+
+
+        <form class="wizard-form" (ngSubmit)="proximo()">
+
+
+          <label class="field-label" for="nome-restaurante">NOME DO RESTAURANTE</label>
+          <div class="input-group">
+            <img src="assets/imagens/icone-usuario.png" alt="" class="input-icon">
+            <input type="text" id="nome-restaurante" class="input-field" placeholder="Ex: Restaurante Athenas"
+                   name="nome" [(ngModel)]="form.nome">
+          </div>
+
+
+          <div class="field-row">
+            <div class="field-block">
+              <label class="field-label" for="email-restaurante">E-MAIL</label>
+              <div class="input-group">
+                <input type="email" id="email-restaurante" class="input-field no-icon" placeholder="seurestaurante@email.com"
+                       name="email" [(ngModel)]="form.email">
+              </div>
+            </div>
+            <div class="field-block">
+              <label class="field-label" for="telefone-restaurante">TELEFONE</label>
+              <div class="input-group">
+                <input type="tel" id="telefone-restaurante" class="input-field no-icon" placeholder="(11) 99999-9999"
+                       name="telefone" [(ngModel)]="form.telefone">
+              </div>
+            </div>
+          </div>
+
+
+          <label class="field-label" for="cnpj-restaurante">CNPJ</label>
+          <div class="input-group">
+            <input type="text" id="cnpj-restaurante" class="input-field no-icon" placeholder="00.000.000/0000-00"
+                   name="cnpj" [(ngModel)]="form.cnpj">
+          </div>
+
+
+          <div class="field-row">
+            <div class="field-block">
+              <label class="field-label" for="senha-restaurante">SENHA</label>
+              <div class="input-group">
+                <img src="assets/imagens/icone-cadeado.png" alt="" class="input-icon">
+                <input type="password" id="senha-restaurante" class="input-field" placeholder="Digite sua senha"
+                       name="senha" [(ngModel)]="form.senha">
+              </div>
+            </div>
+            <div class="field-block">
+              <label class="field-label" for="confirmar-senha-restaurante">CONFIRMAR SENHA</label>
+              <div class="input-group">
+                <img src="assets/imagens/icone-cadeado.png" alt="" class="input-icon">
+                <input type="password" id="confirmar-senha-restaurante" class="input-field" placeholder="Repita a senha"
+                       name="confirmarSenha" [(ngModel)]="form.confirmarSenha">
+              </div>
+            </div>
+          </div>
+
+
+          <div class="wizard-footer">
+            <button type="button" class="btn btn-outline" (click)="voltarLogin()">VOLTAR AO LOGIN</button>
+            <button type="submit" class="btn btn-solid">PRÓXIMO →</button>
+          </div>
+
+
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+
+
+  <!-- Faixa decorativa inferior -->
+  <div class="greek-border bottom"></div>
+
+
+</div>
