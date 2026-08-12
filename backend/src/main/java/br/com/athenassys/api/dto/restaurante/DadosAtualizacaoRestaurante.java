@@ -1,12 +1,10 @@
 package br.com.athenassys.api.dto.restaurante;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public record DadosAtualizacaoRestaurante(
-        @NotNull
-        Long id,
+
         String nome,
 
         @Email
