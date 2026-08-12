@@ -4,8 +4,7 @@ import br.com.athenassys.api.dto.restaurante.DadosAtualizacaoRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosCadastroRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosDetalhamentoRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosListagemRestaurante;
-import br.com.athenassys.api.model.Restaurante;
-import br.com.athenassys.api.repository.RestauranteRepository;
+import br.com.athenassys.api.service.RestauranteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,48 +19,54 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class RestauranteController {
 
-    private final RestauranteRepository repository;
+    private final RestauranteService service;
 
     @PostMapping
     @Transactional
-    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroRestaurante dados, UriComponentsBuilder uriBuilder) {
-        var restaurante = new Restaurante(dados);
-        repository.save(restaurante);
+    public ResponseEntity<DadosDetalhamentoRestaurante> cadastrar(
+            @RequestBody @Valid DadosCadastroRestaurante dados,
+            UriComponentsBuilder uriBuilder) {
 
-        var uri = uriBuilder.path("restaurantes/{id}").buildAndExpand(restaurante.getId()).toUri();
+        var restaurante = service.cadastrar(dados);
 
-        return ResponseEntity.created(uri).body(new DadosDetalhamentoRestaurante(restaurante));
+        var uri = uriBuilder.path("restaurantes/{id}")
+                .buildAndExpand(restaurante.getId())
+                .toUri();
+
+        return ResponseEntity.created(uri)
+                .body(new DadosDetalhamentoRestaurante(restaurante));
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemRestaurante>> listar(Pageable paginacao) {
-        var page = repository.findAllByAtivoTrue(paginacao)
-                .map(DadosListagemRestaurante::new);
-        return ResponseEntity.ok(page);
+    public ResponseEntity<Page<DadosListagemRestaurante>> listar(
+            Pageable paginacao) {
+
+        return ResponseEntity.ok(service.listar(paginacao));
     }
 
-    @PutMapping
+    @PutMapping("/{idRestaurante}")
     @Transactional
-    public ResponseEntity atualizar(@RequestBody @Valid DadosAtualizacaoRestaurante dados) {
-        var restaurante = repository.getReferenceById(dados.id());
-        restaurante.atualizarDados(dados);
+    public ResponseEntity<DadosDetalhamentoRestaurante> atualizar(
+            @PathVariable Long idRestaurante,
+            @RequestBody @Valid DadosAtualizacaoRestaurante dados) {
 
+        var restaurante = service.atualizar(dados, idRestaurante);
         return ResponseEntity.ok(new DadosDetalhamentoRestaurante(restaurante));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{idRestaurante}")
     @Transactional
-    public ResponseEntity deletar(@PathVariable Long id) {
-        var restaurante = repository.getReferenceById(id);
-        restaurante.desativar();
+    public ResponseEntity<Void> desativar(
+            @PathVariable Long idRestaurante) {
 
+        service.desativar(idRestaurante);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity detalhar(@PathVariable Long id) {
-        var restaurante = repository.getReferenceById(id);
+    @GetMapping("/{idRestaurante}")
+    public ResponseEntity<DadosDetalhamentoRestaurante> detalhar(@PathVariable Long idRestaurante) {
 
+        var restaurante = service.buscarPorId(idRestaurante);
         return ResponseEntity.ok(new DadosDetalhamentoRestaurante(restaurante));
     }
 }
