@@ -3,6 +3,7 @@ package br.com.athenassys.api.service;
 import br.com.athenassys.api.dto.categoria.DadosAtualizacaoCategoria;
 import br.com.athenassys.api.dto.categoria.DadosCadastroCategoria;
 import br.com.athenassys.api.dto.categoria.DadosListagemCategoria;
+import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.Categoria;
 import br.com.athenassys.api.repository.CategoriaRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
@@ -25,7 +26,7 @@ public class CategoriaService {
 
         var restaurante = restauranteRepository
                 .findById(idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
         var categoria = new Categoria(dados, restaurante);
 
         return categoriaRepository.save(categoria);
@@ -43,7 +44,7 @@ public class CategoriaService {
 
         var categoria = categoriaRepository
                 .findByIdAndRestauranteId(idCategoria, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria não encontrada."));
 
         categoria.atualizarDados(dados);
         return categoria;
@@ -53,7 +54,7 @@ public class CategoriaService {
 
         var categoria = categoriaRepository
                 .findByIdAndRestauranteId(idCategoria, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria não encontrada."));
 
         categoria.desativar();
         return categoria;
@@ -63,6 +64,6 @@ public class CategoriaService {
 
         return categoriaRepository
                 .findByIdAndRestauranteId(idCategoria, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria não encontrada."));
     }
 }
