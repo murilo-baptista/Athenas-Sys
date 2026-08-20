@@ -3,6 +3,7 @@ package br.com.athenassys.api.service;
 import br.com.athenassys.api.dto.mesa.DadosAtualizacaoMesa;
 import br.com.athenassys.api.dto.mesa.DadosCadastroMesa;
 import br.com.athenassys.api.dto.mesa.DadosListagemMesa;
+import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.Mesa;
 import br.com.athenassys.api.repository.MesaRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
@@ -25,7 +26,7 @@ public class MesaService {
 
         var restaurante = restauranteRepository
                 .findById(idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
         var mesa = new Mesa(dados, restaurante);
 
         return mesaRepository.save(mesa);
@@ -43,7 +44,7 @@ public class MesaService {
 
         var mesa = mesaRepository
                 .findByIdAndRestauranteId(idMesa, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Mesa não encontrada."));
 
         mesa.atualizarDados(dados);
         return mesa;
@@ -53,7 +54,7 @@ public class MesaService {
 
         var mesa = mesaRepository
                 .findByIdAndRestauranteId(idMesa, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Mesa não encontrada."));
 
         mesa.desativar();
         return mesa;
@@ -63,14 +64,14 @@ public class MesaService {
 
         return mesaRepository
                 .findByIdAndRestauranteId(idMesa, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Mesa não encontrada."));
     }
 
     public Mesa ocupar(Long idMesa, Long idRestaurante) {
 
         var mesa = mesaRepository
                 .findByIdAndRestauranteId(idMesa, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Mesa não encontrada."));
 
         mesa.ocupar();
         return mesa;
@@ -80,7 +81,7 @@ public class MesaService {
 
         var mesa = mesaRepository
                 .findByIdAndRestauranteId(idMesa, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Mesa não encontrada."));
 
         mesa.desocupar();
         return mesa;

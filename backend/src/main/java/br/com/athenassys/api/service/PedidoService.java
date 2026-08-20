@@ -3,6 +3,7 @@ package br.com.athenassys.api.service;
 import br.com.athenassys.api.dto.pedido.DadosAtualizacaoPedido;
 import br.com.athenassys.api.dto.pedido.DadosCadastroPedido;
 import br.com.athenassys.api.dto.pedido.DadosListagemPedido;
+import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.*;
 import br.com.athenassys.api.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,21 +28,21 @@ public class PedidoService {
 
         var restaurante = restauranteRepository
                 .findById(idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
 
         var mesa = mesaRepository
                 .findByIdAndRestauranteId(dados.idMesa(), idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Mesa não encontrada."));
 
         var funcionario = funcionarioRepository
                 .findByIdAndRestauranteId(dados.idFuncionario(), idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Funcionario não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionario não encontrado."));
 
         var pedido = new Pedido(dados, restaurante, mesa, funcionario);
         for (var itemDados : dados.itens()) {
             var produto = produtoRepository
                     .findByIdAndRestauranteId(itemDados.idProduto(), idRestaurante)
-                    .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado."));
             pedido.getItens().add(new ItemPedido(itemDados, restaurante, pedido, produto));
         }
         pedido.calcularTotal();
@@ -60,14 +61,14 @@ public class PedidoService {
 
         var pedido = pedidoRepository
                 .findByIdAndRestauranteId(idPedido, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Pedido não encontrado."));
 
         var mesa = pedido.getMesa();
 
         if (dados.idMesa() != null) {
             mesa = mesaRepository
                     .findByIdAndRestauranteId(dados.idMesa(), idRestaurante)
-                    .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("Mesa não encontrada."));
         }
 
         var funcionario = pedido.getFuncionario();
@@ -75,7 +76,7 @@ public class PedidoService {
         if (dados.idFuncionario() != null) {
             funcionario = funcionarioRepository
                     .findByIdAndRestauranteId(dados.idFuncionario(), idRestaurante)
-                    .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado."));
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado."));
         }
 
         pedido.atualizarDados(dados, mesa, funcionario);
@@ -86,6 +87,6 @@ public class PedidoService {
 
         return pedidoRepository
                 .findByIdAndRestauranteId(idPedido, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Pedido não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Pedido não encontrado."));
     }
 }
