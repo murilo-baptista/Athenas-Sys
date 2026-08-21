@@ -9,7 +9,6 @@ import br.com.athenassys.api.repository.ItemPedidoRepository;
 import br.com.athenassys.api.repository.PedidoRepository;
 import br.com.athenassys.api.repository.ProdutoRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

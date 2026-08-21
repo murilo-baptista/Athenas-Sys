@@ -1,13 +1,12 @@
 package br.com.athenassys.api.service;
 
 import br.com.athenassys.api.dto.funcionario.DadosAtualizacaoFuncionario;
-import br.com.athenassys.api.dto.funcionario.DadosListagemFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosCadastroFuncionario;
+import br.com.athenassys.api.dto.funcionario.DadosListagemFuncionario;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.Funcionario;
 import br.com.athenassys.api.repository.FuncionarioRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
