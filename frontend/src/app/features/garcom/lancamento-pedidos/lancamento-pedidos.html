@@ -107,25 +107,33 @@
                 <div class="status-steps">
 
                   <!-- Passo 1: Novo -->
-                  <div class="status-step" [ngClass]="'estado-' + stepEstado(pedido, 0)">
+                  <div class="status-step step-novo" [ngClass]="'estado-' + stepEstado(pedido, 0)">
                     <span class="status-sphere" aria-hidden="true"></span>
                     <span class="status-icon status-icon-novo" aria-hidden="true"></span>
                     <span class="status-rotulo">Novo</span>
                   </div>
 
-                  <div class="status-linha" [ngClass]="'estado-' + linhaEstado(pedido, 0)"></div>
+                  <div
+                    class="status-linha"
+                    [ngClass]="'estado-' + linhaEstado(pedido, 0)"
+                    [class.seta]="linhaEstado(pedido, 0) !== 'pendente'">
+                  </div>
 
                   <!-- Passo 2: Em andamento -->
-                  <div class="status-step" [ngClass]="'estado-' + stepEstado(pedido, 1)">
+                  <div class="status-step step-andamento" [ngClass]="'estado-' + stepEstado(pedido, 1)">
                     <span class="status-sphere" aria-hidden="true"></span>
                     <span class="status-icon status-icon-andamento" aria-hidden="true"></span>
                     <span class="status-rotulo">Em andamento</span>
                   </div>
 
-                  <div class="status-linha" [ngClass]="'estado-' + linhaEstado(pedido, 1)"></div>
+                  <div
+                    class="status-linha"
+                    [ngClass]="'estado-' + linhaEstado(pedido, 1)"
+                    [class.seta]="linhaEstado(pedido, 1) !== 'pendente'">
+                  </div>
 
                   <!-- Passo 3: Pronto -->
-                  <div class="status-step" [ngClass]="'estado-' + stepEstado(pedido, 2)">
+                  <div class="status-step step-pronto" [ngClass]="'estado-' + stepEstado(pedido, 2)">
                     <span class="status-sphere" aria-hidden="true"></span>
                     <span class="status-icon status-icon-pronto" aria-hidden="true"></span>
                     <span class="status-rotulo">Pronto</span>
@@ -135,11 +143,11 @@
                   <div
                     class="status-linha status-linha-final"
                     [ngClass]="'estado-' + linhaEstado(pedido, 2)"
-                    [class.seta]="linhaEstado(pedido, 2) === 'atual'">
+                    [class.seta]="linhaEstado(pedido, 2) !== 'pendente'">
                   </div>
 
                   <!-- Passo 4: Entregue -->
-                  <div class="status-step" [ngClass]="'estado-' + stepEstado(pedido, 3)">
+                  <div class="status-step step-entregue" [ngClass]="'estado-' + stepEstado(pedido, 3)">
                     <span class="status-sphere" aria-hidden="true"></span>
                     <span class="status-icon status-icon-entregue" aria-hidden="true"></span>
                     <span class="status-rotulo" *ngIf="stepEstado(pedido, 3) !== 'completo'">Entregue</span>
