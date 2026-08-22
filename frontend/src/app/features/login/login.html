@@ -31,14 +31,14 @@
 
         <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
 
-          <label class="field-label" for="usuario">USUÁRIO</label>
+          <label class="field-label" for="usuario">NOME DO RESTAURANTE</label>
           <div class="input-wrapper">
             <img src="assets/imagens/icone-usuario.png" alt="" class="input-icon">
             <input
               id="usuario"
               name="usuario"
               type="text"
-              placeholder="Digite seu usuário"
+              placeholder="Ex: Restaurante Athenas"
               [(ngModel)]="usuario"
               required
             >
