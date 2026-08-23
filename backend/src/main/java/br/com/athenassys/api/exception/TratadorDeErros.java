@@ -1,6 +1,8 @@
 package br.com.athenassys.api.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import java.util.List;
 
 @RestControllerAdvice
 public class TratadorDeErros {
+
+    private static final Logger logger = LoggerFactory.getLogger(TratadorDeErros.class);
 
     // Trata erro 404 para Entidades do Banco de Dados não existentes
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
@@ -76,6 +80,17 @@ public class TratadorDeErros {
         var mensagemErro = "Requisição '" + metodo + "' não suportada para essa rota. \nMétodos suportados: " + suportados;
 
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(mensagemErro);
+    }
+
+    //Trata qualquer tipo de erro para evitar vazamento de dados e informações internas
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> tratarErroNaoTratado(Exception ex) {
+
+        logger.error("Erro: ", ex);
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                "Ocorreu um erro! Por favor, contate nosso suporte."
+        );
     }
 
 
