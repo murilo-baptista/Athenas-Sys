@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,17 +16,32 @@ export class LoginComponent {
   senha = '';
   lembrarMe = false;
 
-  constructor(private router: Router) {}
+  carregando = false;
+  mensagemErro = '';
+
+  constructor(private router: Router, private authService: AuthService) {}
 
   onSubmit(): void {
+    this.mensagemErro = '';
+
     if (!this.usuario || !this.senha) {
+      this.mensagemErro = 'Preencha usuário e senha para continuar.';
       return;
     }
 
-    // TODO: substituir pela chamada real ao backend (Spring Boot)
-    console.log('Login solicitado:', {
-      usuario: this.usuario,
-      lembrarMe: this.lembrarMe
+    this.carregando = true;
+
+    this.authService.loginRestaurante({ usuario: this.usuario, senha: this.senha }).subscribe({
+      next: () => {
+        this.carregando = false;
+        this.router.navigate(['/menu']);
+      },
+      error: (erro) => {
+        this.carregando = false;
+        this.mensagemErro = erro.status === 401
+          ? 'Usuário ou senha inválidos.'
+          : 'Não foi possível entrar agora. Tente novamente em instantes.';
+      }
     });
   }
 
@@ -35,6 +51,6 @@ export class LoginComponent {
   }
 
   onRegister(): void {
-    this.router.navigate(['/cadastro']);
+    this.router.navigate(['/cadastro-restaurante']);
   }
 }

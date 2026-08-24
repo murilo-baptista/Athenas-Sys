@@ -2,6 +2,11 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
+interface AreaConfig {
+  cargo: string;
+  destino: string;
+}
+
 @Component({
   selector: 'app-menu',
   standalone: true,
@@ -11,26 +16,28 @@ import { Router } from '@angular/router';
 })
 export class MenuComponent {
 
+  private readonly areas: Record<string, AreaConfig> = {
+    gerente: { cargo: 'Gerente', destino: '/gerente' },
+    recepcionista: { cargo: 'Recepção', destino: '/recepcao' },
+    garcom: { cargo: 'Garçom', destino: '/garcom' },
+    cozinha: { cargo: 'Cozinha', destino: '/cozinha' }
+  };
+
   constructor(private router: Router) {}
 
   onSelectArea(area: string): void {
-    switch (area) {
-      case 'gerente':
-        this.router.navigate(['/gerente']);
-        break;
-      case 'recepcionista':
-        this.router.navigate(['/recepcao']);
-        break;
-      case 'garcom':
-        this.router.navigate(['/garcom']);
-        break;
-      case 'cozinha':
-        this.router.navigate(['/cozinha']);
-        break;
-      case 'estoque':
-        // TODO: criar a rota/tela de estoque (funcionalidade futura)
-        console.log('Área de estoque ainda não implementada');
-        break;
+    const config = this.areas[area];
+
+    if (!config) {
+      // Área ainda não implementada no back-end (ex: estoque).
+      console.log(`Área "${area}" ainda não implementada.`);
+      return;
     }
+
+    // Encaminha para a tela de autenticação do funcionário, informando
+    // qual cargo/tela ele deve acessar após confirmar usuário e código.
+    this.router.navigate(['/autenticacao'], {
+      queryParams: { cargo: config.cargo, destino: config.destino }
+    });
   }
 }

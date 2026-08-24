@@ -23,32 +23,39 @@
 
       <div class="auth-card">
         <h1 class="auth-title">AUTENTIQUE O FUNCIONÁRIO</h1>
-        <p class="auth-subtitle">Faça login do funcionário para<br>que ele possa acessar o sistema</p>
+        <p class="auth-subtitle" *ngIf="cargoEsperado">Faça login do funcionário de <strong>{{ cargoEsperado }}</strong><br>para acessar essa área do sistema</p>
+        <p class="auth-subtitle" *ngIf="!cargoEsperado">Faça login do funcionário para<br>que ele possa acessar o sistema</p>
 
         <img src="assets/imagens/divisor-g.png" alt="" class="divider">
 
-        <form class="auth-form">
+        <form class="auth-form" (ngSubmit)="onEntrar()">
           <label class="field-label" for="usuario">USUÁRIO</label>
           <div class="input-group">
             <img src="assets/imagens/icone-usuario.png" alt="" class="input-icon">
-            <input type="text" id="usuario" class="input-field" placeholder="Digite seu usuário">
+            <input type="text" id="usuario" name="usuario" class="input-field" placeholder="Digite seu usuário"
+                   [(ngModel)]="usuario" required>
           </div>
 
           <label class="field-label" for="senha">CÓDIGO</label>
           <div class="input-group">
             <img src="assets/imagens/icone-cadeado.png" alt="" class="input-icon">
-            <input type="password" id="senha" class="input-field" placeholder="Digite seu código">
+            <input type="password" id="senha" name="senha" class="input-field" placeholder="Digite seu código"
+                   [(ngModel)]="senha" required>
           </div>
 
           <div class="auth-row">
             <label class="remember-me">
-              <input type="checkbox">
+              <input type="checkbox" name="lembrar" [(ngModel)]="lembrarMe">
               <span>Lembre-me</span>
             </label>
             <a href="#" class="forgot-link">Esqueceu sua senha ou usuário?</a>
           </div>
 
-          <button type="submit" class="auth-button">ENTRAR</button>
+          <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+
+          <button type="submit" class="auth-button" [disabled]="carregando">
+            {{ carregando ? 'ENTRANDO...' : 'ENTRAR' }}
+          </button>
         </form>
       </div>
     </div>
