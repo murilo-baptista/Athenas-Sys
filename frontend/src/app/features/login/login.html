@@ -65,7 +65,11 @@
             <a href="#" class="forgot-link" (click)="onForgotPassword($event)">Esqueceu sua senha ou usuário?</a>
           </div>
 
-          <button type="submit" class="btn-entrar">ENTRAR</button>
+          <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+
+          <button type="submit" class="btn-entrar" [disabled]="carregando">
+            {{ carregando ? 'ENTRANDO...' : 'ENTRAR' }}
+          </button>
 
           <img src="assets/imagens/divisor-g.png" alt="" class="divider small">
 

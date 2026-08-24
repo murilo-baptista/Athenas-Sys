@@ -322,3 +322,14 @@
     width: 130%;
   }
 }
+
+.erro-msg {
+  color: #B3261E;
+  background: #FDECEA;
+  border: 1px solid #F5C2C0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  margin: 4px 0 12px;
+  text-align: center;
+}
