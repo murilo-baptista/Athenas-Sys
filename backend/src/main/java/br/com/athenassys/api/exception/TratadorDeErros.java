@@ -37,7 +37,6 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
             HttpHeaders headers,
             HttpStatusCode status,
             WebRequest request) {
-//        return super.handleNoResourceFoundException(ex, headers, status, request);
 
         var servletRequest = ((ServletWebRequest) request).getRequest();
 
@@ -62,7 +61,6 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
             HttpStatusCode status,
             WebRequest request
     ) {
-//        return super.handleMethodArgumentNotValid(ex, headers, status, request);
         var erros = ex.getFieldErrors();
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros.stream().map(DadosErroValidacao::new).toList());
@@ -106,7 +104,6 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
             HttpHeaders headers,
             HttpStatusCode status,
             WebRequest request) {
-//        return super.handleHttpRequestMethodNotSupported(ex, headers, status, request);
         var metodo = ex.getMethod();
         var suportados = ex.getSupportedHttpMethods();
 
