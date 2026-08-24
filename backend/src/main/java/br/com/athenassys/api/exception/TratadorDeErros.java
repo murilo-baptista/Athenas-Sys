@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -67,6 +68,16 @@ public class TratadorDeErros {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 mensagem
+        );
+    }
+
+    // Trata erro 400 para JSON enviado de maneira incorreta
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<String> tratarErroJSON(HttpMessageNotReadableException ex) {
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                "400 JSON Inválido" +
+                        "\nNão foi possível ler/converter o corpo da requisição"
         );
     }
 
