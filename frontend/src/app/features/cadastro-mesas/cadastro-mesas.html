@@ -68,19 +68,21 @@
           </div>
 
 
-          <button type="button" class="add-button" [disabled]="!numeroMesa || !capacidadeMesa" (click)="adicionarMesa()">
-            + Adicionar mesa à lista
+          <button type="button" class="add-button" [disabled]="!numeroMesa || !capacidadeMesa || salvando" (click)="adicionarMesa()">
+            {{ salvando ? 'ADICIONANDO...' : '+ Adicionar mesa à lista' }}
           </button>
 
 
           <label class="added-label">MESAS ADICIONADAS</label>
-          <div class="added-list">
+          <p class="helper-note" *ngIf="carregando">Carregando mesas...</p>
+          <div class="added-list" *ngIf="!carregando">
             <div class="added-item" *ngFor="let mesa of mesas">
               <span class="item-name">Mesa {{ mesa.numero }}</span>
               <span class="badge">{{ mesa.capacidade }} lugares</span>
             </div>
           </div>
-          <p class="helper-note" *ngIf="mesas.length === 0">Cadastre pelo menos 1 mesa para continuar</p>
+          <p class="helper-note" *ngIf="!carregando && mesas.length === 0">Cadastre pelo menos 1 mesa para continuar</p>
+          <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>
 
 
           <div class="wizard-footer">
