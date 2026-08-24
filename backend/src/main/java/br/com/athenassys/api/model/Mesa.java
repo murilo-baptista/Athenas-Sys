@@ -8,7 +8,15 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "mesas")
+@Table(
+    name = "mesas",
+    uniqueConstraints = {
+            @UniqueConstraint(
+                    columnNames = {"numero", "restaurante_id"},
+                    name = "uk_mesa_restaurante_numero"
+            )
+    }
+)
 @Entity(name = "Mesa")
 
 @Getter
