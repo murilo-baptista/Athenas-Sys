@@ -3,12 +3,12 @@ package br.com.athenassys.api.service;
 import br.com.athenassys.api.dto.reserva.DadosAtualizacaoReserva;
 import br.com.athenassys.api.dto.reserva.DadosCadastroReserva;
 import br.com.athenassys.api.dto.reserva.DadosListagemReserva;
+import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.Mesa;
 import br.com.athenassys.api.model.Reserva;
 import br.com.athenassys.api.repository.MesaRepository;
 import br.com.athenassys.api.repository.ReservaRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,11 +28,11 @@ public class ReservaService {
 
         var restaurante = restauranteRepository
                 .findById(idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
 
         var mesa = mesaRepository
                 .findByIdAndRestauranteId(dados.idMesa(), idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Mesa não encontrada."));
 
         var reserva = new Reserva(dados, restaurante, mesa);
 
@@ -54,14 +54,14 @@ public class ReservaService {
 
         var reserva = reservaRepository
                 .findByIdAndRestauranteId(idReserva, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Reserva não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Reserva não encontrada."));
 
         Mesa mesa = reserva.getMesa();
 
         if (dados.idMesa() != null) {
             mesa = mesaRepository
                     .findByIdAndRestauranteId(dados.idMesa(), idRestaurante)
-                    .orElseThrow(() -> new EntityNotFoundException("Mesa não encontrada."));
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("Mesa não encontrada."));
         }
 
         reserva.atualizarDados(dados, mesa);
@@ -72,14 +72,14 @@ public class ReservaService {
 
         return reservaRepository
                 .findByIdAndRestauranteId(idReserva, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Reserva não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Reserva não encontrada."));
     }
 
     public Reserva concluir(Long idReserva, Long idRestaurante) {
 
         var reserva = reservaRepository
                 .findByIdAndRestauranteId(idReserva, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Reserva não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Reserva não encontrada."));
 
         reserva.concluir();
         return reserva;
@@ -89,7 +89,7 @@ public class ReservaService {
 
         var reserva = reservaRepository
                 .findByIdAndRestauranteId(idReserva, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Reserva não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Reserva não encontrada."));
 
         reserva.cancelar();
         return reserva;

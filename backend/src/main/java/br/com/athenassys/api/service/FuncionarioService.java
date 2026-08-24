@@ -1,12 +1,12 @@
 package br.com.athenassys.api.service;
 
 import br.com.athenassys.api.dto.funcionario.DadosAtualizacaoFuncionario;
-import br.com.athenassys.api.dto.funcionario.DadosListagemFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosCadastroFuncionario;
+import br.com.athenassys.api.dto.funcionario.DadosListagemFuncionario;
+import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.Funcionario;
 import br.com.athenassys.api.repository.FuncionarioRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +25,7 @@ public class FuncionarioService {
 
         var restaurante = restauranteRepository
                 .findById(idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
         var funcionario = new Funcionario(dados, restaurante);
 
         return funcionarioRepository.save(funcionario);
@@ -43,7 +43,7 @@ public class FuncionarioService {
 
         var funcionario = funcionarioRepository
                 .findByIdAndRestauranteId(idFuncionario, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado."));
 
         funcionario.atualizarDados(dados);
         return funcionario;
@@ -53,7 +53,7 @@ public class FuncionarioService {
 
         var funcionario = funcionarioRepository
                 .findByIdAndRestauranteId(idFuncionario, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado."));
 
         funcionario.desativar();
         return funcionario;
@@ -63,6 +63,6 @@ public class FuncionarioService {
 
         return funcionarioRepository
                 .findByIdAndRestauranteId(idFuncionario, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado."));
     }
 }

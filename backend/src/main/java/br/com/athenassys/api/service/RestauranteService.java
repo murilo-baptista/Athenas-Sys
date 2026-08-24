@@ -3,9 +3,9 @@ package br.com.athenassys.api.service;
 import br.com.athenassys.api.dto.restaurante.DadosAtualizacaoRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosCadastroRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosListagemRestaurante;
+import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.Restaurante;
 import br.com.athenassys.api.repository.RestauranteRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +35,7 @@ public class RestauranteService {
 
         var restaurante = repository
                 .findById(idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
 
         restaurante.atualizarDados(dados);
         return restaurante;
@@ -45,7 +45,7 @@ public class RestauranteService {
 
         var restaurante = repository
                 .findById(idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
 
         restaurante.desativar();
         return restaurante;
@@ -55,6 +55,6 @@ public class RestauranteService {
 
         return repository
                 .findById(idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
     }
 }

@@ -3,12 +3,12 @@ package br.com.athenassys.api.service;
 import br.com.athenassys.api.dto.produto.DadosAtualizacaoProduto;
 import br.com.athenassys.api.dto.produto.DadosCadastroProduto;
 import br.com.athenassys.api.dto.produto.DadosListagemProduto;
+import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.Categoria;
 import br.com.athenassys.api.model.Produto;
 import br.com.athenassys.api.repository.CategoriaRepository;
 import br.com.athenassys.api.repository.ProdutoRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,11 +28,11 @@ public class ProdutoService {
 
         var restaurante = restauranteRepository
                 .findById(idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Restaurante não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
 
         var categoria = categoriaRepository
                 .findByIdAndRestauranteId(dados.idCategoria(), idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria não encontrada."));
 
         var produto = new Produto(dados, restaurante, categoria);
         return produtoRepository.save(produto);
@@ -50,14 +50,14 @@ public class ProdutoService {
 
         var produto = produtoRepository
                 .findByIdAndRestauranteId(idProduto, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado."));
 
         Categoria categoria = produto.getCategoria();
 
         if (dados.idCategoria() != null) {
             categoria = categoriaRepository
                     .findByIdAndRestauranteId(dados.idCategoria(), idRestaurante)
-                    .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada."));
+                    .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria não encontrada."));
         }
 
         produto.atualizarDados(dados, categoria);
@@ -68,7 +68,7 @@ public class ProdutoService {
 
         var produto = produtoRepository
                 .findByIdAndRestauranteId(idProduto, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado."));
 
         produto.desativar();
         return produto;
@@ -78,6 +78,6 @@ public class ProdutoService {
 
         return produtoRepository
                 .findByIdAndRestauranteId(idProduto, idRestaurante)
-                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado."));
     }
 }
