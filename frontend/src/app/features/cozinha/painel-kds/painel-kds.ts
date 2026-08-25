@@ -1,26 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Subscription, interval } from 'rxjs';
+import { PedidoService } from '../../../core/services/pedido.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { Pedido, StatusPedido } from '../../../core/models/pedido.model';
 
-type StatusPedido = 'novo' | 'andamento' | 'pronto' | 'entregue';
 type EstadoEtapa = 'completo' | 'atual' | 'pendente';
 type EstadoBotao = 'pendente' | 'disponivel' | 'concluido';
-
-interface Pedido {
-  id: number;
-  numero: string;
-  mesa: number;
-  itens: string[];
-  horarioEnvio: string;
-  status: StatusPedido;
-  horarioPronto?: string;
-  horarioEntregue?: string;
-  minutosEmAndamento?: number;
-}
 
 interface Filtro {
   rotulo: string;
   valor: 'todos' | StatusPedido;
 }
+
+const INTERVALO_ATUALIZACAO_MS = 10000;
 
 @Component({
   selector: 'app-painel-kds',
@@ -29,49 +22,54 @@ interface Filtro {
   templateUrl: './painel-kds.html',
   styleUrl: './painel-kds.css'
 })
-export class PainelKdsComponent {
+export class PainelKdsComponent implements OnInit, OnDestroy {
 
   filtroAtivo: 'todos' | StatusPedido = 'todos';
 
   filtros: Filtro[] = [
     { rotulo: 'Todos', valor: 'todos' },
-    { rotulo: 'Novos', valor: 'novo' },
-    { rotulo: 'Em Andamento', valor: 'andamento' },
-    { rotulo: 'Prontos', valor: 'pronto' },
-    { rotulo: 'Entregues', valor: 'entregue' }
+    { rotulo: 'Novos', valor: 'NOVO' },
+    { rotulo: 'Em Andamento', valor: 'ANDAMENTO' },
+    { rotulo: 'Prontos', valor: 'PRONTO' },
+    { rotulo: 'Entregues', valor: 'ENTREGUE' }
   ];
 
-  etapasOrdem: StatusPedido[] = ['novo', 'andamento', 'pronto', 'entregue'];
+  etapasOrdem: StatusPedido[] = ['NOVO', 'ANDAMENTO', 'PRONTO', 'ENTREGUE'];
 
-  pedidos: Pedido[] = [
-    {
-      id: 1,
-      numero: '001',
-      mesa: 5,
-      itens: ['Filé de frango grelhado', '1 Lata de refrigerante'],
-      horarioEnvio: '11:15',
-      status: 'pronto',
-      horarioPronto: '11:26'
-    },
-    {
-      id: 2,
-      numero: '002',
-      mesa: 10,
-      itens: ['Picanha grelhada', 'Risoto de camarão'],
-      horarioEnvio: '12:22',
-      status: 'andamento',
-      minutosEmAndamento: 8
-    },
-    {
-      id: 3,
-      numero: '003',
-      mesa: 2,
-      itens: ['Filé com batata frita', '1 Suco de abacaxi'],
-      horarioEnvio: '11:00',
-      status: 'entregue',
-      horarioEntregue: '11:20'
-    }
-  ];
+  pedidos: Pedido[] = [];
+  carregando = false;
+  mensagemErro = '';
+
+  private restauranteId!: number;
+  private polling?: Subscription;
+
+  constructor(private pedidoService: PedidoService, private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.restauranteId = this.authService.getRestauranteId()!;
+    this.carregarPedidos();
+    // KDS precisa refletir pedidos novos quase em tempo real.
+    this.polling = interval(INTERVALO_ATUALIZACAO_MS).subscribe(() => this.carregarPedidos());
+  }
+
+  ngOnDestroy(): void {
+    this.polling?.unsubscribe();
+  }
+
+  private carregarPedidos(): void {
+    this.carregando = this.pedidos.length === 0;
+
+    this.pedidoService.listar(this.restauranteId).subscribe({
+      next: (pedidos) => {
+        this.pedidos = pedidos;
+        this.carregando = false;
+      },
+      error: () => {
+        this.carregando = false;
+        this.mensagemErro = 'Não foi possível atualizar o painel de pedidos.';
+      }
+    });
+  }
 
   pedidosFiltrados(): Pedido[] {
     if (this.filtroAtivo === 'todos') {
@@ -100,13 +98,13 @@ export class PainelKdsComponent {
 
   textoStatus(pedido: Pedido): string {
     switch (pedido.status) {
-      case 'novo':
+      case 'NOVO':
         return 'Aguardando preparo';
-      case 'andamento':
+      case 'ANDAMENTO':
         return `Em andamento há ${pedido.minutosEmAndamento ?? 0} min`;
-      case 'pronto':
+      case 'PRONTO':
         return `Pronto em ${pedido.horarioPronto ?? ''}`;
-      case 'entregue':
+      case 'ENTREGUE':
         return `Entregue em ${pedido.horarioEntregue ?? ''}`;
       default:
         return '';
@@ -115,50 +113,59 @@ export class PainelKdsComponent {
 
   /**
    * Estado do botão "Marcar como Em Andamento":
-   * - disponível (clicável) quando o pedido está 'novo'
+   * - disponível (clicável) quando o pedido está 'NOVO'
    * - concluído (verde, travado) quando já passou desse ponto
    */
   botaoAndamentoEstado(pedido: Pedido): EstadoBotao {
-    if (pedido.status === 'novo') return 'disponivel';
+    if (pedido.status === 'NOVO') return 'disponivel';
     return 'concluido';
   }
 
   /**
    * Estado do botão "Pedido Pronto":
-   * - pendente (cinza, travado) enquanto o pedido ainda é 'novo'
-   * - disponível (clicável) quando está 'andamento'
-   * - concluído (verde, travado) quando já está 'pronto' ou 'entregue'
+   * - pendente (cinza, travado) enquanto o pedido ainda é 'NOVO'
+   * - disponível (clicável) quando está 'ANDAMENTO'
+   * - concluído (verde, travado) quando já está 'PRONTO' ou 'ENTREGUE'
    */
   botaoProntoEstado(pedido: Pedido): EstadoBotao {
-    if (pedido.status === 'novo') return 'pendente';
-    if (pedido.status === 'andamento') return 'disponivel';
+    if (pedido.status === 'NOVO') return 'pendente';
+    if (pedido.status === 'ANDAMENTO') return 'disponivel';
     return 'concluido';
   }
 
   marcarComoAndamento(pedido: Pedido): void {
-    if (pedido.status !== 'novo') {
+    if (pedido.status !== 'NOVO') {
       return;
     }
-    pedido.status = 'andamento';
+
+    const statusAnterior = pedido.status;
+    pedido.status = 'ANDAMENTO';
     pedido.minutosEmAndamento = 0;
 
-    // TODO: notificar o back-end do início do preparo
+    this.pedidoService.atualizarStatus(pedido.id, 'ANDAMENTO').subscribe({
+      error: () => {
+        pedido.status = statusAnterior;
+        this.mensagemErro = 'Não foi possível iniciar o preparo desse pedido.';
+      }
+    });
   }
 
   marcarComoPronto(pedido: Pedido): void {
-    if (pedido.status !== 'andamento') {
+    if (pedido.status !== 'ANDAMENTO') {
       return;
     }
-    pedido.status = 'pronto';
-    pedido.horarioPronto = this.horaAtual();
 
-    // TODO: notificar o back-end / garçom que o pedido está pronto
-  }
+    const statusAnterior = pedido.status;
+    pedido.status = 'PRONTO';
 
-  private horaAtual(): string {
-    const agora = new Date();
-    const horas = String(agora.getHours()).padStart(2, '0');
-    const minutos = String(agora.getMinutes()).padStart(2, '0');
-    return `${horas}:${minutos}`;
+    this.pedidoService.atualizarStatus(pedido.id, 'PRONTO').subscribe({
+      next: (atualizado) => {
+        pedido.horarioPronto = atualizado.horarioPronto;
+      },
+      error: () => {
+        pedido.status = statusAnterior;
+        this.mensagemErro = 'Não foi possível marcar esse pedido como pronto.';
+      }
+    });
   }
 }
