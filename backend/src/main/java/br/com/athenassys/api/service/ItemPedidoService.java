@@ -37,7 +37,7 @@ public class ItemPedidoService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Pedido não encontrado."));
 
         var produto = produtoRepository
-                .findByIdAndRestauranteId(dados.idProduto(), idRestaurante)
+                .findByIdAndRestauranteIdAndAtivoTrue(dados.idProduto(), idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado."));
 
         var itemPedido = new ItemPedido(dados, restaurante, pedido, produto);
@@ -70,7 +70,7 @@ public class ItemPedidoService {
 
         if (dados.idProduto() != null) {
             produto = produtoRepository
-                    .findByIdAndRestauranteId(dados.idProduto(), idRestaurante)
+                    .findByIdAndRestauranteIdAndAtivoTrue(dados.idProduto(), idRestaurante)
                     .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado."));
         }
 
