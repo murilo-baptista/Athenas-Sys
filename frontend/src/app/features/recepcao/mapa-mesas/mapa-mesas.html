@@ -21,8 +21,10 @@
 
     <div class="mapa-card">
 
+      <p class="mapa-status" *ngIf="carregando">Carregando mesas...</p>
+      <p class="mapa-erro" *ngIf="mensagemErro">{{ mensagemErro }}</p>
 
-      <table class="mesas-tabela">
+      <table class="mesas-tabela" *ngIf="!carregando">
         <thead>
           <tr>
             <th>Mesa</th>
@@ -38,9 +40,9 @@
             <!-- Linha principal -->
             <tr class="mesa-linha" [class.expandida]="mesaExpandidaIndex === i">
               <td class="valor-mesa">{{ mesa.numero }}</td>
-              <td>{{ mesa.lugares }}</td>
+              <td>{{ mesa.capacidade }}</td>
               <td>
-                <span class="status-badge" [ngClass]="'status-' + mesa.status">
+                <span class="status-badge" [ngClass]="statusClasse(mesa.status)">
                   {{ statusRotulo(mesa.status) }}
                 </span>
               </td>
@@ -73,15 +75,15 @@
                     <button
                       type="button"
                       class="status-toggle-btn"
-                      [class.ativo]="mesa.status === 'ocupada'"
-                      (click)="alterarStatusMesa(mesa, 'ocupada')">
+                      [class.ativo]="mesa.status === 'OCUPADA'"
+                      (click)="alterarStatusMesa(mesa, 'OCUPADA')">
                       Ocupada
                     </button>
                     <button
                       type="button"
                       class="status-toggle-btn"
-                      [class.ativo]="mesa.status === 'disponivel'"
-                      (click)="alterarStatusMesa(mesa, 'disponivel')">
+                      [class.ativo]="mesa.status === 'DISPONIVEL'"
+                      (click)="alterarStatusMesa(mesa, 'DISPONIVEL')">
                       Disponível
                     </button>
                   </div>

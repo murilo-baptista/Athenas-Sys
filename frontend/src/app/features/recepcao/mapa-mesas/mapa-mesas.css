@@ -470,3 +470,19 @@
     min-width: 0;
   }
 }
+
+.mapa-status {
+  text-align: center;
+  padding: 16px;
+  color: #6b6b6b;
+}
+
+.mapa-erro {
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 8px;
+  color: #B3261E;
+  background: #FDECEA;
+  border: 1px solid #F5C2C0;
+  border-radius: 6px;
+}

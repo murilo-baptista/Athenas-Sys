@@ -1,21 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Reserva {
-  cliente: string;
-  telefone: string;
-  data: string;
-  horario: string;
-  pessoas: number;
-}
-
-interface Mesa {
-  numero: string;
-  lugares: number;
-  status: 'ocupada' | 'disponivel' | 'reservada';
-  reserva: Reserva | null;
-}
+import { MesaService } from '../../../core/services/mesa.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { Mesa, Reserva, StatusMesa } from '../../../core/models/mesa.model';
 
 @Component({
   selector: 'app-mapa-mesas',
@@ -24,24 +12,40 @@ interface Mesa {
   templateUrl: './mapa-mesas.html',
   styleUrl: './mapa-mesas.css'
 })
-export class MapaMesasComponent {
+export class MapaMesasComponent implements OnInit {
 
-  mesas: Mesa[] = [
-    { numero: '01', lugares: 3, status: 'ocupada', reserva: null },
-    { numero: '02', lugares: 4, status: 'disponivel', reserva: null },
-    { numero: '03', lugares: 6, status: 'ocupada', reserva: null },
-    { numero: '04', lugares: 2, status: 'ocupada', reserva: null },
-    {
-      numero: '04', lugares: 4, status: 'reservada',
-      reserva: { cliente: 'Maria Souza', telefone: '(11) 99999-0000', data: '2026-07-28', horario: '20:30', pessoas: 4 }
-    },
-    { numero: '05', lugares: 6, status: 'disponivel', reserva: null },
-    { numero: '06', lugares: 4, status: 'disponivel', reserva: null },
-  ];
+  mesas: Mesa[] = [];
+  carregando = false;
+  mensagemErro = '';
 
   mesaExpandidaIndex: number | null = null;
   modoEdicao = false;
   formReserva: Reserva = this.formVazio();
+
+  private restauranteId!: number;
+
+  constructor(private mesaService: MesaService, private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.restauranteId = this.authService.getRestauranteId()!;
+    this.carregarMesas();
+  }
+
+  private carregarMesas(): void {
+    this.carregando = true;
+    this.mensagemErro = '';
+
+    this.mesaService.listarPorRestaurante(this.restauranteId).subscribe({
+      next: (mesas) => {
+        this.mesas = mesas;
+        this.carregando = false;
+      },
+      error: () => {
+        this.carregando = false;
+        this.mensagemErro = 'Não foi possível carregar o mapa de mesas.';
+      }
+    });
+  }
 
   private formVazio(): Reserva {
     return { cliente: '', telefone: '', data: '', horario: '', pessoas: 1 };
@@ -60,9 +64,18 @@ export class MapaMesasComponent {
     this.formReserva = mesa.reserva ? { ...mesa.reserva } : this.formVazio();
   }
 
-  alterarStatusMesa(mesa: Mesa, novoStatus: 'ocupada' | 'disponivel'): void {
-    if (mesa.status === novoStatus) return;
-    mesa.status = novoStatus;
+  alterarStatusMesa(mesa: Mesa, novoStatus: StatusMesa): void {
+    if (mesa.status === novoStatus || !mesa.id) return;
+
+    const statusAnterior = mesa.status;
+    mesa.status = novoStatus; // atualização otimista
+
+    this.mesaService.alterarStatus(mesa.id, novoStatus).subscribe({
+      error: () => {
+        mesa.status = statusAnterior; // reverte se o back-end recusar
+        this.mensagemErro = 'Não foi possível atualizar o status da mesa.';
+      }
+    });
   }
 
   iniciarEdicao(mesa: Mesa): void {
@@ -71,15 +84,29 @@ export class MapaMesasComponent {
   }
 
   confirmarReserva(mesa: Mesa): void {
-    mesa.reserva = { ...this.formReserva };
-    mesa.status = 'reservada';
-    this.fecharPainel();
+    if (!mesa.id) return;
+
+    this.mesaService.salvarReserva(mesa.id, this.formReserva).subscribe({
+      next: (mesaAtualizada) => {
+        mesa.reserva = mesaAtualizada.reserva;
+        mesa.status = mesaAtualizada.status ?? 'RESERVADA';
+        this.fecharPainel();
+      },
+      error: () => this.mensagemErro = 'Não foi possível salvar a reserva.'
+    });
   }
 
   cancelarReserva(mesa: Mesa): void {
-    mesa.reserva = null;
-    mesa.status = 'disponivel';
-    this.fecharPainel();
+    if (!mesa.id) return;
+
+    this.mesaService.cancelarReserva(mesa.id).subscribe({
+      next: () => {
+        mesa.reserva = null;
+        mesa.status = 'DISPONIVEL';
+        this.fecharPainel();
+      },
+      error: () => this.mensagemErro = 'Não foi possível cancelar a reserva.'
+    });
   }
 
   cancelarFormulario(): void {
@@ -92,11 +119,21 @@ export class MapaMesasComponent {
     this.formReserva = this.formVazio();
   }
 
-  statusRotulo(status: Mesa['status']): string {
+  statusRotulo(status: StatusMesa | undefined): string {
     switch (status) {
-      case 'ocupada': return 'Ocupada';
-      case 'disponivel': return 'Disponível';
-      case 'reservada': return 'Reservada';
+      case 'OCUPADA': return 'Ocupada';
+      case 'DISPONIVEL': return 'Disponível';
+      case 'RESERVADA': return 'Reservada';
+      default: return '';
+    }
+  }
+
+  statusClasse(status: StatusMesa | undefined): string {
+    switch (status) {
+      case 'OCUPADA': return 'status-ocupada';
+      case 'DISPONIVEL': return 'status-disponivel';
+      case 'RESERVADA': return 'status-reservada';
+      default: return '';
     }
   }
 
