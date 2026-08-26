@@ -38,12 +38,14 @@ public class PedidoController {
                 .body(new DadosDetalhamentoPedido(pedido));
     }
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<Page<DadosListagemPedido>> listar(
             @PathVariable Long idRestaurante,
+            @RequestParam(required = false) Long idMesa,
+            @RequestParam(required = false) Long idFuncionario,
             Pageable paginacao) {
 
-        return ResponseEntity.ok(service.listar(idRestaurante, paginacao));
+        return ResponseEntity.ok(service.listar(idRestaurante, idMesa, idFuncionario, paginacao));
     }
 
     @PutMapping("/{idPedido}")

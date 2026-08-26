@@ -51,8 +51,25 @@ public class PedidoService {
 
     public Page<DadosListagemPedido> listar(
             Long idRestaurante,
+            Long idMesa,
+            Long idFuncionario,
             Pageable paginacao) {
 
+        if (idFuncionario != null && idMesa != null) {
+            return pedidoRepository.findAllByRestauranteIdAndMesaIdAndFuncionarioId(
+                            idRestaurante, idMesa, idFuncionario, paginacao)
+                    .map(DadosListagemPedido::new);
+
+        } else if (idMesa != null) {
+            return pedidoRepository.findAllByRestauranteIdAndMesaId(
+                    idRestaurante, idMesa, paginacao)
+                    .map(DadosListagemPedido::new);
+
+        } else if (idFuncionario != null) {
+            return pedidoRepository.findAllByRestauranteIdAndFuncionarioId(
+                    idRestaurante, idFuncionario, paginacao)
+                    .map(DadosListagemPedido::new);
+        }
         return pedidoRepository.findAllByRestauranteId(idRestaurante, paginacao)
                 .map(DadosListagemPedido::new);
     }
