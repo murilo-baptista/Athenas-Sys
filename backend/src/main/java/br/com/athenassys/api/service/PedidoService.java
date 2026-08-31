@@ -40,8 +40,8 @@ public class PedidoService {
 
         var pedido = new Pedido(dados, restaurante, mesa, funcionario);
         for (var itemDados : dados.itens()) {
-            var produto = produtoRepository
-                    .findByIdAndRestauranteId(itemDados.idProduto(), idRestaurante)
+                var produto = produtoRepository
+                    .findByIdAndRestauranteIdAndAtivoTrue(itemDados.idProduto(), idRestaurante)
                     .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado."));
             pedido.getItens().add(new ItemPedido(itemDados, restaurante, pedido, produto));
         }
@@ -51,8 +51,25 @@ public class PedidoService {
 
     public Page<DadosListagemPedido> listar(
             Long idRestaurante,
+            Long idMesa,
+            Long idFuncionario,
             Pageable paginacao) {
 
+        if (idFuncionario != null && idMesa != null) {
+            return pedidoRepository.findAllByRestauranteIdAndMesaIdAndFuncionarioId(
+                            idRestaurante, idMesa, idFuncionario, paginacao)
+                    .map(DadosListagemPedido::new);
+
+        } else if (idMesa != null) {
+            return pedidoRepository.findAllByRestauranteIdAndMesaId(
+                    idRestaurante, idMesa, paginacao)
+                    .map(DadosListagemPedido::new);
+
+        } else if (idFuncionario != null) {
+            return pedidoRepository.findAllByRestauranteIdAndFuncionarioId(
+                    idRestaurante, idFuncionario, paginacao)
+                    .map(DadosListagemPedido::new);
+        }
         return pedidoRepository.findAllByRestauranteId(idRestaurante, paginacao)
                 .map(DadosListagemPedido::new);
     }

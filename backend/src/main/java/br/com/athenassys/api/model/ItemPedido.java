@@ -3,6 +3,7 @@ package br.com.athenassys.api.model;
 import br.com.athenassys.api.dto.itempedido.DadosAtualizacaoItemPedido;
 import br.com.athenassys.api.dto.itempedido.DadosCadastroItemPedido;
 import br.com.athenassys.api.enums.StatusItemPedido;
+import br.com.athenassys.api.exception.StatusInvalidoException;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -70,18 +71,42 @@ public class ItemPedido {
     }
 
     public void preparar() {
+
+        if (this.status != StatusItemPedido.PENDENTE) {
+            throw new StatusInvalidoException("Não foi possível alterar o status do item, " +
+                    "para definir um item como EM_PREPARO antes ele deve estar como PENDENTE");
+        }
         this.status = StatusItemPedido.EM_PREPARO;
     }
 
     public void marcarPronto() {
+
+        if (this.status != StatusItemPedido.EM_PREPARO) {
+            throw new StatusInvalidoException("Não foi possível alterar o status do item, " +
+                    "para definir um item como PRONTO antes ele deve estar como EM_PREPARO");
+        }
         this.status = StatusItemPedido.PRONTO;
     }
 
     public void entregar() {
+
+        if (this.status != StatusItemPedido.PRONTO) {
+            throw new StatusInvalidoException("Não foi possível alterar o status do item, " +
+                    "para definir um item como ENTREGUE antes ele deve estar como PRONTO");
+        }
         this.status = StatusItemPedido.ENTREGUE;
     }
 
     public void cancelar() {
+
+        if (this.status == StatusItemPedido.ENTREGUE) {
+            throw new StatusInvalidoException("Não foi possível alterar o status do item, " +
+                    "só é possível definir um item como CANCELADO se ele ainda não tiver sido ENTREGUE");
+
+        } else if (this.status == StatusItemPedido.CANCELADO) {
+            throw new StatusInvalidoException("Não foi possível alterar o status do item, " +
+                    "esse item já foi CANCELADO");
+        }
         this.status = StatusItemPedido.CANCELADO;
     }
 }
