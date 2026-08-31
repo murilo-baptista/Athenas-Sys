@@ -112,6 +112,13 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(mensagemErro);
     }
 
+    //Trata erro 409 para Status inválidos
+    @ExceptionHandler(StatusInvalidoException.class)
+    public ResponseEntity<String> tratarStatusInvalido(Exception ex) {
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
     //Trata qualquer tipo de erro para evitar vazamento de dados e informações internas
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> tratarErroNaoTratado(Exception ex) {
