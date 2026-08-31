@@ -1,1 +1,44 @@
-<p>dashboard works!</p>
+<div class="dash-page">
+
+  <!-- Barra superior com faixa grega + identificação do gerente -->
+  <div class="top-bar">
+    <div class="greek-border top"></div>
+    <div class="header-info">
+      <span class="dash-label">GERENTE{{ nomeGerente ? ' · ' + nomeGerente : '' }}</span>
+      <div class="avatar">
+        <img src="/assets/imagens/icone-gerente.png" alt="Ícone do gerente" class="avatar-img">
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-content">
+
+    <div class="dash-card">
+
+      <div class="dash-topo">
+        <h1 class="dash-titulo">VISÃO GERAL DO RESTAURANTE</h1>
+        <button type="button" class="btn-atualizar" (click)="atualizar()" [disabled]="carregando">
+          {{ carregando ? 'Atualizando...' : 'Atualizar' }}
+        </button>
+      </div>
+
+      <p class="dash-erro" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+      <p class="dash-status" *ngIf="carregando && cartoes.length === 0">Carregando indicadores...</p>
+
+      <div class="dash-grid" *ngIf="cartoes.length > 0">
+        <div class="dash-indicador" *ngFor="let cartao of cartoes">
+          <span class="dash-indicador-titulo">{{ cartao.titulo }}</span>
+          <span class="dash-indicador-valor">{{ cartao.valor }}</span>
+        </div>
+      </div>
+
+      <button type="button" class="btn-sair" (click)="sair()">SAIR</button>
+    </div>
+
+  </div>
+
+  <div class="bottom-wrap">
+    <div class="greek-border bottom"></div>
+  </div>
+
+</div>
