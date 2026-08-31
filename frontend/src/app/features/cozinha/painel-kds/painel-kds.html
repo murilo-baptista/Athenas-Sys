@@ -47,8 +47,10 @@
         <!-- Lista de pedidos -->
         <div class="pedidos-lista">
 
+          <p class="kds-erro" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+          <div class="pedido-vazio" *ngIf="carregando">Carregando pedidos...</div>
 
-          <div class="pedido-vazio" *ngIf="pedidosFiltrados().length === 0">
+          <div class="pedido-vazio" *ngIf="!carregando && pedidosFiltrados().length === 0">
             Nenhum pedido nesta categoria.
           </div>
 
