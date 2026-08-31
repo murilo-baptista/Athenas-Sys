@@ -3,6 +3,7 @@ package br.com.athenassys.api.exception;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -18,6 +19,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import java.sql.SQLIntegrityConstraintViolationException;
 
 @RestControllerAdvice
 public class TratadorDeErros extends ResponseEntityExceptionHandler {
@@ -117,6 +120,12 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
     public ResponseEntity<String> tratarStatusInvalido(Exception ex) {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> tratarErroDuplicidade(Exception ex) {
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage() + ex.getCause());
     }
 
     //Trata qualquer tipo de erro para evitar vazamento de dados e informações internas
