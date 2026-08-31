@@ -48,11 +48,12 @@
           <button
             type="button"
             class="enviar-btn"
-            [disabled]="!mesaSelecionada || !pedidoTexto.trim()"
+            [disabled]="!mesaSelecionada || !pedidoTexto.trim() || enviando"
             (click)="enviarPedido()">
-            ENVIAR PEDIDO PARA A COZINHA
+            {{ enviando ? 'ENVIANDO...' : 'ENVIAR PEDIDO PARA A COZINHA' }}
           </button>
         </div>
+        <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>
 
       </div>
 
@@ -74,7 +75,10 @@
         <!-- Lista de pedidos -->
         <div class="pedidos-lista">
 
-          <div class="pedido-vazio" *ngIf="pedidosFiltrados().length === 0">
+          <div class="pedido-vazio" *ngIf="mensagemErro">{{ mensagemErro }}</div>
+          <div class="pedido-vazio" *ngIf="carregando">Carregando pedidos...</div>
+
+          <div class="pedido-vazio" *ngIf="!carregando && pedidosFiltrados().length === 0">
             Nenhum pedido nesta categoria.
           </div>
 
@@ -162,12 +166,12 @@
               <button
                 type="button"
                 class="acao-btn"
-                [class.disponivel]="pedido.status === 'pronto'"
-                [class.finalizado]="pedido.status === 'entregue'"
-                [disabled]="pedido.status !== 'pronto'"
+                [class.disponivel]="pedido.status === 'PRONTO'"
+                [class.finalizado]="pedido.status === 'ENTREGUE'"
+                [disabled]="pedido.status !== 'PRONTO'"
                 (click)="marcarComoEntregue(pedido)">
                 <span class="acao-icon" aria-hidden="true"></span>
-                {{ pedido.status === 'entregue' ? 'Pedido Entregue' : 'Marcar como Entregue' }}
+                {{ pedido.status === 'ENTREGUE' ? 'Pedido Entregue' : 'Marcar como Entregue' }}
               </button>
 
             </div>

@@ -1,26 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Subscription, interval } from 'rxjs';
+import { PedidoService } from '../../../core/services/pedido.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { Pedido, StatusPedido } from '../../../core/models/pedido.model';
 
-type StatusPedido = 'novo' | 'andamento' | 'pronto' | 'entregue';
 type EstadoEtapa = 'completo' | 'atual' | 'pendente';
-
-interface Pedido {
-  id: number;
-  numero: string;
-  mesa: number;
-  itens: string[];
-  horarioEnvio: string;
-  status: StatusPedido;
-  horarioPronto?: string;
-  horarioEntregue?: string;
-  minutosEmAndamento?: number;
-}
 
 interface Filtro {
   rotulo: string;
   valor: 'todos' | StatusPedido;
 }
+
+const INTERVALO_ATUALIZACAO_MS = 15000;
 
 @Component({
   selector: 'app-lancamento-pedidos',
@@ -29,61 +22,69 @@ interface Filtro {
   templateUrl: './lancamento-pedidos.html',
   styleUrl: './lancamento-pedidos.css'
 })
-export class LancamentoPedidosComponent {
+export class LancamentoPedidosComponent implements OnInit, OnDestroy {
 
-  nomeGarcom: string = 'FULANO DE TAL';
+  nomeGarcom = '';
 
   abaAtiva: 'novo' | 'andamento' = 'novo';
 
   mesasDisponiveis: number[] = Array.from({ length: 20 }, (_, i) => i + 1);
   mesaSelecionada: number | null = null;
-  pedidoTexto: string = '';
+  pedidoTexto = '';
 
   filtroAtivo: 'todos' | StatusPedido = 'todos';
 
   filtros: Filtro[] = [
     { rotulo: 'Todos', valor: 'todos' },
-    { rotulo: 'Novos', valor: 'novo' },
-    { rotulo: 'Em Andamento', valor: 'andamento' },
-    { rotulo: 'Prontos', valor: 'pronto' },
-    { rotulo: 'Entregues', valor: 'entregue' }
+    { rotulo: 'Novos', valor: 'NOVO' },
+    { rotulo: 'Em Andamento', valor: 'ANDAMENTO' },
+    { rotulo: 'Prontos', valor: 'PRONTO' },
+    { rotulo: 'Entregues', valor: 'ENTREGUE' }
   ];
 
-  etapasOrdem: StatusPedido[] = ['novo', 'andamento', 'pronto', 'entregue'];
+  etapasOrdem: StatusPedido[] = ['NOVO', 'ANDAMENTO', 'PRONTO', 'ENTREGUE'];
 
-  pedidos: Pedido[] = [
-    {
-      id: 1,
-      numero: '001',
-      mesa: 5,
-      itens: ['Filé de frango grelhado', '1 Lata de refrigerante'],
-      horarioEnvio: '11:15',
-      status: 'pronto',
-      horarioPronto: '11:26'
-    },
-    {
-      id: 2,
-      numero: '002',
-      mesa: 10,
-      itens: ['Picanha grelhada', 'Risoto de camarão'],
-      horarioEnvio: '12:22',
-      status: 'andamento',
-      minutosEmAndamento: 8
-    },
-    {
-      id: 3,
-      numero: '003',
-      mesa: 2,
-      itens: ['Filé com batata frita', '1 Suco de abacaxi'],
-      horarioEnvio: '11:00',
-      status: 'entregue',
-      horarioEntregue: '11:20'
-    }
-  ];
+  pedidos: Pedido[] = [];
+  carregando = false;
+  enviando = false;
+  mensagemErro = '';
 
-  private proximoId: number = 4;
+  private restauranteId!: number;
+  private polling?: Subscription;
+
+  constructor(private pedidoService: PedidoService, private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.restauranteId = this.authService.getRestauranteId()!;
+    this.nomeGarcom = this.authService.getSessao()?.nomeFuncionario ?? '';
+
+    this.carregarPedidos();
+    // Atualiza a lista periodicamente para refletir o andamento na cozinha.
+    this.polling = interval(INTERVALO_ATUALIZACAO_MS).subscribe(() => this.carregarPedidos());
+  }
+
+  ngOnDestroy(): void {
+    this.polling?.unsubscribe();
+  }
+
+  private carregarPedidos(): void {
+    this.carregando = this.pedidos.length === 0;
+
+    this.pedidoService.listar(this.restauranteId).subscribe({
+      next: (pedidos) => {
+        this.pedidos = pedidos;
+        this.carregando = false;
+      },
+      error: () => {
+        this.carregando = false;
+        this.mensagemErro = 'Não foi possível atualizar os pedidos.';
+      }
+    });
+  }
 
   enviarPedido(): void {
+    this.mensagemErro = '';
+
     if (!this.mesaSelecionada || !this.pedidoTexto.trim()) {
       return;
     }
@@ -93,22 +94,25 @@ export class LancamentoPedidosComponent {
       .map(linha => linha.trim())
       .filter(linha => linha.length > 0);
 
-    const novoPedido: Pedido = {
-      id: this.proximoId++,
-      numero: String(this.proximoId - 1).padStart(3, '0'),
+    this.enviando = true;
+
+    this.pedidoService.criar({
       mesa: this.mesaSelecionada,
       itens,
-      horarioEnvio: this.horaAtual(),
-      status: 'novo'
-    };
-
-    this.pedidos.unshift(novoPedido);
-
-    // TODO: enviar pedido para o back-end (cozinha)
-
-    this.mesaSelecionada = null;
-    this.pedidoTexto = '';
-    this.abaAtiva = 'andamento';
+      restauranteId: this.restauranteId
+    }).subscribe({
+      next: (novoPedido) => {
+        this.pedidos.unshift(novoPedido);
+        this.mesaSelecionada = null;
+        this.pedidoTexto = '';
+        this.abaAtiva = 'andamento';
+        this.enviando = false;
+      },
+      error: () => {
+        this.enviando = false;
+        this.mensagemErro = 'Não foi possível enviar o pedido para a cozinha.';
+      }
+    });
   }
 
   pedidosFiltrados(): Pedido[] {
@@ -122,9 +126,6 @@ export class LancamentoPedidosComponent {
     return this.etapasOrdem.indexOf(status);
   }
 
-  /**
-   * Estado de cada um dos 4 passos (Novo, Em andamento, Pronto, Entregue).
-   */
   stepEstado(pedido: Pedido, idx: number): EstadoEtapa {
     const atual = this.statusIndex(pedido.status);
     if (idx < atual) return 'completo';
@@ -132,12 +133,6 @@ export class LancamentoPedidosComponent {
     return 'pendente';
   }
 
-  /**
-   * Estado de cada uma das 3 linhas que conectam os passos.
-   * idx 0 = Novo -> Em andamento
-   * idx 1 = Em andamento -> Pronto
-   * idx 2 = Pronto -> Entregue
-   */
   linhaEstado(pedido: Pedido, idx: number): EstadoEtapa {
     const atual = this.statusIndex(pedido.status);
     if (atual > idx) return 'completo';
@@ -147,13 +142,13 @@ export class LancamentoPedidosComponent {
 
   textoStatus(pedido: Pedido): string {
     switch (pedido.status) {
-      case 'novo':
+      case 'NOVO':
         return 'Aguardando preparo';
-      case 'andamento':
+      case 'ANDAMENTO':
         return `Em andamento há ${pedido.minutosEmAndamento ?? 0} min`;
-      case 'pronto':
+      case 'PRONTO':
         return `Pronto em ${pedido.horarioPronto ?? ''}`;
-      case 'entregue':
+      case 'ENTREGUE':
         return `Entregue em ${pedido.horarioEntregue ?? ''}`;
       default:
         return '';
@@ -161,19 +156,21 @@ export class LancamentoPedidosComponent {
   }
 
   marcarComoEntregue(pedido: Pedido): void {
-    if (pedido.status !== 'pronto') {
+    if (pedido.status !== 'PRONTO') {
       return;
     }
-    pedido.status = 'entregue';
-    pedido.horarioEntregue = this.horaAtual();
 
-    // TODO: notificar o back-end da entrega do pedido
-  }
+    const statusAnterior = pedido.status;
+    pedido.status = 'ENTREGUE'; // atualização otimista
 
-  private horaAtual(): string {
-    const agora = new Date();
-    const horas = String(agora.getHours()).padStart(2, '0');
-    const minutos = String(agora.getMinutes()).padStart(2, '0');
-    return `${horas}:${minutos}`;
+    this.pedidoService.atualizarStatus(pedido.id, 'ENTREGUE').subscribe({
+      next: (atualizado) => {
+        pedido.horarioEntregue = atualizado.horarioEntregue;
+      },
+      error: () => {
+        pedido.status = statusAnterior;
+        this.mensagemErro = 'Não foi possível confirmar a entrega do pedido.';
+      }
+    });
   }
 }
