@@ -29,11 +29,11 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(TratadorDeErros.class);
     private static final Map<String, DadosErro> MAPA = Map.of(
             "uk_restaurantes_cnpj", new DadosErro("cnpj", "Já existe um restaurante cadastrado com esse CNPJ."),
-            "uk_restaurantes_email", new DadosErro("email", "Já existe um restaurante cadastrado com esse email."),
-            "uk_mesas_restaurante_numero", new DadosErro("numero", "Já existe uma mesa cadastrada com esse número."),
-            "uk_funcionarios_restaurante_codigo", new DadosErro("codigo", "Já existe um funcionário cadastrado com esse código."),
-            "uk_categorias_restaurante_nome", new DadosErro("nome", "Já existe uma categoria cadastrada com esse nome."),
-            "uk_produtos_restaurante_nome", new DadosErro("nome", "Já existe um produto cadastrado com esse nome.")
+            "uk_restaurantes_email", new DadosErro("email", "Já existe um restaurante cadastrado com esse e-mail."),
+            "uk_mesas_restaurante_numero", new DadosErro("numero", "Já existe uma mesa cadastrada com esse número neste restaurante."),
+            "uk_funcionarios_restaurante_codigo", new DadosErro("codigo", "Já existe um funcionário cadastrado com esse código neste restaurante."),
+            "uk_categorias_restaurante_nome", new DadosErro("nome", "Já existe uma categoria cadastrada com esse nome neste restaurante."),
+            "uk_produtos_restaurante_nome", new DadosErro("nome", "Já existe um produto cadastrado com esse nome neste restaurante.")
     );
 
     // Trata erro 404 para Entidades do Banco de Dados não existentes
@@ -126,7 +126,7 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
 
     //Trata erro 409 para Status inválidos
     @ExceptionHandler(StatusInvalidoException.class)
-    public ResponseEntity<String> tratarStatusInvalido(Exception ex) {
+    public ResponseEntity<String> tratarStatusInvalido(StatusInvalidoException ex) {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
@@ -137,12 +137,12 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
         var causa = ex.getCause();
 
         if (causa instanceof ConstraintViolationException cve) {
-            var erro = cve.getConstraintName();
+            var nomeConstraint = cve.getConstraintName();
 
-            if (erro != null) {
-                var indicePonto = erro.lastIndexOf(".");
-                var erroTratado = erro.substring(indicePonto + 1);
-                var erroMapeado = MAPA.get(erroTratado);
+            if (nomeConstraint != null) {
+                var indicePonto = nomeConstraint.lastIndexOf(".");
+                var nomeTratado = nomeConstraint.substring(indicePonto + 1);
+                var erroMapeado = MAPA.get(nomeTratado);
 
                 if (erroMapeado != null) {
                     return ResponseEntity.status(HttpStatus.CONFLICT).body(List.of(erroMapeado));
@@ -166,31 +166,4 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
                 "Ocorreu um erro! Por favor, contate nosso suporte."
         );
     }
-
-
-
-
-
-    //    record DadosErroDuplicidade(
-    //            String field,
-    //            String code,
-    //            String defaultMessage,
-    //            Object rejectedValue,
-    //            String[] codes,
-    //            String objectName,
-    //            Object[] arguments,
-    //            Class<? extends FieldError> aClass) {
-    //        public DadosErroDuplicidade(FieldError erro) {
-    //            this(
-    //                    erro.getField(),
-    //                    erro.getCode(),
-    //                    erro.getDefaultMessage(),
-    //                    erro.getRejectedValue(),
-    //                    erro.getCodes(),
-    //                    erro.getObjectName(),
-    //                    erro.getArguments(),
-    //                    erro.getClass()
-    //            );
-    //        }
-    //    }
 }
