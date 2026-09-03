@@ -1,5 +1,6 @@
 package br.com.athenassys.api.exception;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,12 +20,21 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.List;
+import java.util.Map;
 
 @RestControllerAdvice
 public class TratadorDeErros extends ResponseEntityExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(TratadorDeErros.class);
+    private static final Map<String, DadosErro> MAPA = Map.of(
+            "uk_restaurantes_cnpj", new DadosErro("cnpj", "Já existe um restaurante cadastrado com esse CNPJ."),
+            "uk_restaurantes_email", new DadosErro("email", "Já existe um restaurante cadastrado com esse email."),
+            "uk_mesas_restaurante_numero", new DadosErro("numero", "Já existe uma mesa cadastrada com esse número."),
+            "uk_funcionarios_restaurante_codigo", new DadosErro("codigo", "Já existe um funcionário cadastrado com esse código."),
+            "uk_categorias_restaurante_nome", new DadosErro("nome", "Já existe uma categoria cadastrada com esse nome."),
+            "uk_produtos_restaurante_nome", new DadosErro("nome", "Já existe um produto cadastrado com esse nome.")
+    );
 
     // Trata erro 404 para Entidades do Banco de Dados não existentes
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
@@ -66,7 +75,7 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
     ) {
         var erros = ex.getFieldErrors();
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros.stream().map(DadosErroValidacao::new).toList());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros.stream().map(DadosErro::new).toList());
     }
 
     // Trata erro 400 para parametros (normalmente IDs) preenchidos incorretamente
@@ -123,9 +132,28 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<String> tratarErroDuplicidade(Exception ex) {
+    public ResponseEntity<Object> tratarViolacaoIntegridade(DataIntegrityViolationException ex) {
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage() + ex.getCause());
+        var causa = ex.getCause();
+
+        if (causa instanceof ConstraintViolationException cve) {
+            var erro = cve.getConstraintName();
+
+            if (erro != null) {
+                var indicePonto = erro.lastIndexOf(".");
+                var erroTratado = erro.substring(indicePonto + 1);
+                var erroMapeado = MAPA.get(erroTratado);
+
+                if (erroMapeado != null) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(List.of(erroMapeado));
+                }
+            }
+        }
+        logger.error("Erro: ", ex);
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                "Ocorreu um erro! Por favor, contate nosso suporte."
+        );
     }
 
     //Trata qualquer tipo de erro para evitar vazamento de dados e informações internas
@@ -141,16 +169,28 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
 
 
 
-    // Formata os campos inválidos do erro 400 para facilitar visualização
-    record DadosErroValidacao(
-            String campo,
-            String mensagem
-    ) {
-        public DadosErroValidacao(FieldError erro) {
-            this(
-                    erro.getField(),
-                    erro.getDefaultMessage()
-            );
-        }
-    }
+
+
+    //    record DadosErroDuplicidade(
+    //            String field,
+    //            String code,
+    //            String defaultMessage,
+    //            Object rejectedValue,
+    //            String[] codes,
+    //            String objectName,
+    //            Object[] arguments,
+    //            Class<? extends FieldError> aClass) {
+    //        public DadosErroDuplicidade(FieldError erro) {
+    //            this(
+    //                    erro.getField(),
+    //                    erro.getCode(),
+    //                    erro.getDefaultMessage(),
+    //                    erro.getRejectedValue(),
+    //                    erro.getCodes(),
+    //                    erro.getObjectName(),
+    //                    erro.getArguments(),
+    //                    erro.getClass()
+    //            );
+    //        }
+    //    }
 }
