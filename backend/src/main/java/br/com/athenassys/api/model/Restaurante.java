@@ -7,7 +7,18 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "restaurantes")
+@Table(
+    name = "restaurantes",
+    uniqueConstraints = {
+            @UniqueConstraint(
+                    columnNames = "email",
+                    name = "uk_restaurantes_email"
+            ),
+            @UniqueConstraint(
+                    columnNames = "cnpj",
+                    name = "uk_restaurantes_cnpj"
+            )
+    })
 @Entity(name = "Restaurante")
 
 @Getter
@@ -18,12 +29,8 @@ public class Restaurante {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-
-    @Column(unique = true)
     private String email;
     private String telefone;
-
-    @Column(unique = true)
     private String cnpj;
     private String senha;
     private Boolean ativo;

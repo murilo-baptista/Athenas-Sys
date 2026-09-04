@@ -1,14 +1,15 @@
 package br.com.athenassys.api.exception;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,10 +20,21 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.util.List;
+import java.util.Map;
+
 @RestControllerAdvice
 public class TratadorDeErros extends ResponseEntityExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(TratadorDeErros.class);
+    private static final Map<String, DadosErro> MAPA = Map.of(
+            "uk_restaurantes_cnpj", new DadosErro("cnpj", "Já existe um restaurante cadastrado com esse CNPJ."),
+            "uk_restaurantes_email", new DadosErro("email", "Já existe um restaurante cadastrado com esse e-mail."),
+            "uk_mesas_restaurante_numero", new DadosErro("numero", "Já existe uma mesa cadastrada com esse número neste restaurante."),
+            "uk_funcionarios_restaurante_codigo", new DadosErro("codigo", "Já existe um funcionário cadastrado com esse código neste restaurante."),
+            "uk_categorias_restaurante_nome", new DadosErro("nome", "Já existe uma categoria cadastrada com esse nome neste restaurante."),
+            "uk_produtos_restaurante_nome", new DadosErro("nome", "Já existe um produto cadastrado com esse nome neste restaurante.")
+    );
 
     // Trata erro 404 para Entidades do Banco de Dados não existentes
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
@@ -63,7 +75,7 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
     ) {
         var erros = ex.getFieldErrors();
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros.stream().map(DadosErroValidacao::new).toList());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erros.stream().map(DadosErro::new).toList());
     }
 
     // Trata erro 400 para parametros (normalmente IDs) preenchidos incorretamente
@@ -112,6 +124,38 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(mensagemErro);
     }
 
+    //Trata erro 409 para Status inválidos
+    @ExceptionHandler(StatusInvalidoException.class)
+    public ResponseEntity<String> tratarStatusInvalido(StatusInvalidoException ex) {
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> tratarViolacaoIntegridade(DataIntegrityViolationException ex) {
+
+        var causa = ex.getCause();
+
+        if (causa instanceof ConstraintViolationException cve) {
+            var nomeConstraint = cve.getConstraintName();
+
+            if (nomeConstraint != null) {
+                var indicePonto = nomeConstraint.lastIndexOf(".");
+                var nomeTratado = nomeConstraint.substring(indicePonto + 1);
+                var erroMapeado = MAPA.get(nomeTratado);
+
+                if (erroMapeado != null) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body(List.of(erroMapeado));
+                }
+            }
+        }
+        logger.error("Erro: ", ex);
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                "Ocorreu um erro! Por favor, contate nosso suporte."
+        );
+    }
+
     //Trata qualquer tipo de erro para evitar vazamento de dados e informações internas
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> tratarErroNaoTratado(Exception ex) {
@@ -121,20 +165,5 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 "Ocorreu um erro! Por favor, contate nosso suporte."
         );
-    }
-
-
-
-    // Formata os campos inválidos do erro 400 para facilitar visualização
-    record DadosErroValidacao(
-            String campo,
-            String mensagem
-    ) {
-        public DadosErroValidacao(FieldError erro) {
-            this(
-                    erro.getField(),
-                    erro.getDefaultMessage()
-            );
-        }
     }
 }
