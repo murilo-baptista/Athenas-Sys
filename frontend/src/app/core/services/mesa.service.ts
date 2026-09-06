@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CriarMesaRequest, AtualizarMesaRequest, Mesa, Reserva, StatusMesa } from '../models/mesa.model';
+import { CriarMesaRequest, AtualizarMesaRequest, Mesa, StatusMesa } from '../models/mesa.model';
 
 @Injectable({ providedIn: 'root' })
 export class MesaService {
