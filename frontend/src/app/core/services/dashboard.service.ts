@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -15,12 +15,11 @@ export interface ResumoDashboard {
 @Injectable({ providedIn: 'root' })
 export class DashboardService {
 
-  private readonly baseUrl = `${environment.apiUrl}/dashboard`;
+  private readonly baseUrl = `${environment.apiUrl}/restaurantes`;
 
   constructor(private http: HttpClient) {}
 
   buscarResumo(restauranteId: number): Observable<ResumoDashboard> {
-    const params = new HttpParams().set('restauranteId', restauranteId);
-    return this.http.get<ResumoDashboard>(`${this.baseUrl}/resumo`, { params });
+    return this.http.get<ResumoDashboard>(`${this.baseUrl}/${restauranteId}/dashboard/resumo`);
   }
 }
