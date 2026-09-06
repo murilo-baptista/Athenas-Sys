@@ -7,24 +7,34 @@ import { AtualizarStatusPedidoRequest, CriarPedidoRequest, Pedido, StatusPedido 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
 
-  private readonly baseUrl = `${environment.apiUrl}/pedidos`;
+  private readonly baseUrl = `${environment.apiUrl}/restaurantes`;
 
   constructor(private http: HttpClient) {}
 
-  listar(restauranteId: number, status?: StatusPedido): Observable<Pedido[]> {
-    let params = new HttpParams().set('restauranteId', restauranteId);
-    if (status) {
-      params = params.set('status', status);
+  listar(restauranteId: number, idMesa?: number, idFuncionario?: number): Observable<Pedido[]> {
+    let params = new HttpParams();
+    if (idMesa) {
+      params = params.set('idMesa', idMesa);
     }
-    return this.http.get<Pedido[]>(this.baseUrl, { params });
+    if (idFuncionario) {
+      params = params.set('idFuncionario', idFuncionario);
+    }
+    return this.http.get<Pedido[]>(`${this.baseUrl}/${restauranteId}/pedidos`, { params });
   }
 
-  criar(dados: CriarPedidoRequest): Observable<Pedido> {
-    return this.http.post<Pedido>(this.baseUrl, dados);
+  criar(restauranteId: number, dados: CriarPedidoRequest): Observable<Pedido> {
+    return this.http.post<Pedido>(`${this.baseUrl}/${restauranteId}/pedidos`, dados);
   }
 
-  atualizarStatus(pedidoId: number, status: StatusPedido): Observable<Pedido> {
-    const body: AtualizarStatusPedidoRequest = { status };
-    return this.http.patch<Pedido>(`${this.baseUrl}/${pedidoId}/status`, body);
+  atualizar(restauranteId: number, pedidoId: number, dados: AtualizarPedidoRequest): Observable<Pedido> {
+      return this.http.put<Pedido>(`${this.baseUrl}/${restauranteId}/pedidos/${pedidoId}`, dados);
+    }
+
+  marcarPronto(restauranteId: number, pedidoId: number): Observable<Pedido> {
+    return this.http.patch<Pedido>(`${this.baseUrl}/${restauranteId}/pedidos/${pedidoId}/marcarPronto`, {});
+  }
+
+  entregar(restauranteId: number, pedidoId: number): Observable<Pedido> {
+    return this.http.patch<Pedido>(`${this.baseUrl}/${restauranteId}/pedidos/${pedidoId}/entregar`, {});
   }
 }

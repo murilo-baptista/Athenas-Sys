@@ -1,4 +1,4 @@
-export type StatusPedido = 'NOVO' | 'ANDAMENTO' | 'PRONTO' | 'ENTREGUE';
+export type StatusPedido = 'EM ANDAMENTO' | 'ENTREGUE' | 'CANCELADO';
 
 export interface Pedido {
   id: number;
@@ -14,8 +14,15 @@ export interface Pedido {
 
 export interface CriarPedidoRequest {
   mesa: number;
+  funcionario: number;
+  observacao: string;
   itens: string[];
-  restauranteId: number;
+}
+
+export interface AtualizarPedidoRequest {
+  idMesa: number;
+  idFuncionario: number;
+  observacao: string;
 }
 
 export interface AtualizarStatusPedidoRequest {
