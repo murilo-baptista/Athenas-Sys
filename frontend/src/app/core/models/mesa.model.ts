@@ -1,4 +1,4 @@
-export type StatusMesa = 'OCUPADA' | 'DISPONIVEL' | 'RESERVADA';
+export type StatusMesa = 'OCUPADA' | 'LIVRE';
 
 export interface Mesa {
   id?: number;
@@ -12,7 +12,11 @@ export interface Mesa {
 export interface CriarMesaRequest {
   numero: string;
   capacidade: number;
-  restauranteId: number;
+}
+
+export interface AtualizarMesaRequest {
+  numero: string;
+  capacidade: number;
 }
 
 export interface Reserva {

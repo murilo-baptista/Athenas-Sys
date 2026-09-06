@@ -1,34 +1,33 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CriarMesaRequest, Mesa, Reserva, StatusMesa } from '../models/mesa.model';
+import { CriarMesaRequest, AtualizarMesaRequest, Mesa, Reserva, StatusMesa } from '../models/mesa.model';
 
 @Injectable({ providedIn: 'root' })
 export class MesaService {
 
-  private readonly baseUrl = `${environment.apiUrl}/mesas`;
+  private readonly baseUrl = `${environment.apiUrl}/restaurantes`;
 
   constructor(private http: HttpClient) {}
 
   listarPorRestaurante(restauranteId: number): Observable<Mesa[]> {
-    const params = new HttpParams().set('restauranteId', restauranteId);
-    return this.http.get<Mesa[]>(this.baseUrl, { params });
+    return this.http.get<Mesa[]>(`${this.baseUrl}/${restauranteId}/mesas`);
   }
 
-  criar(dados: CriarMesaRequest): Observable<Mesa> {
-    return this.http.post<Mesa>(this.baseUrl, dados);
+  criar(restauranteId: number, dados: CriarMesaRequest): Observable<Mesa> {
+    return this.http.post<Mesa>(`${this.baseUrl}/${restauranteId}/mesas`, dados);
   }
 
-  alterarStatus(mesaId: number, status: StatusMesa): Observable<Mesa> {
-    return this.http.patch<Mesa>(`${this.baseUrl}/${mesaId}/status`, { status });
+  atualizar(restauranteId: number, mesaId: number, dados: AtualizarMesaRequest): Observable<Mesa> {
+    return this.http.put<Mesa>(`${this.baseUrl}/${restauranteId}/mesas/${mesaId}`, dados);
   }
 
-  salvarReserva(mesaId: number, reserva: Reserva): Observable<Mesa> {
-    return this.http.post<Mesa>(`${this.baseUrl}/${mesaId}/reserva`, reserva);
+  ocuparMesa(restauranteId: number, mesaId: number, status: StatusMesa): Observable<Mesa> {
+    return this.http.patch<Mesa>(`${this.baseUrl}/${restauranteId}/mesas/${mesaId}/ocupar`, {});
   }
 
-  cancelarReserva(mesaId: number): Observable<Mesa> {
-    return this.http.delete<Mesa>(`${this.baseUrl}/${mesaId}/reserva`);
+  desocuparMesa(restauranteId: number, mesaId: number, status: StatusMesa): Observable<Mesa> {
+    return this.http.patch<Mesa>(`${this.baseUrl}/${restauranteId}/mesas/${mesaId}/desocupar`, {});
   }
 }
