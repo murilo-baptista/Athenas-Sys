@@ -11,5 +11,9 @@ export interface CriarFuncionarioRequest {
   nome: string;
   codigo: string;
   cargo: CargoFuncionario;
-  restauranteId: number;
+}
+
+export interface AtualizarFuncionarioRequest {
+  nome: string;
+  cargo: CargoFuncionario;
 }

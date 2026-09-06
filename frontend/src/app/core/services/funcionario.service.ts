@@ -7,20 +7,23 @@ import { CriarFuncionarioRequest, Funcionario } from '../models/funcionario.mode
 @Injectable({ providedIn: 'root' })
 export class FuncionarioService {
 
-  private readonly baseUrl = `${environment.apiUrl}/funcionarios`;
+  private readonly baseUrl = `${environment.apiUrl}/restaurantes`;
 
   constructor(private http: HttpClient) {}
 
   listarPorRestaurante(restauranteId: number): Observable<Funcionario[]> {
-    const params = new HttpParams().set('restauranteId', restauranteId);
-    return this.http.get<Funcionario[]>(this.baseUrl, { params });
+    return this.http.get<Funcionario[]>(`${this.baseUrl}/${restauranteId}/funcionarios`);
   }
 
-  criar(dados: CriarFuncionarioRequest): Observable<Funcionario> {
-    return this.http.post<Funcionario>(this.baseUrl, dados);
+  criar(restauranteId: number, dados: CriarFuncionarioRequest): Observable<Funcionario> {
+    return this.http.post<Funcionario>(`${this.baseUrl}/${restauranteId}/funcionarios`, dados);
   }
 
-  remover(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  atualizar(restauranteId: number, id: number, dados: AtualizarFuncionarioRequest): Observable<Funcionario> {
+      return this.http.put<Funcionario>(`${this.baseUrl}/${restauranteId}/funcionarios/${id}`, dados);
+    }
+
+  remover(restauranteId: number, id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${restauranteId}/funcionarios/${id}`);
   }
 }
