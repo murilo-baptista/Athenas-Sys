@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { CriarMesaRequest, AtualizarMesaRequest, Mesa, StatusMesa } from '../models/mesa.model';
+import { Page } from '../models/pagina.model';
+import { map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class MesaService {
@@ -12,7 +14,7 @@ export class MesaService {
   constructor(private http: HttpClient) {}
 
   listarPorRestaurante(restauranteId: number): Observable<Mesa[]> {
-    return this.http.get<Mesa[]>(`${this.baseUrl}/${restauranteId}/mesas`);
+    return this.http.get<Page<Mesa>>(`${this.baseUrl}/${restauranteId}/mesas`).pipe(map(r => r.content));
   }
 
   criar(restauranteId: number, dados: CriarMesaRequest): Observable<Mesa> {

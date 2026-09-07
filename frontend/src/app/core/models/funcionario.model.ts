@@ -1,8 +1,7 @@
-export type CargoFuncionario = 'Gerente' | 'Garçom' | 'Recepção' | 'Cozinha';
+export type CargoFuncionario = 'GERENTE' | 'RECEPCAO' | 'GARCOM' | 'COZINHA';
 
 export interface Funcionario {
-  id?: number;
-  restauranteId?: number;
+  id: number;
   nome: string;
   cargo: CargoFuncionario;
 }

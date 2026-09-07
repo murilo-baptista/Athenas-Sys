@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { CriarFuncionarioRequest, AtualizarFuncionarioRequest, Funcionario } from '../models/funcionario.model';
+import { Page } from '../models/pagina.model';
+import { map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class FuncionarioService {
@@ -12,7 +14,7 @@ export class FuncionarioService {
   constructor(private http: HttpClient) {}
 
   listarPorRestaurante(restauranteId: number): Observable<Funcionario[]> {
-    return this.http.get<Funcionario[]>(`${this.baseUrl}/${restauranteId}/funcionarios`);
+    return this.http.get<Page<Funcionario>>(`${this.baseUrl}/${restauranteId}/funcionarios`).pipe(map(r => r.content));
   }
 
   criar(restauranteId: number, dados: CriarFuncionarioRequest): Observable<Funcionario> {

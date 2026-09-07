@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { CadastroRestauranteRequest, AtualizarRestauranteRequest, Restaurante } from '../models/restaurante.model';
+import { Page } from '../models/pagina.model';
+import { map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class RestauranteService {
@@ -15,8 +17,8 @@ export class RestauranteService {
     return this.http.post<Restaurante>(this.baseUrl, dados);
   }
 
-  buscar(): Observable<Restaurante> {
-    return this.http.get<Restaurante>(`${this.baseUrl}`);
+  buscar(): Observable<Restaurante[]> {
+    return this.http.get<Page<Restaurante>>(`${this.baseUrl}`).pipe(map(r => r.content));
   }
 
   atualizar(id: number, dados: AtualizarRestauranteRequest): Observable<Restaurante> {

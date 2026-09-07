@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AtualizarPedidoRequest, CriarPedidoRequest, Pedido} from '../models/pedido.model';
+import { Page } from '../models/pagina.model';
+import { map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
@@ -19,7 +21,7 @@ export class PedidoService {
     if (idFuncionario) {
       params = params.set('idFuncionario', idFuncionario);
     }
-    return this.http.get<Pedido[]>(`${this.baseUrl}/${restauranteId}/pedidos`, { params });
+    return this.http.get<Page<Pedido>>(`${this.baseUrl}/${restauranteId}/pedidos`, { params }).pipe(map(r => r.content));
   }
 
   criar(restauranteId: number, dados: CriarPedidoRequest): Observable<Pedido> {
