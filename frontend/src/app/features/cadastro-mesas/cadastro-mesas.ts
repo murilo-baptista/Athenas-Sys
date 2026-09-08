@@ -44,7 +44,7 @@ export class CadastroMesasComponent implements OnInit {
 
   private carregarMesas(): void {
     this.carregando = true;
-    this.mesaService.listarPorRestaurante(this.restauranteId).subscribe({
+    this.mesaService.listarPorRestaurante().subscribe({
       next: (mesas) => {
         this.mesas = mesas;
         this.carregando = false;
@@ -66,9 +66,8 @@ export class CadastroMesasComponent implements OnInit {
     this.salvando = true;
 
     this.mesaService.criar({
-      numero: this.numeroMesa,
+      numero: Number(this.numeroMesa),
       capacidade: this.capacidadeMesa,
-      restauranteId: this.restauranteId
     }).subscribe({
       next: (mesaCriada) => {
         this.mesas.push(mesaCriada);

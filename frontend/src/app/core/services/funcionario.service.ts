@@ -1,31 +1,35 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { CriarFuncionarioRequest, AtualizarFuncionarioRequest, Funcionario } from '../models/funcionario.model';
 import { Page } from '../models/pagina.model';
-import { map } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class FuncionarioService {
 
   private readonly baseUrl = `${environment.apiUrl}/restaurantes`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private auth: AuthService) {}
 
-  listarPorRestaurante(restauranteId: number): Observable<Funcionario[]> {
-    return this.http.get<Page<Funcionario>>(`${this.baseUrl}/${restauranteId}/funcionarios`).pipe(map(r => r.content));
+  private get restauranteId(): number {
+    return this.auth.getRestauranteId()!;
   }
 
-  criar(restauranteId: number, dados: CriarFuncionarioRequest): Observable<Funcionario> {
-    return this.http.post<Funcionario>(`${this.baseUrl}/${restauranteId}/funcionarios`, dados);
+  listarPorRestaurante(): Observable<Funcionario[]> {
+    return this.http.get<Page<Funcionario>>(`${this.baseUrl}/${this.restauranteId}/funcionarios`).pipe(map(r => r.content));
   }
 
-  atualizar(restauranteId: number, id: number, dados: AtualizarFuncionarioRequest): Observable<Funcionario> {
-      return this.http.put<Funcionario>(`${this.baseUrl}/${restauranteId}/funcionarios/${id}`, dados);
+  criar(dados: CriarFuncionarioRequest): Observable<Funcionario> {
+    return this.http.post<Funcionario>(`${this.baseUrl}/${this.restauranteId}/funcionarios`, dados);
+  }
+
+  atualizar(id: number, dados: AtualizarFuncionarioRequest): Observable<Funcionario> {
+      return this.http.put<Funcionario>(`${this.baseUrl}/${this.restauranteId}/funcionarios/${id}`, dados);
     }
 
-  remover(restauranteId: number, id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${restauranteId}/funcionarios/${id}`);
+  remover(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${this.restauranteId}/funcionarios/${id}`);
   }
 }
