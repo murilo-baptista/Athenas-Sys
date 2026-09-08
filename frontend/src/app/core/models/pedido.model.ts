@@ -2,7 +2,6 @@ export type StatusPedido = 'EM ANDAMENTO' | 'ENTREGUE' | 'CANCELADO';
 
 export interface Pedido {
   id: number;
-  
   status: StatusPedido;
   horarioEnvio: string;
   observacao?: string;
@@ -25,8 +24,4 @@ export interface AtualizarPedidoRequest {
   mesa: number;
   funcionario: number;
   observacao?: string;
-}
-
-export interface AtualizarStatusPedidoRequest {
-  status: StatusPedido;
 }
