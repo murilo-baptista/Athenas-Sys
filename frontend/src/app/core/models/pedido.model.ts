@@ -1,12 +1,13 @@
-export type StatusPedido = 'NOVO' | 'ANDAMENTO' | 'PRONTO' | 'ENTREGUE';
+export type StatusPedido = 'EM ANDAMENTO' | 'ENTREGUE' | 'CANCELADO';
 
 export interface Pedido {
   id: number;
-  numero: string;
-  mesa: number;
-  itens: string[];
   status: StatusPedido;
   horarioEnvio: string;
+  observacao?: string;
+  valorTotal: number;
+  mesa: number;
+  funcionario: number;
   horarioPronto?: string;
   horarioEntregue?: string;
   minutosEmAndamento?: number;
@@ -14,10 +15,13 @@ export interface Pedido {
 
 export interface CriarPedidoRequest {
   mesa: number;
+  funcionario: number;
+  observacao?: string;
   itens: string[];
-  restauranteId: number;
 }
 
-export interface AtualizarStatusPedidoRequest {
-  status: StatusPedido;
+export interface AtualizarPedidoRequest {
+  mesa: number;
+  funcionario: number;
+  observacao?: string;
 }

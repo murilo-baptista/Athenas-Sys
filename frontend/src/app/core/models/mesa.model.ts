@@ -1,20 +1,26 @@
-export type StatusMesa = 'OCUPADA' | 'DISPONIVEL' | 'RESERVADA';
+export type StatusMesa = 'OCUPADA' | 'LIVRE' | 'RESERVADA'; //remover RESERVADA quando for alterar esse arquivo
 
 export interface Mesa {
   id?: number;
-  restauranteId?: number;
-  numero: string;
+  numero: number;
   capacidade: number;
   status?: StatusMesa;
+//  Reserva é entidade independente no backend, não campo de Mesa.
+//  Mantido só pra não quebrar mapa-mesas.ts hoje. Remover quando esse componente for reescrito.
   reserva?: Reserva | null;
 }
 
 export interface CriarMesaRequest {
-  numero: string;
+  numero: number;
   capacidade: number;
-  restauranteId: number;
 }
 
+export interface AtualizarMesaRequest {
+  numero: number;
+  capacidade: number;
+}
+
+//  remover
 export interface Reserva {
   id?: number;
   mesaId?: number;

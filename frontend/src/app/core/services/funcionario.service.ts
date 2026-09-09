@@ -1,26 +1,35 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CriarFuncionarioRequest, Funcionario } from '../models/funcionario.model';
+import { CriarFuncionarioRequest, AtualizarFuncionarioRequest, Funcionario } from '../models/funcionario.model';
+import { Page } from '../models/pagina.model';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class FuncionarioService {
 
-  private readonly baseUrl = `${environment.apiUrl}/funcionarios`;
+  private readonly baseUrl = `${environment.apiUrl}/restaurantes`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private auth: AuthService) {}
 
-  listarPorRestaurante(restauranteId: number): Observable<Funcionario[]> {
-    const params = new HttpParams().set('restauranteId', restauranteId);
-    return this.http.get<Funcionario[]>(this.baseUrl, { params });
+  private get restauranteId(): number {
+    return this.auth.getRestauranteId()!;
+  }
+
+  listarPorRestaurante(): Observable<Funcionario[]> {
+    return this.http.get<Page<Funcionario>>(`${this.baseUrl}/${this.restauranteId}/funcionarios`).pipe(map(r => r.content));
   }
 
   criar(dados: CriarFuncionarioRequest): Observable<Funcionario> {
-    return this.http.post<Funcionario>(this.baseUrl, dados);
+    return this.http.post<Funcionario>(`${this.baseUrl}/${this.restauranteId}/funcionarios`, dados);
   }
 
+  atualizar(id: number, dados: AtualizarFuncionarioRequest): Observable<Funcionario> {
+      return this.http.put<Funcionario>(`${this.baseUrl}/${this.restauranteId}/funcionarios/${id}`, dados);
+    }
+
   remover(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}/${this.restauranteId}/funcionarios/${id}`);
   }
 }

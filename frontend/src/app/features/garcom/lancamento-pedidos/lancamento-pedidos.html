@@ -3,40 +3,87 @@
   <!-- Barra superior com faixa grega + identificação do garçom -->
   <div class="top-bar">
     <div class="greek-border top"></div>
+
     <div class="header-info">
-      <span class="garcom-label">GARÇOM: {{ nomeGarcom }}</span>
+      <span class="garcom-label">
+        GARÇOM: {{ nomeGarcom }}
+      </span>
+
       <div class="avatar">
-        <img src="assets/imagens/perfil-garçom.png" alt="Foto do garçom" class="avatar-img">
+        <img
+          src="assets/imagens/perfil-garçom.png"
+          alt="Foto do garçom"
+          class="avatar-img">
       </div>
     </div>
   </div>
 
   <div class="garcom-content">
 
-    <img src="assets/imagens/pilar.png" alt="" class="pillar-decoration">
+    <img
+      src="assets/imagens/pilar.png"
+      alt=""
+      class="pillar-decoration">
 
     <div class="garcom-card">
 
       <!-- Abas -->
       <div class="tabs">
-        <button type="button" class="tab-btn" [class.active]="abaAtiva === 'novo'" (click)="abaAtiva = 'novo'">
+
+        <button
+          type="button"
+          class="tab-btn"
+          [class.active]="abaAtiva === 'novo'"
+          (click)="abaAtiva = 'novo'">
           NOVO PEDIDO
         </button>
-        <button type="button" class="tab-btn" [class.active]="abaAtiva === 'andamento'" (click)="abaAtiva = 'andamento'">
+
+        <button
+          type="button"
+          class="tab-btn"
+          [class.active]="abaAtiva === 'andamento'"
+          (click)="abaAtiva = 'andamento'">
           PEDIDOS EM ANDAMENTO
         </button>
+
       </div>
 
       <!-- ===================== ABA: NOVO PEDIDO ===================== -->
-      <div class="tab-panel" *ngIf="abaAtiva === 'novo'">
+      <div
+        class="tab-panel"
+        *ngIf="abaAtiva === 'novo'">
 
-        <label class="field-label" for="mesa">NÚMERO DA MESA:</label>
-        <select id="mesa" class="mesa-select" [(ngModel)]="mesaSelecionada">
-          <option [ngValue]="null" disabled selected>-</option>
-          <option *ngFor="let mesa of mesasDisponiveis" [ngValue]="mesa">{{ mesa }}</option>
+        <label
+          class="field-label"
+          for="mesa">
+          NÚMERO DA MESA:
+        </label>
+
+        <select
+          id="mesa"
+          class="mesa-select"
+          [(ngModel)]="mesaSelecionada">
+
+          <option
+            [ngValue]="null"
+            disabled>
+            -
+          </option>
+
+          <option
+            *ngFor="let mesa of mesasDisponiveis"
+            [ngValue]="mesa">
+            {{ mesa }}
+          </option>
+
         </select>
 
-        <label class="field-label" for="pedido">ANOTE SEU NOVO PEDIDO:</label>
+        <label
+          class="field-label"
+          for="pedido">
+          ANOTE SEU NOVO PEDIDO:
+        </label>
+
         <textarea
           id="pedido"
           class="pedido-textarea"
@@ -45,62 +92,113 @@
         </textarea>
 
         <div class="form-actions">
+
           <button
             type="button"
             class="enviar-btn"
-            [disabled]="!mesaSelecionada || !pedidoTexto.trim() || enviando"
+            [disabled]="
+              !mesaSelecionada ||
+              !pedidoTexto.trim() ||
+              enviando
+            "
             (click)="enviarPedido()">
-            {{ enviando ? 'ENVIANDO...' : 'ENVIAR PEDIDO PARA A COZINHA' }}
+
+            {{
+              enviando
+                ? 'ENVIANDO...'
+                : 'ENVIAR PEDIDO PARA A COZINHA'
+            }}
+
           </button>
+
         </div>
-        <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+
+        <p
+          class="erro-msg"
+          *ngIf="mensagemErro">
+          {{ mensagemErro }}
+        </p>
 
       </div>
 
       <!-- ================= ABA: PEDIDOS EM ANDAMENTO ================= -->
-      <div class="tab-panel andamento-panel" *ngIf="abaAtiva === 'andamento'">
+      <div
+        class="tab-panel andamento-panel"
+        *ngIf="abaAtiva === 'andamento'">
 
         <!-- Filtros laterais -->
         <div class="filtros">
+
           <button
             type="button"
             class="filtro-btn"
             *ngFor="let filtro of filtros"
             [class.active]="filtroAtivo === filtro.valor"
             (click)="filtroAtivo = filtro.valor">
+
             {{ filtro.rotulo }}
+
           </button>
+
         </div>
 
         <!-- Lista de pedidos -->
         <div class="pedidos-lista">
 
-          <div class="pedido-vazio" *ngIf="mensagemErro">{{ mensagemErro }}</div>
-          <div class="pedido-vazio" *ngIf="carregando">Carregando pedidos...</div>
+          <div
+            class="pedido-vazio"
+            *ngIf="mensagemErro">
+            {{ mensagemErro }}
+          </div>
 
-          <div class="pedido-vazio" *ngIf="!carregando && pedidosFiltrados().length === 0">
+          <div
+            class="pedido-vazio"
+            *ngIf="carregando">
+            Carregando pedidos...
+          </div>
+
+          <div
+            class="pedido-vazio"
+            *ngIf="
+              !carregando &&
+              pedidosFiltrados().length === 0
+            ">
             Nenhum pedido nesta categoria.
           </div>
 
-          <div class="pedido-card" *ngFor="let pedido of pedidosFiltrados()">
+          <div
+            class="pedido-card"
+            *ngFor="let pedido of pedidosFiltrados()">
 
             <!-- Informações do pedido -->
             <div class="pedido-info">
+
               <div class="pedido-info-header">
                 <span>Mesa</span>
                 <span>Pedido</span>
                 <span>Itens</span>
                 <span>Enviado em</span>
               </div>
+
               <div class="pedido-info-valores">
-                <span class="valor-mesa">{{ pedido.mesa }}</span>
-                <span>#{{ pedido.numero }}</span>
-                <span>{{ pedido.itens.length }}</span>
-                <span>{{ pedido.horarioEnvio }}</span>
+
+                <span class="valor-mesa">
+                  {{ pedido.mesa }}
+                </span>
+
+                <span>
+                  #{{ pedido.id }}
+                </span>
+
+                <span>
+                  {{ pedido.horarioEnvio }}
+                </span>
+
               </div>
+
               <ul class="pedido-itens">
-                <li *ngFor="let item of pedido.itens">- {{ item }}</li>
               </ul>
+
             </div>
 
             <!-- Status do pedido -->
@@ -111,67 +209,153 @@
                 <div class="status-steps">
 
                   <!-- Passo 1: Novo -->
-                  <div class="status-step step-novo" [ngClass]="'estado-' + stepEstado(pedido, 0)">
-                    <span class="status-sphere" aria-hidden="true"></span>
-                    <span class="status-icon status-icon-novo" aria-hidden="true"></span>
-                    <span class="status-rotulo">Novo</span>
+                  <div
+                    class="status-step step-novo"
+                    [ngClass]="'estado-' + stepEstado(pedido, 0)">
+
+                    <span
+                      class="status-sphere"
+                      aria-hidden="true">
+                    </span>
+
+                    <span
+                      class="status-icon status-icon-novo"
+                      aria-hidden="true">
+                    </span>
+
+                    <span class="status-rotulo">
+                      Novo
+                    </span>
+
                   </div>
 
                   <div
                     class="status-linha"
                     [ngClass]="'estado-' + linhaEstado(pedido, 0)"
-                    [class.seta]="linhaEstado(pedido, 0) !== 'pendente'">
+                    [class.seta]="
+                      linhaEstado(pedido, 0) !== 'pendente'
+                    ">
                   </div>
 
                   <!-- Passo 2: Em andamento -->
-                  <div class="status-step step-andamento" [ngClass]="'estado-' + stepEstado(pedido, 1)">
-                    <span class="status-sphere" aria-hidden="true"></span>
-                    <span class="status-icon status-icon-andamento" aria-hidden="true"></span>
-                    <span class="status-rotulo">Em andamento</span>
+                  <div
+                    class="status-step step-andamento"
+                    [ngClass]="'estado-' + stepEstado(pedido, 1)">
+
+                    <span
+                      class="status-sphere"
+                      aria-hidden="true">
+                    </span>
+
+                    <span
+                      class="status-icon status-icon-andamento"
+                      aria-hidden="true">
+                    </span>
+
+                    <span class="status-rotulo">
+                      Em andamento
+                    </span>
+
                   </div>
 
                   <div
                     class="status-linha"
                     [ngClass]="'estado-' + linhaEstado(pedido, 1)"
-                    [class.seta]="linhaEstado(pedido, 1) !== 'pendente'">
+                    [class.seta]="
+                      linhaEstado(pedido, 1) !== 'pendente'
+                    ">
                   </div>
 
                   <!-- Passo 3: Pronto -->
-                  <div class="status-step step-pronto" [ngClass]="'estado-' + stepEstado(pedido, 2)">
-                    <span class="status-sphere" aria-hidden="true"></span>
-                    <span class="status-icon status-icon-pronto" aria-hidden="true"></span>
-                    <span class="status-rotulo">Pronto</span>
+                  <div
+                    class="status-step step-pronto"
+                    [ngClass]="'estado-' + stepEstado(pedido, 2)">
+
+                    <span
+                      class="status-sphere"
+                      aria-hidden="true">
+                    </span>
+
+                    <span
+                      class="status-icon status-icon-pronto"
+                      aria-hidden="true">
+                    </span>
+
+                    <span class="status-rotulo">
+                      Pronto
+                    </span>
+
                   </div>
 
-                  <!-- Linha final: vira seta quando o pedido está pronto -->
                   <div
                     class="status-linha status-linha-final"
                     [ngClass]="'estado-' + linhaEstado(pedido, 2)"
-                    [class.seta]="linhaEstado(pedido, 2) !== 'pendente'">
+                    [class.seta]="
+                      linhaEstado(pedido, 2) !== 'pendente'
+                    ">
                   </div>
 
                   <!-- Passo 4: Entregue -->
-                  <div class="status-step step-entregue" [ngClass]="'estado-' + stepEstado(pedido, 3)">
-                    <span class="status-sphere" aria-hidden="true"></span>
-                    <span class="status-icon status-icon-entregue" aria-hidden="true"></span>
-                    <span class="status-rotulo" *ngIf="stepEstado(pedido, 3) !== 'completo'">Entregue</span>
+                  <div
+                    class="status-step step-entregue"
+                    [ngClass]="'estado-' + stepEstado(pedido, 3)">
+
+                    <span
+                      class="status-sphere"
+                      aria-hidden="true">
+                    </span>
+
+                    <span
+                      class="status-icon status-icon-entregue"
+                      aria-hidden="true">
+                    </span>
+
+                    <span
+                      class="status-rotulo"
+                      *ngIf="
+                        stepEstado(pedido, 3) !== 'completo'
+                      ">
+                      Entregue
+                    </span>
+
                   </div>
 
                 </div>
 
-                <span class="status-tempo">{{ textoStatus(pedido) }}</span>
+                <span class="status-tempo">
+                  {{ textoStatus(pedido) }}
+                </span>
 
               </div>
 
+              <!-- Ação do garçom -->
               <button
                 type="button"
                 class="acao-btn"
-                [class.disponivel]="pedido.status === 'PRONTO'"
-                [class.finalizado]="pedido.status === 'ENTREGUE'"
-                [disabled]="pedido.status !== 'PRONTO'"
+                [class.disponivel]="
+                  pedido.status === 'EM ANDAMENTO' &&
+                  !!pedido.horarioPronto
+                "
+                [class.finalizado]="
+                  pedido.status === 'ENTREGUE'
+                "
+                [disabled]="
+                  pedido.status !== 'EM ANDAMENTO' ||
+                  !pedido.horarioPronto
+                "
                 (click)="marcarComoEntregue(pedido)">
-                <span class="acao-icon" aria-hidden="true"></span>
-                {{ pedido.status === 'ENTREGUE' ? 'Pedido Entregue' : 'Marcar como Entregue' }}
+
+                <span
+                  class="acao-icon"
+                  aria-hidden="true">
+                </span>
+
+                {{
+                  pedido.status === 'ENTREGUE'
+                    ? 'Pedido Entregue'
+                    : 'Marcar como Entregue'
+                }}
+
               </button>
 
             </div>
@@ -188,8 +372,14 @@
 
   <!-- Rodapé decorativo -->
   <div class="bottom-wrap">
-    <img src="assets/imagens/pantheon-pequeno.png" alt="" class="pantheon-decoration">
+
+    <img
+      src="assets/imagens/pantheon-pequeno.png"
+      alt=""
+      class="pantheon-decoration">
+
     <div class="greek-border bottom"></div>
+
   </div>
 
 </div>

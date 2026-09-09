@@ -1,34 +1,52 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CriarMesaRequest, Mesa, Reserva, StatusMesa } from '../models/mesa.model';
+import { CriarMesaRequest, AtualizarMesaRequest, Mesa, Reserva, StatusMesa } from '../models/mesa.model';
+import { Page } from '../models/pagina.model';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class MesaService {
 
-  private readonly baseUrl = `${environment.apiUrl}/mesas`;
+  private readonly baseUrl = `${environment.apiUrl}/restaurantes`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private auth: AuthService) {}
 
-  listarPorRestaurante(restauranteId: number): Observable<Mesa[]> {
-    const params = new HttpParams().set('restauranteId', restauranteId);
-    return this.http.get<Mesa[]>(this.baseUrl, { params });
+  private get restauranteId(): number {
+    return this.auth.getRestauranteId()!;
+  }
+
+  listarPorRestaurante(): Observable<Mesa[]> {
+    return this.http.get<Page<Mesa>>(`${this.baseUrl}/${this.restauranteId}/mesas`).pipe(map(r => r.content));
   }
 
   criar(dados: CriarMesaRequest): Observable<Mesa> {
-    return this.http.post<Mesa>(this.baseUrl, dados);
+    return this.http.post<Mesa>(`${this.baseUrl}/${this.restauranteId}/mesas`, dados);
   }
 
+  atualizar(mesaId: number, dados: AtualizarMesaRequest): Observable<Mesa> {
+    return this.http.put<Mesa>(`${this.baseUrl}/${this.restauranteId}/mesas/${mesaId}`, dados);
+  }
+
+  ocuparMesa(mesaId: number): Observable<Mesa> {
+    return this.http.patch<Mesa>(`${this.baseUrl}/${this.restauranteId}/mesas/${mesaId}/ocupar`, {});
+  }
+
+  desocuparMesa(mesaId: number): Observable<Mesa> {
+    return this.http.patch<Mesa>(`${this.baseUrl}/${this.restauranteId}/mesas/${mesaId}/desocupar`, {});
+  }
+
+//  remover, colocado somente para rodar
   alterarStatus(mesaId: number, status: StatusMesa): Observable<Mesa> {
-    return this.http.patch<Mesa>(`${this.baseUrl}/${mesaId}/status`, { status });
+    return status === 'OCUPADA' ? this.ocuparMesa(mesaId) : this.desocuparMesa(mesaId);
   }
 
-  salvarReserva(mesaId: number, reserva: Reserva): Observable<Mesa> {
-    return this.http.post<Mesa>(`${this.baseUrl}/${mesaId}/reserva`, reserva);
+  salvarReserva(mesaId: number, dados: Reserva): Observable<Mesa> {
+    return this.http.post<Mesa>(`${this.baseUrl}/${this.restauranteId}/mesas/${mesaId}/reserva`, dados);
   }
 
   cancelarReserva(mesaId: number): Observable<Mesa> {
-    return this.http.delete<Mesa>(`${this.baseUrl}/${mesaId}/reserva`);
+    return this.http.delete<Mesa>(`${this.baseUrl}/${this.restauranteId}/mesas/${mesaId}/reserva`);
   }
 }

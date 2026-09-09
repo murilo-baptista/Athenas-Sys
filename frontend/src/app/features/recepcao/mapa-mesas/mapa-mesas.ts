@@ -35,7 +35,7 @@ export class MapaMesasComponent implements OnInit {
     this.carregando = true;
     this.mensagemErro = '';
 
-    this.mesaService.listarPorRestaurante(this.restauranteId).subscribe({
+    this.mesaService.listarPorRestaurante().subscribe({
       next: (mesas) => {
         this.mesas = mesas;
         this.carregando = false;
@@ -102,7 +102,7 @@ export class MapaMesasComponent implements OnInit {
     this.mesaService.cancelarReserva(mesa.id).subscribe({
       next: () => {
         mesa.reserva = null;
-        mesa.status = 'DISPONIVEL';
+        mesa.status = 'LIVRE';
         this.fecharPainel();
       },
       error: () => this.mensagemErro = 'Não foi possível cancelar a reserva.'
@@ -122,7 +122,7 @@ export class MapaMesasComponent implements OnInit {
   statusRotulo(status: StatusMesa | undefined): string {
     switch (status) {
       case 'OCUPADA': return 'Ocupada';
-      case 'DISPONIVEL': return 'Disponível';
+      case 'LIVRE': return 'Livre';
       case 'RESERVADA': return 'Reservada';
       default: return '';
     }
@@ -131,7 +131,7 @@ export class MapaMesasComponent implements OnInit {
   statusClasse(status: StatusMesa | undefined): string {
     switch (status) {
       case 'OCUPADA': return 'status-ocupada';
-      case 'DISPONIVEL': return 'status-disponivel';
+      case 'LIVRE': return 'status-livre';
       case 'RESERVADA': return 'status-reservada';
       default: return '';
     }

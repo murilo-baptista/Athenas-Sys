@@ -23,13 +23,13 @@ export class CadastroFuncionariosComponent implements OnInit {
 
   nomeFuncionario = '';
   senhaFuncionario = '';
-  cargoSelecionado: CargoFuncionario = 'Gerente';
+  cargoSelecionado: CargoFuncionario = 'GERENTE';
 
   cargos: CargoOption[] = [
-    { label: 'Gerente', icone: 'icone-gerente.png', badgeClass: '' },
-    { label: 'Garçom', icone: 'icone-garcom.png', badgeClass: 'badge-bordo' },
-    { label: 'Recepção', icone: 'icone-recepcionista.png', badgeClass: '' },
-    { label: 'Cozinha', icone: 'icone-cozinha.png', badgeClass: 'badge-bordo' }
+    { label: 'GERENTE', icone: 'icone-gerente.png', badgeClass: '' },
+    { label: 'GARCOM', icone: 'icone-garcom.png', badgeClass: 'badge-bordo' },
+    { label: 'RECEPCAO', icone: 'icone-recepcionista.png', badgeClass: '' },
+    { label: 'COZINHA', icone: 'icone-cozinha.png', badgeClass: 'badge-bordo' }
   ];
 
   funcionarios: Funcionario[] = [];
@@ -58,7 +58,7 @@ export class CadastroFuncionariosComponent implements OnInit {
 
   private carregarFuncionarios(): void {
     this.carregando = true;
-    this.funcionarioService.listarPorRestaurante(this.restauranteId).subscribe({
+    this.funcionarioService.listarPorRestaurante().subscribe({
       next: (funcionarios) => {
         this.funcionarios = funcionarios;
         this.carregando = false;
@@ -92,7 +92,6 @@ export class CadastroFuncionariosComponent implements OnInit {
       nome: this.nomeFuncionario,
       codigo: this.senhaFuncionario,
       cargo: this.cargoSelecionado,
-      restauranteId: this.restauranteId
     }).subscribe({
       next: (funcionarioCriado) => {
         this.funcionarios.push(funcionarioCriado);

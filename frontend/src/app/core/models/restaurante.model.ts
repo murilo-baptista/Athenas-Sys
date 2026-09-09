@@ -13,3 +13,9 @@ export interface CadastroRestauranteRequest {
   cnpj: string;
   senha: string;
 }
+
+export interface AtualizarRestauranteRequest {
+  nome: string;
+  email: string;
+  telefone: string;
+}
