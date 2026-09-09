@@ -1,4 +1,3 @@
-DROP DATABASE athenas_sys;
 CREATE DATABASE IF NOT EXISTS athenas_sys;
 USE athenas_sys;
 
@@ -132,7 +131,7 @@ CREATE TABLE pedidos (
     mesa_id BIGINT NOT NULL,
     funcionario_id BIGINT NOT NULL,
     data_hora DATETIME NOT NULL,
-    valor_total DECIMAL(10,2) NOT NULL, -- renomeado para o padrão snake_case (antes valorTotal)
+    valor_total DECIMAL(10,2) NOT NULL, 
     observacao VARCHAR(255),
 
     CONSTRAINT fk_pedidos_restaurante
@@ -159,7 +158,7 @@ CREATE TABLE itens_pedido (
     produto_id BIGINT NOT NULL,
     quantidade INT NOT NULL,
     observacao VARCHAR(255),
-    valor_unitario DECIMAL(10,2) NOT NULL, -- renomeado para o padrão snake_case (antes valorUnitario)
+    valor_unitario DECIMAL(10,2) NOT NULL, 
     status VARCHAR(20) NOT NULL,
 
     CONSTRAINT fk_itens_pedido_restaurante
