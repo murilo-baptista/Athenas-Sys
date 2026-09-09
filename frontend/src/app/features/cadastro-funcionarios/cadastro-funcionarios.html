@@ -1,0 +1,118 @@
+<div class="wizard-page">
+
+
+  <!-- Faixa decorativa superior -->
+  <div class="greek-border top"></div>
+
+
+  <div class="wizard-content">
+
+
+    <!-- Lado esquerdo: banner Athenas (idêntico à página de autenticação) -->
+    <div class="left-panel">
+      <div class="banner">
+        <img src="assets/imagens/banner-bordo.jpeg" alt="Athenas - Gestão inteligente para restaurantes" class="banner-img">
+        <div class="banner-content">
+          <div class="banner-logo-placeholder">logo<br>transparente</div>
+          <h2 class="banner-title">ATHENAS</h2>
+          <p class="banner-subtitle">Gestão inteligente<br>para restaurantes</p>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Direita: fundo com templo desbotado + card do wizard -->
+    <div class="wizard-right">
+      <img src="assets/imagens/templo-grego-g.png" alt="" class="temple-watermark">
+
+
+      <div class="wizard-card">
+
+
+        <!-- Indicador de etapas -->
+        <div class="steps-indicator">
+          <div class="step-circle is-done">✓</div>
+          <div class="step-line"></div>
+          <div class="step-circle is-done">✓</div>
+          <div class="step-line"></div>
+          <div class="step-circle is-current">3</div>
+        </div>
+        <p class="step-caption">ETAPA 3 DE 3 · <strong>FUNCIONÁRIOS</strong></p>
+
+
+        <h1 class="wizard-title">CADASTRE SEUS FUNCIONÁRIOS</h1>
+        <p class="wizard-subtitle">Adicione a equipe que vai acessar o sistema.<br>Você pode adicionar mais depois.</p>
+
+
+        <img src="assets/imagens/divisor-g.png" alt="" class="divider">
+
+
+        <form class="wizard-form" (ngSubmit)="finalizar()">
+
+
+          <label class="field-label" for="nome-funcionario">NOME DO FUNCIONÁRIO</label>
+          <div class="input-group">
+            <img src="assets/imagens/icone-usuario.png" alt="" class="input-icon">
+            <input type="text" id="nome-funcionario" class="input-field" placeholder="Nome completo"
+                   name="nomeFuncionario" [(ngModel)]="nomeFuncionario">
+          </div>
+
+
+          <label class="field-label" for="senha-funcionario">CÓDIGO</label>
+          <div class="input-group">
+            <img src="assets/imagens/icone-cadeado.png" alt="" class="input-icon">
+            <input type="password" id="codigo-funcionario" class="input-field" placeholder="Código de acesso"
+                   name="senhaFuncionario" [(ngModel)]="senhaFuncionario">
+          </div>
+
+
+          <label class="cargo-label">CARGO</label>
+          <div class="cargo-grid">
+            <div class="cargo-option"
+                 *ngFor="let cargo of cargos"
+                 [class.is-selected]="cargoSelecionado === cargo.label"
+                 (click)="selecionarCargo(cargo.label)">
+              <img [src]="'assets/imagens/' + cargo.icone" [alt]="cargo.label" (error)="onImgError($event)">
+              <span>{{ cargo.label }}</span>
+            </div>
+          </div>
+
+
+          <button type="button" class="add-button" [disabled]="!nomeFuncionario || !senhaFuncionario || !cargoSelecionado || salvando" (click)="adicionarFuncionario()">
+            {{ salvando ? 'ADICIONANDO...' : '+ Adicionar funcionário à lista' }}
+          </button>
+
+
+          <label class="added-label">FUNCIONÁRIOS ADICIONADOS</label>
+          <p class="helper-note" *ngIf="carregando">Carregando funcionários...</p>
+          <div class="added-list" *ngIf="!carregando">
+            <div class="added-item" *ngFor="let funcionario of funcionarios; let i = index">
+              <div class="item-info">
+                <span class="item-name">{{ funcionario.nome }}</span>
+                <span class="badge" [ngClass]="badgeClassDoCargo(funcionario.cargo)">{{ funcionario.cargo }}</span>
+              </div>
+              <button type="button" class="remove-btn" (click)="removerFuncionario(i)" aria-label="Remover funcionário">✕</button>
+            </div>
+          </div>
+          <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+
+
+          <div class="wizard-footer">
+            <button type="button" class="btn btn-outline" (click)="voltar()">← VOLTAR</button>
+            <button type="submit" class="btn btn-solid" [disabled]="funcionarios.length === 0">FINALIZAR CADASTRO ✓</button>
+          </div>
+
+
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+
+
+  <!-- Faixa decorativa inferior -->
+  <div class="greek-border bottom"></div>
+
+
+</div>

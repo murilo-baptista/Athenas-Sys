@@ -1,0 +1,330 @@
+/* ==========================================================
+   Athenas - Página de Login
+   Paleta: bordô #7B0F12 | dourado #C9A46A | creme #FFF8EE
+   ========================================================== */
+
+:host {
+  --cor-creme: #FFF8EE;
+  --cor-bordo: #7B0F12;
+  --cor-bordo-escuro: #5A0B0D;
+  --cor-dourado: #C9A46A;
+  --cor-texto-titulo: #7B0F12;
+  --cor-texto-secundario: #4A4038;
+  --cor-borda-input: #C9A46A;
+  display: block;
+  font-family: 'Georgia', 'Times New Roman', serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.login-page {
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--cor-creme);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Faixas decorativas (padrão grego / meandro) ---------- */
+.greek-border {
+  height: 22px;
+  width: 100%;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='22' viewBox='0 0 40 22'><path d='M0 4 H14 V18 H24 V10 H34 V18 H40' fill='none' stroke='%23C9A46A' stroke-width='2.4'/></svg>");
+  background-repeat: repeat-x;
+  background-size: 40px 22px;
+  background-position: left center;
+  flex-shrink: 0;
+}
+
+/* ---------- Layout principal ---------- */
+.login-content {
+  flex: 1;
+  display: flex;
+  width: 100%;
+  min-height: 0;
+}
+
+/* ---------- Lado esquerdo ---------- */
+.left-panel {
+  display: flex;
+  width: 46%;
+  min-width: 420px;
+}
+
+.temple-bg {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background-color: var(--cor-creme);
+}
+
+.temple-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left center;
+  opacity: 0.9;
+}
+
+.banner {
+  position: relative;
+  width: 314px;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.banner-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 44px 20px 0;
+}
+
+.banner-logo-placeholder {
+  width: 116px;
+  height: 116px;
+  border-radius: 50%;
+  background-color: var(--cor-dourado);
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cor-bordo);
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  line-height: 1.3;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.banner-title {
+  color: var(--cor-dourado);
+  font-size: 40px;
+  letter-spacing: 5px;
+  font-family: 'Times New Roman', serif;
+  text-transform: uppercase;
+  margin: -10px 0 4px;
+  flex-shrink: 0;
+}
+
+.banner-subtitle {
+  color: var(--cor-dourado);
+  font-size: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: 'Georgia', serif;
+  opacity: 0.9;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* ---------- Lado direito ---------- */
+.right-panel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 500px;
+  background-color: var(--cor-creme);
+  border: 1.5px solid var(--cor-dourado);
+  border-radius: 6px;
+  padding: 48px 48px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.card-title {
+  color: var(--cor-texto-titulo);
+  font-size: 22px;
+  letter-spacing: 1px;
+  margin: 0 0 6px;
+  font-weight: 700;
+}
+
+.card-subtitle {
+  color: var(--cor-texto-secundario);
+  font-size: 15px;
+  margin: 0 0 18px;
+  font-family: 'Georgia', serif;
+  font-style: italic;
+}
+
+.divider {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  margin: 4px 0 22px;
+  object-fit: contain;
+}
+
+.divider.small {
+  margin: 22px 0 10px;
+}
+
+/* ---------- Formulário ---------- */
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.field-label {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--cor-bordo);
+  margin-bottom: 6px;
+  font-family: Arial, sans-serif;
+}
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--cor-borda-input);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  background-color: #FFFDF9;
+}
+
+.input-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.input-wrapper input {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  font-size: 15px;
+  font-family: Arial, sans-serif;
+  color: #2E2A26;
+}
+
+.input-wrapper input::placeholder {
+  color: #A79E92;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #4A4038;
+  cursor: pointer;
+}
+
+.remember-me input {
+  accent-color: var(--cor-bordo);
+}
+
+.forgot-link {
+  color: var(--cor-bordo);
+  text-decoration: underline;
+}
+
+.forgot-link:hover {
+  color: var(--cor-bordo-escuro);
+}
+
+/* ---------- Botões ---------- */
+.btn-entrar,
+.btn-cadastro {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  background-color: var(--cor-bordo);
+  color: #FFFDF9;
+  font-family: 'Georgia', serif;
+  transition: background-color 0.2s ease;
+}
+
+.btn-entrar:hover,
+.btn-cadastro:hover {
+  background-color: var(--cor-bordo-escuro);
+}
+
+.btn-cadastro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.first-access {
+  color: #4A4038;
+  font-size: 14px;
+  margin: 0 0 12px;
+  font-family: Arial, sans-serif;
+}
+
+/* ---------- Responsividade ---------- */
+@media (max-width: 900px) {
+  .left-panel {
+    display: none;
+  }
+
+  .right-panel {
+    width: 100%;
+    padding: 24px 16px;
+  }
+
+  .login-card {
+    padding: 32px 24px;
+  }
+}
+
+.erro-msg {
+  color: #B3261E;
+  background: #FDECEA;
+  border: 1px solid #F5C2C0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  margin: 4px 0 12px;
+  text-align: center;
+}

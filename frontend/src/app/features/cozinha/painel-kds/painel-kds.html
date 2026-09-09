@@ -1,0 +1,235 @@
+<div class="kds-page">
+
+  <!-- Barra superior com faixa grega + identificação da cozinha -->
+  <div class="top-bar">
+    <div class="greek-border top"></div>
+
+    <div class="header-info">
+      <span class="kds-label">COZINHA</span>
+
+      <div class="avatar">
+        <img
+          src="assets/imagens/perfil-cozinha.png"
+          alt="Ícone da cozinha"
+          class="avatar-img">
+      </div>
+    </div>
+  </div>
+
+  <div class="kds-content">
+
+    <img
+      src="assets/imagens/pilar.png"
+      alt=""
+      class="pillar-decoration">
+
+    <div class="kds-card">
+
+      <div class="titulo-secao">
+        <span class="titulo-pedidos">PEDIDOS</span>
+      </div>
+
+      <div class="painel-panel">
+
+        <!-- Filtros laterais -->
+        <div class="filtros">
+          <button
+            type="button"
+            class="filtro-btn"
+            *ngFor="let filtro of filtros"
+            [class.active]="filtroAtivo === filtro.valor"
+            (click)="filtroAtivo = filtro.valor">
+            {{ filtro.rotulo }}
+          </button>
+        </div>
+
+        <!-- Lista de pedidos -->
+        <div class="pedidos-lista">
+
+          <p class="kds-erro" *ngIf="mensagemErro">
+            {{ mensagemErro }}
+          </p>
+
+          <div class="pedido-vazio" *ngIf="carregando">
+            Carregando pedidos...
+          </div>
+
+          <div
+            class="pedido-vazio"
+            *ngIf="!carregando && pedidosFiltrados().length === 0">
+            Nenhum pedido nesta categoria.
+          </div>
+
+          <div
+            class="pedido-card"
+            *ngFor="let pedido of pedidosFiltrados()">
+
+            <!-- Informações do pedido -->
+            <div class="pedido-info">
+
+              <div class="pedido-info-header">
+                <span>Mesa</span>
+                <span>Pedido</span>
+                <span>Itens</span>
+                <span>Enviado em</span>
+              </div>
+
+              <div class="pedido-info-valores">
+                <span class="valor-mesa">
+                  {{ pedido.mesa }}
+                </span>
+
+                <span>
+                  #{{ pedido.id }}
+                </span>
+
+                <span>
+                  {{ pedido.horarioEnvio }}
+                </span>
+              </div>
+
+              <ul class="pedido-itens">
+              </ul>
+
+            </div>
+
+            <!-- Status do pedido -->
+            <div class="pedido-status">
+
+              <div class="status-main">
+
+                <div class="status-steps">
+
+                  <!-- Passo 1: Novo -->
+                  <div
+                    class="status-step step-novo"
+                    [ngClass]="'estado-' + stepEstado(pedido, 0)">
+
+                    <span
+                      class="status-sphere"
+                      aria-hidden="true">
+                    </span>
+
+                    <span
+                      class="status-icon status-icon-novo"
+                      aria-hidden="true">
+                    </span>
+
+                    <span class="status-rotulo">
+                      Novo
+                    </span>
+                  </div>
+
+                  <div
+                    class="status-linha"
+                    [ngClass]="'estado-' + linhaEstado(pedido, 0)"
+                    [class.seta]="linhaEstado(pedido, 0) !== 'pendente'">
+                  </div>
+
+                  <!-- Passo 2: Em andamento -->
+                  <div
+                    class="status-step step-andamento"
+                    [ngClass]="'estado-' + stepEstado(pedido, 1)">
+
+                    <span
+                      class="status-sphere"
+                      aria-hidden="true">
+                    </span>
+
+                    <span
+                      class="status-icon status-icon-andamento"
+                      aria-hidden="true">
+                    </span>
+
+                    <span class="status-rotulo">
+                      Em andamento
+                    </span>
+                  </div>
+
+                  <div
+                    class="status-linha"
+                    [ngClass]="'estado-' + linhaEstado(pedido, 1)"
+                    [class.seta]="linhaEstado(pedido, 1) !== 'pendente'">
+                  </div>
+
+                  <!-- Passo 3: Pronto -->
+                  <div
+                    class="status-step step-pronto"
+                    [ngClass]="'estado-' + stepEstado(pedido, 2)">
+
+                    <span
+                      class="status-sphere"
+                      aria-hidden="true">
+                    </span>
+
+                    <span
+                      class="status-icon status-icon-pronto"
+                      aria-hidden="true">
+                    </span>
+
+                    <span class="status-rotulo">
+                      Pronto
+                    </span>
+                  </div>
+
+                  <div
+                    class="status-linha status-linha-final"
+                    [ngClass]="'estado-' + linhaEstado(pedido, 2)"
+                    [class.seta]="linhaEstado(pedido, 2) !== 'pendente'">
+                  </div>
+
+                  <!-- Passo 4: Entregue -->
+                  <div
+                    class="status-step step-entregue"
+                    [ngClass]="'estado-' + stepEstado(pedido, 3)">
+
+                    <span
+                      class="status-sphere"
+                      aria-hidden="true">
+                    </span>
+
+                    <span
+                      class="status-icon status-icon-entregue"
+                      aria-hidden="true">
+                    </span>
+
+                    <span
+                      class="status-rotulo"
+                      *ngIf="stepEstado(pedido, 3) !== 'completo'">
+                      Entregue
+                    </span>
+                  </div>
+
+                </div>
+
+                <span class="status-tempo">
+                  {{ textoStatus(pedido) }}
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Rodapé decorativo -->
+  <div class="bottom-wrap">
+
+    <img
+      src="assets/imagens/pantheon-pequeno.png"
+      alt=""
+      class="pantheon-decoration">
+
+    <div class="greek-border bottom"></div>
+
+  </div>
+
+</div>
