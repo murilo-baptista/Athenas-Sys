@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { MesaService } from '../../../core/services/mesa.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { Mesa, Reserva, StatusMesa } from '../../../core/models/mesa.model';
+import { Mesa, StatusMesa } from '../../../core/models/mesa.model';
 
 @Component({
   selector: 'app-mapa-mesas',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './mapa-mesas.html',
   styleUrl: './mapa-mesas.css'
 })
@@ -19,8 +19,6 @@ export class MapaMesasComponent implements OnInit {
   mensagemErro = '';
 
   mesaExpandidaIndex: number | null = null;
-  modoEdicao = false;
-  formReserva: Reserva = this.formVazio();
 
   private restauranteId!: number;
 
@@ -47,21 +45,8 @@ export class MapaMesasComponent implements OnInit {
     });
   }
 
-  private formVazio(): Reserva {
-    return { cliente: '', telefone: '', data: '', horario: '', pessoas: 1 };
-  }
-
   toggleMesa(index: number): void {
-    if (this.mesaExpandidaIndex === index) {
-      this.fecharPainel();
-      return;
-    }
-
-    this.mesaExpandidaIndex = index;
-    this.modoEdicao = false;
-
-    const mesa = this.mesas[index];
-    this.formReserva = mesa.reserva ? { ...mesa.reserva } : this.formVazio();
+    this.mesaExpandidaIndex = this.mesaExpandidaIndex === index ? null : index;
   }
 
   alterarStatusMesa(mesa: Mesa, novoStatus: StatusMesa): void {
@@ -70,7 +55,11 @@ export class MapaMesasComponent implements OnInit {
     const statusAnterior = mesa.status;
     mesa.status = novoStatus; // atualização otimista
 
-    this.mesaService.alterarStatus(mesa.id, novoStatus).subscribe({
+    const acao$ = novoStatus === 'OCUPADA'
+      ? this.mesaService.ocuparMesa(mesa.id)
+      : this.mesaService.desocuparMesa(mesa.id);
+
+    acao$.subscribe({
       error: () => {
         mesa.status = statusAnterior; // reverte se o back-end recusar
         this.mensagemErro = 'Não foi possível atualizar o status da mesa.';
@@ -78,52 +67,14 @@ export class MapaMesasComponent implements OnInit {
     });
   }
 
-  iniciarEdicao(mesa: Mesa): void {
-    this.modoEdicao = true;
-    this.formReserva = mesa.reserva ? { ...mesa.reserva } : this.formVazio();
-  }
-
-  confirmarReserva(mesa: Mesa): void {
-    if (!mesa.id) return;
-
-    this.mesaService.salvarReserva(mesa.id, this.formReserva).subscribe({
-      next: (mesaAtualizada) => {
-        mesa.reserva = mesaAtualizada.reserva;
-        mesa.status = mesaAtualizada.status ?? 'RESERVADA';
-        this.fecharPainel();
-      },
-      error: () => this.mensagemErro = 'Não foi possível salvar a reserva.'
-    });
-  }
-
-  cancelarReserva(mesa: Mesa): void {
-    if (!mesa.id) return;
-
-    this.mesaService.cancelarReserva(mesa.id).subscribe({
-      next: () => {
-        mesa.reserva = null;
-        mesa.status = 'LIVRE';
-        this.fecharPainel();
-      },
-      error: () => this.mensagemErro = 'Não foi possível cancelar a reserva.'
-    });
-  }
-
-  cancelarFormulario(): void {
-    this.fecharPainel();
-  }
-
-  private fecharPainel(): void {
+  fecharPainel(): void {
     this.mesaExpandidaIndex = null;
-    this.modoEdicao = false;
-    this.formReserva = this.formVazio();
   }
 
   statusRotulo(status: StatusMesa | undefined): string {
     switch (status) {
       case 'OCUPADA': return 'Ocupada';
       case 'LIVRE': return 'Livre';
-      case 'RESERVADA': return 'Reservada';
       default: return '';
     }
   }
@@ -132,14 +83,7 @@ export class MapaMesasComponent implements OnInit {
     switch (status) {
       case 'OCUPADA': return 'status-ocupada';
       case 'LIVRE': return 'status-livre';
-      case 'RESERVADA': return 'status-reservada';
       default: return '';
     }
-  }
-
-  formatarData(data: string): string {
-    if (!data) return '';
-    const [ano, mes, dia] = data.split('-');
-    return `${dia}/${mes}/${ano}`;
   }
 }
