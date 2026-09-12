@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MesaService } from '../../../core/services/mesa.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { Mesa, StatusMesa } from '../../../core/models/mesa.model';
+import { MesaListagem, StatusMesa } from '../../../core/models/mesa.model';
 
 @Component({
   selector: 'app-mapa-mesas',
@@ -14,7 +14,7 @@ import { Mesa, StatusMesa } from '../../../core/models/mesa.model';
 })
 export class MapaMesasComponent implements OnInit {
 
-  mesas: Mesa[] = [];
+  mesas: MesaListagem[] = [];
   carregando = false;
   mensagemErro = '';
 
@@ -49,8 +49,8 @@ export class MapaMesasComponent implements OnInit {
     this.mesaExpandidaIndex = this.mesaExpandidaIndex === index ? null : index;
   }
 
-  alterarStatusMesa(mesa: Mesa, novoStatus: StatusMesa): void {
-    if (mesa.status === novoStatus || !mesa.id) return;
+  alterarStatusMesa(mesa: MesaListagem, novoStatus: StatusMesa): void {
+    if (mesa.status === novoStatus) return;
 
     const statusAnterior = mesa.status;
     mesa.status = novoStatus; // atualização otimista
@@ -71,19 +71,11 @@ export class MapaMesasComponent implements OnInit {
     this.mesaExpandidaIndex = null;
   }
 
-  statusRotulo(status: StatusMesa | undefined): string {
-    switch (status) {
-      case 'OCUPADA': return 'Ocupada';
-      case 'LIVRE': return 'Livre';
-      default: return '';
-    }
+  statusRotulo(status: StatusMesa): string {
+    return status === 'OCUPADA' ? 'Ocupada' : 'Livre';
   }
 
-  statusClasse(status: StatusMesa | undefined): string {
-    switch (status) {
-      case 'OCUPADA': return 'status-ocupada';
-      case 'LIVRE': return 'status-livre';
-      default: return '';
-    }
+  statusClasse(status: StatusMesa): string {
+    return status === 'OCUPADA' ? 'status-ocupada' : 'status-livre';
   }
 }
