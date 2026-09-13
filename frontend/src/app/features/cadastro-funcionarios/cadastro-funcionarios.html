@@ -78,21 +78,23 @@
           </div>
 
 
-          <button type="button" class="add-button" [disabled]="!nomeFuncionario || !cargoSelecionado" (click)="adicionarFuncionario()">
-            + Adicionar funcionário à lista
+          <button type="button" class="add-button" [disabled]="!nomeFuncionario || !senhaFuncionario || !cargoSelecionado || salvando" (click)="adicionarFuncionario()">
+            {{ salvando ? 'ADICIONANDO...' : '+ Adicionar funcionário à lista' }}
           </button>
 
 
           <label class="added-label">FUNCIONÁRIOS ADICIONADOS</label>
-          <div class="added-list">
+          <p class="helper-note" *ngIf="carregando">Carregando funcionários...</p>
+          <div class="added-list" *ngIf="!carregando">
             <div class="added-item" *ngFor="let funcionario of funcionarios; let i = index">
               <div class="item-info">
                 <span class="item-name">{{ funcionario.nome }}</span>
-                <span class="badge" [ngClass]="funcionario.badgeClass">{{ funcionario.cargo }}</span>
+                <span class="badge" [ngClass]="badgeClassDoCargo(funcionario.cargo)">{{ funcionario.cargo }}</span>
               </div>
               <button type="button" class="remove-btn" (click)="removerFuncionario(i)" aria-label="Remover funcionário">✕</button>
             </div>
           </div>
+          <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>
 
 
           <div class="wizard-footer">

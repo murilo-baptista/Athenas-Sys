@@ -685,3 +685,13 @@
     flex-direction: row;
   }
 }
+
+.kds-erro {
+  color: #B3261E;
+  background: #FDECEA;
+  border: 1px solid #F5C2C0;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  text-align: center;
+}

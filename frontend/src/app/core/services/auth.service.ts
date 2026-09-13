@@ -73,8 +73,13 @@ export class AuthService {
     return this.getSessao()?.token ?? null;
   }
 
+//  getRestauranteId(): number | null {
+//    return this.getSessao()?.restauranteId ?? null;
+//  }
+//  Volte a usar quando a autenticação do backend estiver feita.
+
   getRestauranteId(): number | null {
-    return this.getSessao()?.restauranteId ?? null;
+    return 1;
   }
 
   getCargoFuncionario(): string | null {

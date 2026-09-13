@@ -103,9 +103,13 @@
           </div>
 
 
+          <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+
           <div class="wizard-footer">
             <button type="button" class="btn btn-outline" (click)="voltarLogin()">VOLTAR AO LOGIN</button>
-            <button type="submit" class="btn btn-solid">PRÓXIMO →</button>
+            <button type="submit" class="btn btn-solid" [disabled]="carregando">
+              {{ carregando ? 'ENVIANDO...' : 'PRÓXIMO →' }}
+            </button>
           </div>
 
 

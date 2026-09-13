@@ -29,10 +29,10 @@ export const routes: Routes = [
   { path: 'autenticacao', component: AutenticacaoComponent, canActivate: [authGuard] },
 
   // 5. Telas operacionais (exigem funcionário autenticado com o cargo correto)
-  { path: 'recepcao', component: MapaMesasComponent, canActivate: [funcionarioGuard], data: { cargo: 'Recepção' } },
-  { path: 'garcom', component: LancamentoPedidosComponent, canActivate: [funcionarioGuard], data: { cargo: 'Garçom' } },
-  { path: 'cozinha', component: PainelKdsComponent, canActivate: [funcionarioGuard], data: { cargo: 'Cozinha' } },
-  { path: 'gerente', component: DashboardComponent, canActivate: [funcionarioGuard], data: { cargo: 'Gerente' } },
+  { path: 'recepcao', component: MapaMesasComponent, canActivate: [funcionarioGuard], data: { cargo: 'RECEPCAO' } },
+  { path: 'garcom', component: LancamentoPedidosComponent, canActivate: [funcionarioGuard], data: { cargo: 'GARCOM' } },
+  { path: 'cozinha', component: PainelKdsComponent, canActivate: [funcionarioGuard], data: { cargo: 'COZINHA' } },
+  { path: 'gerente', component: DashboardComponent, canActivate: [funcionarioGuard], data: { cargo: 'GERENTE' } },
 
   { path: '**', redirectTo: 'login' }
 ];

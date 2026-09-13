@@ -13,8 +13,8 @@ import java.math.BigDecimal;
     name = "produtos",
     uniqueConstraints = {
             @UniqueConstraint(
-                    columnNames = {"nome", "restaurante_id"},
-                    name = "uk_produto_restaurante_nome"
+                    columnNames = {"restaurante_id", "nome"},
+                    name = "uk_produtos_restaurante_nome"
             )
     }
 )
