@@ -1,26 +1,27 @@
-export type StatusMesa = 'OCUPADA' | 'DISPONIVEL' | 'RESERVADA';
+export type StatusMesa = 'LIVRE' | 'OCUPADA';
 
-export interface Mesa {
-  id?: number;
-  restauranteId?: number;
-  numero: string;
+export interface DadosCadastroMesa {
+  numero: number;
   capacidade: number;
-  status?: StatusMesa;
-  reserva?: Reserva | null;
 }
 
-export interface CriarMesaRequest {
-  numero: string;
-  capacidade: number;
-  restauranteId: number;
+export interface DadosAtualizacaoMesa {
+  numero?: number;
+  capacidade?: number;
 }
 
-export interface Reserva {
-  id?: number;
-  mesaId?: number;
-  cliente: string;
-  telefone: string;
-  data: string;
-  horario: string;
-  pessoas: number;
+export interface MesaListagem {
+  id: number;
+  numero: number;
+  capacidade: number;
+  status: StatusMesa;
+}
+
+export interface MesaDetalhamento {
+  id: number;
+  idRestaurante: number;
+  numero: number;
+  capacidade: number;
+  status: StatusMesa;
+  ativo: boolean;
 }
