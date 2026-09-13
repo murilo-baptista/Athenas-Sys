@@ -10,6 +10,7 @@ import { LancamentoPedidosComponent } from './features/garcom/lancamento-pedidos
 import { PainelKdsComponent } from './features/cozinha/painel-kds/painel-kds';
 import { DashboardComponent } from './features/gerente/dashboard/dashboard';
 import { authGuard, funcionarioGuard } from './core/guards/auth.guard';
+import { ReservasComponent } from './features/recepcao/reservas/reservas';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -33,6 +34,8 @@ export const routes: Routes = [
   { path: 'garcom', component: LancamentoPedidosComponent, canActivate: [funcionarioGuard], data: { cargo: 'GARCOM' } },
   { path: 'cozinha', component: PainelKdsComponent, canActivate: [funcionarioGuard], data: { cargo: 'COZINHA' } },
   { path: 'gerente', component: DashboardComponent, canActivate: [funcionarioGuard], data: { cargo: 'GERENTE' } },
+
+  { path: 'recepcao/reservas', component: ReservasComponent, canActivate: [funcionarioGuard], data: { cargo: 'RECEPCAO' } },
 
   { path: '**', redirectTo: 'login' }
 ];
