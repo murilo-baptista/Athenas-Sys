@@ -1,4 +1,4 @@
-package br.com.athenassys.api.dto;
+package br.com.athenassys.api.dto.autenticacao;
 
 public record DadosAutenticacao(
 
