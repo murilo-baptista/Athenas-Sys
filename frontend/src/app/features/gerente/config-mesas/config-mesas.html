@@ -1,0 +1,80 @@
+<div class="min-h-screen bg-[#FFF8EE] font-['Georgia',serif]">
+
+  <div class="max-w-3xl mx-auto px-6 py-10">
+
+    <a routerLink="/gerente" class="text-sm text-[#4A4038] hover:text-[#7B0F12]">&larr; Painel do gerente</a>
+
+    <h1 class="text-xl font-bold text-[#7B0F12] mt-2 mb-6 tracking-wide">Mesas do restaurante</h1>
+
+    <p *ngIf="mensagemErro" class="text-[#7B0F12] text-sm mb-4">{{ mensagemErro }}</p>
+
+    <!-- Formulário -->
+    <div class="border border-[#C9A46A] rounded-lg p-5 bg-[#FFF8EE] shadow-sm mb-8">
+      <p class="text-xs font-bold uppercase tracking-wide text-[#7B0F12] mb-3">
+        {{ idEmEdicao ? 'Alterar mesa' : 'Nova mesa' }}
+      </p>
+
+      <div class="flex flex-wrap gap-3 items-end">
+        <div>
+          <label class="block text-xs text-[#4A4038] mb-1">Número</label>
+          <input
+            type="number"
+            [(ngModel)]="form.numero"
+            min="1"
+            placeholder="Ex: 12"
+            class="w-28 border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE] focus:outline-none focus:border-[#7B0F12]">
+        </div>
+
+        <div>
+          <label class="block text-xs text-[#4A4038] mb-1">Capacidade (lugares)</label>
+          <input
+            type="number"
+            [(ngModel)]="form.capacidade"
+            min="1"
+            placeholder="Ex: 4"
+            class="w-28 border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE] focus:outline-none focus:border-[#7B0F12]">
+        </div>
+
+        <button
+          type="button"
+          [disabled]="salvando"
+          (click)="salvar()"
+          class="px-5 py-2 rounded-md bg-[#7B0F12] text-[#FFF8EE] text-sm disabled:opacity-60">
+          {{ idEmEdicao ? 'Salvar' : 'Adicionar' }}
+        </button>
+
+        <button
+          type="button"
+          *ngIf="idEmEdicao"
+          (click)="cancelarEdicao()"
+          class="px-5 py-2 rounded-md border border-[#7B0F12] text-[#7B0F12] text-sm">
+          Cancelar
+        </button>
+      </div>
+    </div>
+
+    <!-- Lista -->
+    <div class="border border-[#C9A46A] rounded-lg overflow-hidden">
+      <div *ngIf="carregando" class="p-6 text-center text-[#4A4038] italic">Carregando mesas...</div>
+      <div *ngIf="!carregando && mesas.length === 0" class="p-6 text-center text-[#4A4038] italic">
+        Nenhuma mesa cadastrada ainda.
+      </div>
+
+      <div
+        *ngFor="let mesa of mesas"
+        class="flex items-center justify-between px-5 py-3 border-b border-[#E4DDD0] last:border-b-0">
+        <div class="text-[#4A4038] text-sm">
+          <span class="font-bold text-[#7B0F12]">Mesa {{ mesa.numero }}</span>
+          &middot; {{ mesa.capacidade }} lugares
+          &middot; <span class="text-xs uppercase">{{ mesa.status === 'LIVRE' ? 'Livre' : 'Ocupada' }}</span>
+        </div>
+        <div class="flex gap-4">
+          <button type="button" class="text-xs underline text-[#7B0F12]" (click)="editar(mesa)">Editar</button>
+          <button type="button" class="text-xs underline text-[#9a2a2a]" (click)="remover(mesa)">Remover</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
