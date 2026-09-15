@@ -1,0 +1,77 @@
+<div class="min-h-screen bg-[#FFF8EE] font-['Georgia',serif]">
+
+  <div class="max-w-2xl mx-auto px-6 py-10">
+
+    <a routerLink="/gerente" class="text-sm text-[#4A4038] hover:text-[#7B0F12]">&larr; Painel do gerente</a>
+
+    <h1 class="text-xl font-bold text-[#7B0F12] mt-2 mb-6 tracking-wide">Configurações do restaurante</h1>
+
+    <p *ngIf="carregando" class="text-center text-[#4A4038] italic py-6">Carregando dados do restaurante...</p>
+
+    <div *ngIf="!carregando && restaurante">
+
+      <p *ngIf="mensagemErro" class="text-[#7B0F12] text-sm mb-4">{{ mensagemErro }}</p>
+      <p *ngIf="mensagemSucesso" class="text-[#244A37] text-sm mb-4">{{ mensagemSucesso }}</p>
+
+      <!-- Dados da conta -->
+      <div class="border border-[#C9A46A] rounded-lg p-5 bg-[#FFF8EE] shadow-sm mb-6">
+        <p class="text-xs font-bold uppercase tracking-wide text-[#7B0F12] mb-3">Dados da conta</p>
+
+        <div class="grid grid-cols-1 gap-3 mb-3">
+          <div>
+            <label class="block text-xs text-[#4A4038] mb-1">Nome do restaurante</label>
+            <input type="text" [(ngModel)]="form.nome"
+              class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE] focus:outline-none focus:border-[#7B0F12]">
+          </div>
+
+          <div>
+            <label class="block text-xs text-[#4A4038] mb-1">E-mail</label>
+            <input type="email" [(ngModel)]="form.email"
+              class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE] focus:outline-none focus:border-[#7B0F12]">
+          </div>
+
+          <div>
+            <label class="block text-xs text-[#4A4038] mb-1">Telefone</label>
+            <input type="text" [(ngModel)]="form.telefone"
+              class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE] focus:outline-none focus:border-[#7B0F12]">
+          </div>
+
+          <div>
+            <label class="block text-xs text-[#4A4038] mb-1">CNPJ</label>
+            <input type="text" [value]="restaurante.cnpj" disabled
+              class="w-full border border-[#E4DDD0] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#F5EEE0] cursor-not-allowed">
+            <p class="text-xs text-[#4A4038] opacity-70 mt-1">O CNPJ não pode ser alterado.</p>
+          </div>
+        </div>
+
+        <button type="button" [disabled]="salvando" (click)="salvar()"
+          class="px-5 py-2 rounded-md bg-[#7B0F12] text-[#FFF8EE] text-sm disabled:opacity-60">
+          {{ salvando ? 'Salvando...' : 'Salvar alterações' }}
+        </button>
+      </div>
+
+      <!-- Senha -->
+      <div class="border border-[#C9A46A] rounded-lg p-5 bg-[#FFF8EE] shadow-sm mb-6">
+        <p class="text-xs font-bold uppercase tracking-wide text-[#7B0F12] mb-2">Senha</p>
+        <p class="text-sm text-[#4A4038] italic">
+          A troca de senha ainda não está disponível — a API do back-end não expõe esse endpoint no momento.
+        </p>
+      </div>
+
+      <!-- Zona de risco -->
+      <div class="border border-[#9a2a2a] rounded-lg p-5 bg-[#FDECEA]">
+        <p class="text-xs font-bold uppercase tracking-wide text-[#9a2a2a] mb-2">Zona de risco</p>
+        <p class="text-sm text-[#4A4038] mb-3">
+          Desativar o restaurante remove o acesso de todos os funcionários e não pode ser desfeito por aqui.
+        </p>
+        <button type="button" (click)="desativarConta()"
+          class="px-5 py-2 rounded-md border border-[#9a2a2a] text-[#9a2a2a] text-sm">
+          Desativar restaurante
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
