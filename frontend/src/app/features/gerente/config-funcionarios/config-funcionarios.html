@@ -1,0 +1,78 @@
+<div class="min-h-screen bg-[#FFF8EE] font-['Georgia',serif]">
+
+  <div class="max-w-3xl mx-auto px-6 py-10">
+
+    <a routerLink="/gerente" class="text-sm text-[#4A4038] hover:text-[#7B0F12]">&larr; Painel do gerente</a>
+
+    <h1 class="text-xl font-bold text-[#7B0F12] mt-2 mb-6 tracking-wide">Funcionários</h1>
+
+    <p *ngIf="mensagemErro" class="text-[#7B0F12] text-sm mb-4">{{ mensagemErro }}</p>
+
+    <!-- Formulário -->
+    <div class="border border-[#C9A46A] rounded-lg p-5 bg-[#FFF8EE] shadow-sm mb-8">
+      <p class="text-xs font-bold uppercase tracking-wide text-[#7B0F12] mb-3">
+        {{ idEmEdicao ? 'Alterar funcionário' : 'Novo funcionário' }}
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+        <div>
+          <label class="block text-xs text-[#4A4038] mb-1">Nome</label>
+          <input type="text" [(ngModel)]="form.nome" placeholder="Ex: Ana Souza"
+            class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE] focus:outline-none focus:border-[#7B0F12]">
+        </div>
+
+        <div *ngIf="!idEmEdicao">
+          <label class="block text-xs text-[#4A4038] mb-1">Código de acesso</label>
+          <input type="text" [(ngModel)]="form.codigo" placeholder="Ex: 1234"
+            class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE] focus:outline-none focus:border-[#7B0F12]">
+        </div>
+
+        <div>
+          <label class="block text-xs text-[#4A4038] mb-1">Cargo</label>
+          <select [(ngModel)]="form.cargo"
+            class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE] focus:outline-none focus:border-[#7B0F12]">
+            <option [ngValue]="null" disabled>Selecione</option>
+            <option *ngFor="let cargo of cargos" [ngValue]="cargo">{{ cargoRotulo(cargo) }}</option>
+          </select>
+        </div>
+      </div>
+
+      <p *ngIf="idEmEdicao" class="text-xs text-[#4A4038] italic mb-3">
+        O código de acesso não pode ser alterado por aqui.
+      </p>
+
+      <div class="flex gap-3">
+        <button type="button" [disabled]="salvando" (click)="salvar()"
+          class="px-5 py-2 rounded-md bg-[#7B0F12] text-[#FFF8EE] text-sm disabled:opacity-60">
+          {{ idEmEdicao ? 'Salvar' : 'Adicionar' }}
+        </button>
+        <button type="button" *ngIf="idEmEdicao" (click)="cancelarEdicao()"
+          class="px-5 py-2 rounded-md border border-[#7B0F12] text-[#7B0F12] text-sm">
+          Cancelar
+        </button>
+      </div>
+    </div>
+
+    <!-- Lista -->
+    <div class="border border-[#C9A46A] rounded-lg overflow-hidden">
+      <div *ngIf="carregando" class="p-6 text-center text-[#4A4038] italic">Carregando funcionários...</div>
+      <div *ngIf="!carregando && funcionarios.length === 0" class="p-6 text-center text-[#4A4038] italic">
+        Nenhum funcionário cadastrado ainda.
+      </div>
+
+      <div *ngFor="let funcionario of funcionarios"
+        class="flex items-center justify-between px-5 py-3 border-b border-[#E4DDD0] last:border-b-0">
+        <div class="text-sm text-[#4A4038]">
+          <span class="font-bold text-[#7B0F12]">{{ funcionario.nome }}</span>
+          &middot; {{ cargoRotulo(funcionario.cargo) }}
+        </div>
+        <div class="flex gap-4">
+          <button type="button" class="text-xs underline text-[#7B0F12]" (click)="editar(funcionario)">Editar</button>
+          <button type="button" class="text-xs underline text-[#9a2a2a]" (click)="remover(funcionario)">Remover</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
