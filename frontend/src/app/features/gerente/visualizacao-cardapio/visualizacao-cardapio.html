@@ -1,0 +1,41 @@
+<div class="min-h-screen bg-[#FFF8EE] font-['Georgia',serif]">
+
+  <div class="max-w-3xl mx-auto px-6 py-10">
+
+    <a routerLink="/gerente" class="text-sm text-[#4A4038] hover:text-[#7B0F12]">&larr; Painel do gerente</a>
+
+    <h1 class="text-xl font-bold text-[#7B0F12] mt-2 mb-6 tracking-wide">Cardápio</h1>
+
+    <p *ngIf="mensagemErro" class="text-[#7B0F12] text-sm mb-4">{{ mensagemErro }}</p>
+    <p *ngIf="carregando" class="text-center text-[#4A4038] italic py-6">Carregando cardápio...</p>
+
+    <p *ngIf="!carregando && categorias.length === 0 && !mensagemErro" class="text-center text-[#4A4038] italic py-6">
+      Nenhuma categoria cadastrada ainda.
+    </p>
+
+    <div *ngFor="let categoria of categorias" class="mb-8">
+
+      <h2 class="text-sm font-bold uppercase tracking-wide text-[#7B0F12] border-b border-[#C9A46A] pb-2 mb-3">
+        {{ categoria.nome }}
+      </h2>
+
+      <p *ngIf="categoria.produtos.length === 0" class="text-sm text-[#4A4038] italic mb-2">
+        Nenhum produto nesta categoria.
+      </p>
+
+      <div *ngFor="let produto of categoria.produtos"
+        class="flex items-start justify-between py-2 border-b border-[#E4DDD0] last:border-b-0">
+        <div class="pr-4">
+          <p class="text-sm font-bold text-[#4A4038]">{{ produto.nome }}</p>
+          <p *ngIf="produto.descricao" class="text-xs text-[#4A4038] opacity-75">{{ produto.descricao }}</p>
+        </div>
+        <span class="text-sm font-bold text-[#7B0F12] whitespace-nowrap">
+          R$ {{ produto.preco | number:'1.2-2' }}
+        </span>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
