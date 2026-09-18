@@ -7,13 +7,20 @@ import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Table(
     name = "funcionarios",
     uniqueConstraints = {
         @UniqueConstraint(
-            columnNames = {"restaurante_id", "codigo"},
-            name = "uk_funcionarios_restaurante_codigo"
+            columnNames = {"restaurante_id", "nome"},
+            name = "uk_funcionarios_restaurante_nome"
         )
     }
 )
@@ -22,7 +29,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Funcionario {
+public class Funcionario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,5 +64,23 @@ public class Funcionario {
 
     public void desativar() {
         this.ativo = false;
+    }
+
+    //Segurança
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(
+                new SimpleGrantedAuthority("ROLE_" + this.cargo)
+        );
+    }
+
+    @Override
+    public @Nullable String getPassword() {
+        return this.codigo;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.nome;
     }
 }
