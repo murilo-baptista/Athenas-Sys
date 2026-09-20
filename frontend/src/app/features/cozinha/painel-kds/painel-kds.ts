@@ -1,18 +1,28 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription, interval } from 'rxjs';
+import { Subscription, interval, forkJoin, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+
 import { PedidoService } from '../../../core/services/pedido.service';
-import { Pedido, StatusPedido } from '../../../core/models/pedido.model';
+import { ItemPedidoService } from '../../../core/services/item-pedido.service';
+import { MesaService } from '../../../core/services/mesa.service';
+import { ProdutoService } from '../../../core/services/produto.service';
+import { StatusItemPedido } from '../../../core/models/item-pedido.model';
 
-type EtapaVisual = 'NOVO' | 'EM ANDAMENTO' | 'PRONTO' | 'ENTREGUE';
-
-type EstadoEtapa = 'completo' | 'atual' | 'pendente';
-
-type FiltroValor = 'todos' | StatusPedido | 'PRONTO';
+interface ItemKds {
+  idPedido: number;
+  idItemPedido: number;
+  numeroMesa: number | string;
+  nomeProduto: string;
+  quantidade: number;
+  observacao: string | null;
+  status: StatusItemPedido;
+  dataHoraPedido: string;
+}
 
 interface Filtro {
   rotulo: string;
-  valor: FiltroValor;
+  valor: 'todos' | StatusItemPedido;
 }
 
 const INTERVALO_ATUALIZACAO_MS = 10000;
@@ -26,150 +36,130 @@ const INTERVALO_ATUALIZACAO_MS = 10000;
 })
 export class PainelKdsComponent implements OnInit, OnDestroy {
 
-  filtroAtivo: FiltroValor = 'todos';
+  filtroAtivo: 'todos' | StatusItemPedido = 'todos';
 
   filtros: Filtro[] = [
     { rotulo: 'Todos', valor: 'todos' },
-    { rotulo: 'Em Andamento', valor: 'EM ANDAMENTO' },
+    { rotulo: 'Pendentes', valor: 'PENDENTE' },
+    { rotulo: 'Em preparo', valor: 'EM_PREPARO' },
     { rotulo: 'Prontos', valor: 'PRONTO' },
-    { rotulo: 'Entregues', valor: 'ENTREGUE' },
-    { rotulo: 'Cancelados', valor: 'CANCELADO' }
+    { rotulo: 'Entregues', valor: 'ENTREGUE' }
   ];
 
-  etapasOrdem: EtapaVisual[] = [
-    'NOVO',
-    'EM ANDAMENTO',
-    'PRONTO',
-    'ENTREGUE'
-  ];
-
-  pedidos: Pedido[] = [];
+  itens: ItemKds[] = [];
   carregando = false;
   mensagemErro = '';
 
   private polling?: Subscription;
 
   constructor(
-    private pedidoService: PedidoService
+    private pedidoService: PedidoService,
+    private itemPedidoService: ItemPedidoService,
+    private mesaService: MesaService,
+    private produtoService: ProdutoService
   ) {}
 
   ngOnInit(): void {
-    this.carregarPedidos();
-
-    this.polling = interval(INTERVALO_ATUALIZACAO_MS)
-      .subscribe(() => this.carregarPedidos());
+    this.carregarPainel();
+    this.polling = interval(INTERVALO_ATUALIZACAO_MS).subscribe(() => this.carregarPainel());
   }
 
   ngOnDestroy(): void {
     this.polling?.unsubscribe();
   }
 
-  private carregarPedidos(): void {
-    this.carregando = this.pedidos.length === 0;
+  private carregarPainel(): void {
+    this.carregando = this.itens.length === 0;
     this.mensagemErro = '';
 
-    this.pedidoService.listar().subscribe({
-      next: (pedidos) => {
-        this.pedidos = pedidos;
-        this.carregando = false;
+    forkJoin({
+      mesas: this.mesaService.listarPorRestaurante().pipe(catchError(() => of([]))),
+      produtos: this.produtoService.listarPorRestaurante().pipe(catchError(() => of([]))),
+      pedidos: this.pedidoService.listar()
+    }).subscribe({
+      next: ({ mesas, produtos, pedidos }) => {
+        if (pedidos.length === 0) {
+          this.itens = [];
+          this.carregando = false;
+          return;
+        }
+
+        const chamadas = pedidos.map(pedido =>
+          this.itemPedidoService.listarPorPedido(pedido.id).pipe(
+            map(itens => itens.map(item => ({
+              idPedido: pedido.id,
+              idItemPedido: item.id,
+              numeroMesa: mesas.find(m => m.id === pedido.idMesa)?.numero ?? pedido.idMesa,
+              nomeProduto: produtos.find(p => p.id === item.idProduto)?.nome ?? `Produto #${item.idProduto}`,
+              quantidade: item.quantidade,
+              observacao: item.observacao,
+              status: item.status,
+              dataHoraPedido: pedido.dataHora
+            } as ItemKds))),
+            catchError(() => of([] as ItemKds[]))
+          )
+        );
+
+        forkJoin(chamadas).subscribe(listas => {
+          this.itens = listas.flat().filter(i => i.status !== 'CANCELADO');
+          this.carregando = false;
+        });
       },
       error: () => {
         this.carregando = false;
-        this.mensagemErro =
-          'Não foi possível atualizar o painel de pedidos.';
+        this.mensagemErro = 'Não foi possível atualizar o painel de pedidos.';
       }
     });
   }
 
-  etapaDoPedido(pedido: Pedido): EtapaVisual {
-    if (pedido.status === 'ENTREGUE') {
-      return 'ENTREGUE';
-    }
-
-    if (pedido.status === 'CANCELADO') {
-      return 'EM ANDAMENTO';
-    }
-
-    if (pedido.horarioPronto) {
-      return 'PRONTO';
-    }
-
-    return 'EM ANDAMENTO';
+  itensFiltrados(): ItemKds[] {
+    if (this.filtroAtivo === 'todos') return this.itens;
+    return this.itens.filter(i => i.status === this.filtroAtivo);
   }
 
-  pedidosFiltrados(): Pedido[] {
-    if (this.filtroAtivo === 'todos') {
-      return this.pedidos;
+  statusRotulo(status: StatusItemPedido): string {
+    switch (status) {
+      case 'PENDENTE': return 'Aguardando preparo';
+      case 'EM_PREPARO': return 'Em preparo';
+      case 'PRONTO': return 'Pronto';
+      case 'ENTREGUE': return 'Entregue';
+      case 'CANCELADO': return 'Cancelado';
     }
-
-    if (this.filtroAtivo === 'PRONTO') {
-      return this.pedidos.filter(
-        pedido =>
-          pedido.status === 'EM ANDAMENTO' &&
-          !!pedido.horarioPronto
-      );
-    }
-
-    return this.pedidos.filter(
-      pedido => pedido.status === this.filtroAtivo
-    );
   }
 
-  statusIndex(etapa: EtapaVisual): number {
-    return this.etapasOrdem.indexOf(etapa);
+  podePreparar(item: ItemKds): boolean {
+    return item.status === 'PENDENTE';
   }
 
-  stepEstado(
-    pedido: Pedido,
-    idx: number
-  ): EstadoEtapa {
-    const atual = this.statusIndex(
-      this.etapaDoPedido(pedido)
-    );
-
-    if (idx < atual) {
-      return 'completo';
-    }
-
-    if (idx === atual) {
-      return 'atual';
-    }
-
-    return 'pendente';
+  podeMarcarPronto(item: ItemKds): boolean {
+    return item.status === 'EM_PREPARO';
   }
 
-  linhaEstado(
-    pedido: Pedido,
-    idx: number
-  ): EstadoEtapa {
-    const atual = this.statusIndex(
-      this.etapaDoPedido(pedido)
-    );
+  marcarComoEmPreparo(item: ItemKds): void {
+    if (!this.podePreparar(item)) return;
 
-    if (atual > idx) {
-      return 'completo';
-    }
+    const anterior = item.status;
+    item.status = 'EM_PREPARO';
 
-    if (atual === idx) {
-      return 'atual';
-    }
-
-    return 'pendente';
+    this.itemPedidoService.preparar(item.idPedido, item.idItemPedido).subscribe({
+      error: () => {
+        item.status = anterior;
+        this.mensagemErro = 'Não foi possível iniciar o preparo desse item.';
+      }
+    });
   }
 
-  textoStatus(pedido: Pedido): string {
-    if (pedido.status === 'CANCELADO') {
-      return 'Pedido cancelado';
-    }
+  marcarComoPronto(item: ItemKds): void {
+    if (!this.podeMarcarPronto(item)) return;
 
-    if (pedido.status === 'ENTREGUE') {
-      return `Entregue em ${pedido.horarioEntregue ?? ''}`;
-    }
+    const anterior = item.status;
+    item.status = 'PRONTO';
 
-    if (pedido.horarioPronto) {
-      return `Pronto em ${pedido.horarioPronto}`;
-    }
-
-    return `Em andamento há ${pedido.minutosEmAndamento ?? 0} min`;
+    this.itemPedidoService.marcarPronto(item.idPedido, item.idItemPedido).subscribe({
+      error: () => {
+        item.status = anterior;
+        this.mensagemErro = 'Não foi possível marcar esse item como pronto.';
+      }
+    });
   }
 }
