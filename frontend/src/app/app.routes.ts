@@ -10,9 +10,12 @@ import { LancamentoPedidosComponent } from './features/garcom/lancamento-pedidos
 import { PainelKdsComponent } from './features/cozinha/painel-kds/painel-kds';
 import { DashboardComponent } from './features/gerente/dashboard/dashboard';
 import { authGuard, funcionarioGuard } from './core/guards/auth.guard';
+import { ReservasComponent } from './features/recepcao/reservas/reservas';
 import { CadastroProdutosComponent } from './features/gerente/cadastro-produtos/cadastro-produtos';
 import { CadastroCategoriasComponent } from './features/gerente/cadastro-categorias/cadastro-categorias';
 import { ConfigRestauranteComponent } from './features/gerente/config-restaurante/config-restaurante';
+import { VisualizacaoCardapioComponent } from './features/gerente/visualizacao-cardapio/visualizacao-cardapio';
+import { ConfigMesasComponent } from './features/gerente/config-mesas/config-mesas';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -37,9 +40,12 @@ export const routes: Routes = [
   { path: 'cozinha', component: PainelKdsComponent, canActivate: [funcionarioGuard], data: { cargo: 'COZINHA' } },
   { path: 'gerente', component: DashboardComponent, canActivate: [funcionarioGuard], data: { cargo: 'GERENTE' } },
 
+  { path: 'recepcao/reservas', component: ReservasComponent, canActivate: [funcionarioGuard], data: { cargo: 'RECEPCAO' } },
   { path: 'gerente/produtos', component: CadastroProdutosComponent, canActivate: [funcionarioGuard], data: { cargo: 'GERENTE' } },
   { path: 'gerente/categorias', component: CadastroCategoriasComponent, canActivate: [funcionarioGuard], data: { cargo: 'GERENTE' } },
   { path: 'gerente/config', component: ConfigRestauranteComponent, canActivate: [funcionarioGuard], data: { cargo: 'GERENTE' } },
+  { path: 'gerente/cardapio', component: VisualizacaoCardapioComponent, canActivate: [funcionarioGuard], data: { cargo: 'GERENTE' } },
+  { path: 'gerente/mesas', component: ConfigMesasComponent, canActivate: [funcionarioGuard], data: { cargo: 'GERENTE' } },
 
   { path: '**', redirectTo: 'login' }
 ];

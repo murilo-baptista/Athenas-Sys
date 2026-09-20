@@ -1,0 +1,131 @@
+<div class="min-h-screen bg-[#FFF8EE] font-['Georgia',serif] p-6">
+
+  <div class="max-w-5xl mx-auto">
+
+    <a routerLink="/recepcao" class="text-sm text-[#4A4038] hover:text-[#7B0F12]">&larr; Mapa de mesas</a>
+
+    <h1 class="text-xl font-bold text-[#7B0F12] mt-2 mb-6 tracking-wide">Reservas</h1>
+
+    <p *ngIf="mensagemErro" class="text-[#7B0F12] text-sm mb-4">{{ mensagemErro }}</p>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-6">
+
+      <!-- Formulário -->
+      <div class="border border-[#C9A46A] rounded-lg p-5 bg-[#FFF8EE] shadow-sm h-fit">
+        <p class="text-xs font-bold uppercase tracking-wide text-[#7B0F12] mb-3">
+          {{ idEmEdicao ? 'Alterar reserva' : 'Nova reserva' }}
+        </p>
+
+        <div class="mb-3">
+          <label class="block text-xs text-[#4A4038] mb-1">Mesa</label>
+          <select [(ngModel)]="form.idMesa"
+            class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE]">
+            <option [ngValue]="null" disabled>Selecione a mesa</option>
+            <option *ngFor="let mesa of mesas" [ngValue]="mesa.id">Mesa {{ mesa.numero }} ({{ mesa.capacidade }} lugares)</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label class="block text-xs text-[#4A4038] mb-1">Nome do cliente</label>
+            <input type="text" [(ngModel)]="form.nomeCliente" placeholder="Ex: Maria Souza"
+              class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE]">
+          </div>
+          <div>
+            <label class="block text-xs text-[#4A4038] mb-1">Telefone</label>
+            <input type="text" [(ngModel)]="form.telefone" placeholder="11999990000"
+              class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE]">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label class="block text-xs text-[#4A4038] mb-1">Data</label>
+            <input type="date" [(ngModel)]="form.data"
+              class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE]">
+          </div>
+          <div>
+            <label class="block text-xs text-[#4A4038] mb-1">Horário</label>
+            <input type="time" [(ngModel)]="form.horario"
+              class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE]">
+          </div>
+        </div>
+
+        <div class="mb-4 max-w-[140px]">
+          <label class="block text-xs text-[#4A4038] mb-1">Nº de pessoas</label>
+          <input type="number" [(ngModel)]="form.numPessoas" min="1"
+            class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE]">
+        </div>
+
+        <div class="flex gap-3">
+          <button type="button" [disabled]="salvando" (click)="salvar()"
+            class="flex-1 px-4 py-2 rounded-md bg-[#7B0F12] text-[#FFF8EE] text-sm disabled:opacity-60">
+            {{ idEmEdicao ? 'Salvar alterações' : 'Confirmar reserva' }}
+          </button>
+          <button type="button" *ngIf="idEmEdicao" (click)="cancelarEdicao()"
+            class="px-4 py-2 rounded-md border border-[#7B0F12] text-[#7B0F12] text-sm">
+            Cancelar
+          </button>
+        </div>
+      </div>
+
+      <!-- Listagem + filtros -->
+      <div class="border border-[#C9A46A] rounded-lg p-5 bg-[#FFF8EE] shadow-sm">
+        <p class="text-xs font-bold uppercase tracking-wide text-[#7B0F12] mb-3">Reservas cadastradas</p>
+
+        <div class="grid grid-cols-3 gap-3 mb-4">
+          <div>
+            <label class="block text-xs text-[#4A4038] mb-1">Mesa</label>
+            <select [(ngModel)]="filtroMesa"
+              class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE]">
+              <option value="todas">Todas</option>
+              <option *ngFor="let mesa of mesas" [ngValue]="mesa.id">Mesa {{ mesa.numero }}</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-[#4A4038] mb-1">De</label>
+            <input type="date" [(ngModel)]="filtroDataInicio"
+              class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE]">
+          </div>
+          <div>
+            <label class="block text-xs text-[#4A4038] mb-1">Até</label>
+            <input type="date" [(ngModel)]="filtroDataFim"
+              class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE]">
+          </div>
+        </div>
+
+        <div class="space-y-3 max-h-[520px] overflow-y-auto">
+          <p *ngIf="carregando" class="text-center text-[#4A4038] italic py-6">Carregando reservas...</p>
+          <p *ngIf="!carregando && reservasFiltradas().length === 0" class="text-center text-[#4A4038] italic py-6">
+            Nenhuma reserva encontrada.
+          </p>
+
+          <div *ngFor="let reserva of reservasFiltradas()" class="border border-[#E4DDD0] rounded-md p-3 bg-[#F5EEE0]">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-[#7B0F12] font-bold text-sm">Mesa {{ numeroMesa(reserva.idMesa) }}</span>
+              <span class="text-xs font-bold uppercase px-3 py-1 rounded-full"
+                [ngClass]="{
+                  'bg-[#244A37] text-[#E1F5EE]': reserva.status === 'ATIVA',
+                  'bg-[#C9A46A] text-[#5A0B0D]': reserva.status === 'CONCLUIDA',
+                  'bg-[#E4DDD0] text-[#4A4038]': reserva.status === 'CANCELADA'
+                }">
+                {{ statusRotulo(reserva.status) }}
+              </span>
+            </div>
+            <p class="text-sm text-[#4A4038]">{{ reserva.nomeCliente }} &middot; {{ reserva.telefone }}</p>
+            <p class="text-xs text-[#4A4038] opacity-80 mb-2">{{ reserva.dataHora | date:'dd/MM/yyyy HH:mm' }} &middot; {{ reserva.numPessoas }} pessoa(s)</p>
+
+            <div class="flex gap-4" *ngIf="reserva.status === 'ATIVA'">
+              <button type="button" class="text-xs underline text-[#7B0F12]" (click)="iniciarEdicao(reserva)">Alterar</button>
+              <button type="button" class="text-xs underline text-[#7B0F12]" (click)="concluir(reserva)">Concluir</button>
+              <button type="button" class="text-xs underline text-[#9a2a2a]" (click)="cancelar(reserva)">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -155,6 +155,28 @@
   font-weight: 700;
 }
 
+.dash-atalhos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.dash-atalho {
+  padding: 10px 16px;
+  border: 1px solid var(--cor-dourado);
+  border-radius: 8px;
+  color: var(--cor-bordo);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.dash-atalho:hover {
+  background-color: var(--cor-creme);
+}
+
 .btn-sair {
   background: transparent;
   border: 1px solid var(--cor-bordo);
