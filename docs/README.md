@@ -30,7 +30,7 @@ O projeto tem como objetivo aplicar, na prática, conhecimentos adquiridos ao lo
 
 ### Backend
 
-`mvnw.cmd spring-boot:run`
+<Comandos para executar o backend>
 
 ### Frontend
 

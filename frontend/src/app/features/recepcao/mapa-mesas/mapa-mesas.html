@@ -1,5 +1,6 @@
 <div class="mapa-page">
 
+
   <!-- Barra superior com faixa grega + identificação da recepção -->
   <div class="top-bar">
     <div class="greek-border top"></div>
@@ -11,18 +12,14 @@
     </div>
   </div>
 
+
   <div class="mapa-content">
+
 
     <img src="assets/imagens/pilar.png" alt="" class="pillar-decoration">
 
-    <div class="mapa-card">
 
-      <div class="mapa-card-header">
-        <span class="titulo-secao">MESAS</span>
-        <a routerLink="/recepcao/reservas" class="acao-btn acao-primaria link-reservas">
-          Gerenciar reservas
-        </a>
-      </div>
+    <div class="mapa-card">
 
       <p class="mapa-status" *ngIf="carregando">Carregando mesas...</p>
       <p class="mapa-erro" *ngIf="mensagemErro">{{ mensagemErro }}</p>
@@ -38,6 +35,7 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let mesa of mesas; let i = index">
+
 
             <!-- Linha principal -->
             <tr class="mesa-linha" [class.expandida]="mesaExpandidaIndex === i">
@@ -59,12 +57,19 @@
               </td>
             </tr>
 
-            <!-- Linha expandida: só muda o status da mesa -->
+
+            <!-- Linha expandida -->
             <tr class="mesa-expandida-linha" *ngIf="mesaExpandidaIndex === i">
               <td colspan="4">
-                <div class="painel-expandido">
 
+
+                <!-- Mesa sem reserva: status + formulário de nova reserva -->
+                <div class="painel-expandido" *ngIf="!mesa.reserva">
+
+
+                  <!-- Mudar status da mesa -->
                   <p class="painel-titulo">Mesa {{ mesa.numero }} &middot; mudar status da mesa</p>
+
 
                   <div class="status-toggle">
                     <button
@@ -79,32 +84,169 @@
                       class="status-toggle-btn"
                       [class.ativo]="mesa.status === 'LIVRE'"
                       (click)="alterarStatusMesa(mesa, 'LIVRE')">
-                      Livre
+                      Disponível
                     </button>
                   </div>
+
+
+                  <div class="painel-divisor"></div>
+
+
+                  <p class="painel-titulo">Mesa {{ mesa.numero }} &middot; nova reserva</p>
+
+
+                  <div class="form-grid">
+                    <div class="form-campo">
+                      <label>Nome do cliente</label>
+                      <input type="text" [(ngModel)]="formReserva.cliente" placeholder="Ex: Maria Souza">
+                    </div>
+                    <div class="form-campo">
+                      <label>Telefone</label>
+                      <input type="text" [(ngModel)]="formReserva.telefone" placeholder="(11) 99999-0000">
+                    </div>
+                  </div>
+
+
+                  <div class="form-grid">
+                    <div class="form-campo">
+                      <label>Data</label>
+                      <input type="date" [(ngModel)]="formReserva.data">
+                    </div>
+                    <div class="form-campo">
+                      <label>Horário</label>
+                      <input type="time" [(ngModel)]="formReserva.horario">
+                    </div>
+                  </div>
+
+
+                  <div class="form-campo form-campo-pequeno">
+                    <label>Nº de pessoas</label>
+                    <input type="number" [(ngModel)]="formReserva.pessoas" min="1">
+                  </div>
+
 
                   <div class="painel-acoes">
-                    <button type="button" class="acao-btn acao-secundaria" (click)="fecharPainel()">
-                      Fechar
+                    <button type="button" class="acao-btn acao-primaria" (click)="confirmarReserva(mesa)">
+                      Confirmar reserva
+                    </button>
+                    <button type="button" class="acao-btn acao-secundaria" (click)="cancelarFormulario()">
+                      Cancelar
                     </button>
                   </div>
+                </div>
+
+
+                <!-- Mesa com reserva: detalhes ou edição -->
+                <div class="painel-expandido" *ngIf="mesa.reserva">
+
+
+                  <ng-container *ngIf="!modoEdicao; else edicaoTpl">
+                    <p class="painel-titulo">Mesa {{ mesa.numero }} &middot; reserva atual</p>
+
+
+                    <div class="detalhes-grid">
+                      <div>
+                        <p class="detalhe-rotulo">Cliente</p>
+                        <p class="detalhe-valor">{{ mesa.reserva.cliente }}</p>
+                      </div>
+                      <div>
+                        <p class="detalhe-rotulo">Telefone</p>
+                        <p class="detalhe-valor">{{ mesa.reserva.telefone }}</p>
+                      </div>
+                      <div>
+                        <p class="detalhe-rotulo">Data</p>
+                        <p class="detalhe-valor">{{ formatarData(mesa.reserva.data) }}</p>
+                      </div>
+                      <div>
+                        <p class="detalhe-rotulo">Horário</p>
+                        <p class="detalhe-valor">{{ mesa.reserva.horario }}</p>
+                      </div>
+                      <div>
+                        <p class="detalhe-rotulo">Nº de pessoas</p>
+                        <p class="detalhe-valor">{{ mesa.reserva.pessoas }}</p>
+                      </div>
+                    </div>
+
+
+                    <div class="painel-acoes">
+                      <button type="button" class="acao-btn acao-primaria" (click)="iniciarEdicao(mesa)">
+                        Alterar reserva
+                      </button>
+                      <button type="button" class="acao-btn acao-secundaria" (click)="cancelarReserva(mesa)">
+                        Cancelar reserva
+                      </button>
+                    </div>
+                  </ng-container>
+
+
+                  <ng-template #edicaoTpl>
+                    <p class="painel-titulo">Mesa {{ mesa.numero }} &middot; alterar reserva</p>
+
+
+                    <div class="form-grid">
+                      <div class="form-campo">
+                        <label>Nome do cliente</label>
+                        <input type="text" [(ngModel)]="formReserva.cliente">
+                      </div>
+                      <div class="form-campo">
+                        <label>Telefone</label>
+                        <input type="text" [(ngModel)]="formReserva.telefone">
+                      </div>
+                    </div>
+
+
+                    <div class="form-grid">
+                      <div class="form-campo">
+                        <label>Data</label>
+                        <input type="date" [(ngModel)]="formReserva.data">
+                      </div>
+                      <div class="form-campo">
+                        <label>Horário</label>
+                        <input type="time" [(ngModel)]="formReserva.horario">
+                      </div>
+                    </div>
+
+
+                    <div class="form-campo form-campo-pequeno">
+                      <label>Nº de pessoas</label>
+                      <input type="number" [(ngModel)]="formReserva.pessoas" min="1">
+                    </div>
+
+
+                    <div class="painel-acoes">
+                      <button type="button" class="acao-btn acao-primaria" (click)="confirmarReserva(mesa)">
+                        Salvar alterações
+                      </button>
+                      <button type="button" class="acao-btn acao-secundaria" (click)="modoEdicao = false">
+                        Voltar
+                      </button>
+                    </div>
+                  </ng-template>
+
 
                 </div>
+
+
               </td>
             </tr>
+
 
           </ng-container>
         </tbody>
       </table>
 
+
     </div>
 
+
   </div>
+
 
   <!-- Rodapé decorativo -->
   <div class="bottom-wrap">
     <img src="assets/imagens/pantheon-pequeno.png" alt="" class="pantheon-decoration">
     <div class="greek-border bottom"></div>
   </div>
+
 
 </div>

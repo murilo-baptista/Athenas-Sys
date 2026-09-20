@@ -1,24 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { MesaService } from '../../../core/services/mesa.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { MesaListagem, StatusMesa } from '../../../core/models/mesa.model';
+import { Mesa, Reserva, StatusMesa } from '../../../core/models/mesa.model';
 
 @Component({
   selector: 'app-mapa-mesas',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './mapa-mesas.html',
   styleUrl: './mapa-mesas.css'
 })
 export class MapaMesasComponent implements OnInit {
 
-  mesas: MesaListagem[] = [];
+  mesas: Mesa[] = [];
   carregando = false;
   mensagemErro = '';
 
   mesaExpandidaIndex: number | null = null;
+  modoEdicao = false;
+  formReserva: Reserva = this.formVazio();
 
   private restauranteId!: number;
 
@@ -45,21 +47,30 @@ export class MapaMesasComponent implements OnInit {
     });
   }
 
-  toggleMesa(index: number): void {
-    this.mesaExpandidaIndex = this.mesaExpandidaIndex === index ? null : index;
+  private formVazio(): Reserva {
+    return { cliente: '', telefone: '', data: '', horario: '', pessoas: 1 };
   }
 
-  alterarStatusMesa(mesa: MesaListagem, novoStatus: StatusMesa): void {
-    if (mesa.status === novoStatus) return;
+  toggleMesa(index: number): void {
+    if (this.mesaExpandidaIndex === index) {
+      this.fecharPainel();
+      return;
+    }
+
+    this.mesaExpandidaIndex = index;
+    this.modoEdicao = false;
+
+    const mesa = this.mesas[index];
+    this.formReserva = mesa.reserva ? { ...mesa.reserva } : this.formVazio();
+  }
+
+  alterarStatusMesa(mesa: Mesa, novoStatus: StatusMesa): void {
+    if (mesa.status === novoStatus || !mesa.id) return;
 
     const statusAnterior = mesa.status;
     mesa.status = novoStatus; // atualização otimista
 
-    const acao$ = novoStatus === 'OCUPADA'
-      ? this.mesaService.ocuparMesa(mesa.id)
-      : this.mesaService.desocuparMesa(mesa.id);
-
-    acao$.subscribe({
+    this.mesaService.alterarStatus(mesa.id, novoStatus).subscribe({
       error: () => {
         mesa.status = statusAnterior; // reverte se o back-end recusar
         this.mensagemErro = 'Não foi possível atualizar o status da mesa.';
@@ -67,15 +78,68 @@ export class MapaMesasComponent implements OnInit {
     });
   }
 
-  fecharPainel(): void {
+  iniciarEdicao(mesa: Mesa): void {
+    this.modoEdicao = true;
+    this.formReserva = mesa.reserva ? { ...mesa.reserva } : this.formVazio();
+  }
+
+  confirmarReserva(mesa: Mesa): void {
+    if (!mesa.id) return;
+
+    this.mesaService.salvarReserva(mesa.id, this.formReserva).subscribe({
+      next: (mesaAtualizada) => {
+        mesa.reserva = mesaAtualizada.reserva;
+        mesa.status = mesaAtualizada.status ?? 'RESERVADA';
+        this.fecharPainel();
+      },
+      error: () => this.mensagemErro = 'Não foi possível salvar a reserva.'
+    });
+  }
+
+  cancelarReserva(mesa: Mesa): void {
+    if (!mesa.id) return;
+
+    this.mesaService.cancelarReserva(mesa.id).subscribe({
+      next: () => {
+        mesa.reserva = null;
+        mesa.status = 'LIVRE';
+        this.fecharPainel();
+      },
+      error: () => this.mensagemErro = 'Não foi possível cancelar a reserva.'
+    });
+  }
+
+  cancelarFormulario(): void {
+    this.fecharPainel();
+  }
+
+  private fecharPainel(): void {
     this.mesaExpandidaIndex = null;
+    this.modoEdicao = false;
+    this.formReserva = this.formVazio();
   }
 
-  statusRotulo(status: StatusMesa): string {
-    return status === 'OCUPADA' ? 'Ocupada' : 'Livre';
+  statusRotulo(status: StatusMesa | undefined): string {
+    switch (status) {
+      case 'OCUPADA': return 'Ocupada';
+      case 'LIVRE': return 'Livre';
+      case 'RESERVADA': return 'Reservada';
+      default: return '';
+    }
   }
 
-  statusClasse(status: StatusMesa): string {
-    return status === 'OCUPADA' ? 'status-ocupada' : 'status-livre';
+  statusClasse(status: StatusMesa | undefined): string {
+    switch (status) {
+      case 'OCUPADA': return 'status-ocupada';
+      case 'LIVRE': return 'status-livre';
+      case 'RESERVADA': return 'status-reservada';
+      default: return '';
+    }
+  }
+
+  formatarData(data: string): string {
+    if (!data) return '';
+    const [ano, mes, dia] = data.split('-');
+    return `${dia}/${mes}/${ano}`;
   }
 }
