@@ -16,6 +16,7 @@ import { CadastroCategoriasComponent } from './features/gerente/cadastro-categor
 import { ConfigRestauranteComponent } from './features/gerente/config-restaurante/config-restaurante';
 import { VisualizacaoCardapioComponent } from './features/gerente/visualizacao-cardapio/visualizacao-cardapio';
 import { ConfigMesasComponent } from './features/gerente/config-mesas/config-mesas';
+import { HistoricoPedidosComponent } from './features/gerente/historico-pedidos/historico-pedidos';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -46,6 +47,7 @@ export const routes: Routes = [
   { path: 'gerente/config', component: ConfigRestauranteComponent, canActivate: [funcionarioGuard], data: { cargo: 'GERENTE' } },
   { path: 'gerente/cardapio', component: VisualizacaoCardapioComponent, canActivate: [funcionarioGuard], data: { cargo: 'GERENTE' } },
   { path: 'gerente/mesas', component: ConfigMesasComponent, canActivate: [funcionarioGuard], data: { cargo: 'GERENTE' } },
+  { path: 'gerente/historico', component: HistoricoPedidosComponent, canActivate: [funcionarioGuard], data: { cargo: 'GERENTE' } },
 
   { path: '**', redirectTo: 'login' }
 ];
