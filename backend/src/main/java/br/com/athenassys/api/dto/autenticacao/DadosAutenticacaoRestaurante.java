@@ -1,8 +1,8 @@
 package br.com.athenassys.api.dto.autenticacao;
 
-public record DadosAutenticacao(
+public record DadosAutenticacaoRestaurante(
 
-        String login,
+        String username,
         String senha
 ) {
 }

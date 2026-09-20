@@ -9,5 +9,5 @@ import org.springframework.security.core.userdetails.UserDetails;
 public interface RestauranteRepository extends JpaRepository<Restaurante, Long> {
     Page<Restaurante> findAllByAtivoTrue(Pageable paginacao);
 
-    UserDetails findByIdLogin(String login);
+    UserDetails findByEmail(String email);
 }

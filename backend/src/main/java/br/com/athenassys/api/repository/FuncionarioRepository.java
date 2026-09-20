@@ -13,5 +13,5 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> 
 
     Optional<Funcionario> findByIdAndRestauranteId(Long idFuncionario, Long idRestaurante);
 
-    UserDetails findByIdLoginAndRestauranteId(String login, Long idRestaurante);
+    Optional<Funcionario> findByNomeAndRestauranteId(String nome, Long idRestaurante);
 }

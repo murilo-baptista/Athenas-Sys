@@ -1,10 +1,11 @@
 package br.com.athenassys.api.controller;
 
-import br.com.athenassys.api.dto.autenticacao.DadosAutenticacao;
+import br.com.athenassys.api.dto.autenticacao.DadosAutenticacaoFuncionario;
+import br.com.athenassys.api.dto.autenticacao.DadosAutenticacaoRestaurante;
 import br.com.athenassys.api.dto.autenticacao.DadosTokenJWT;
 import br.com.athenassys.api.model.Funcionario;
 import br.com.athenassys.api.model.Restaurante;
-import br.com.athenassys.api.model.Usuario;
+import br.com.athenassys.api.service.AutenticacaoService;
 import br.com.athenassys.api.service.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,12 @@ public class AutenticacaoController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private AutenticacaoService autenticacaoService;
+
     @PostMapping ("/login")
-    public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
-        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
+    public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacaoRestaurante dados) {
+        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.username(), dados.senha());
         var authentication = manager.authenticate(authenticationToken);
 
         var tokenJWT = tokenService.gerarToken((Restaurante) authentication.getPrincipal());
@@ -37,11 +41,11 @@ public class AutenticacaoController {
     }
 
     @PostMapping ("/funcionario/login")
-    public ResponseEntity efetuarLoginFuncionario(@RequestBody @Valid DadosAutenticacao dados) {
-        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
-        var authentication = manager.authenticate(authenticationToken);
+    public ResponseEntity efetuarLoginFuncionario(@RequestBody @Valid DadosAutenticacaoFuncionario dados) {
 
-        var tokenJWT = tokenService.gerarToken((Funcionario) authentication.getPrincipal());
+        var funcionario = autenticacaoService.autenticarFuncionario(dados);
+
+        var tokenJWT = tokenService.gerarToken(funcionario);
 
         return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }
