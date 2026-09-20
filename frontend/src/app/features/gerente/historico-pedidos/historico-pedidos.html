@@ -1,0 +1,81 @@
+<div class="min-h-screen bg-[#FFF8EE] font-['Georgia',serif]">
+
+  <div class="max-w-4xl mx-auto px-6 py-10">
+
+    <a routerLink="/gerente" class="text-sm text-[#4A4038] hover:text-[#7B0F12]">&larr; Painel do gerente</a>
+
+    <h1 class="text-xl font-bold text-[#7B0F12] mt-2 mb-6 tracking-wide">Histórico de pedidos</h1>
+
+    <p *ngIf="mensagemErro" class="text-[#7B0F12] text-sm mb-4">{{ mensagemErro }}</p>
+
+    <!-- Filtros -->
+    <div class="border border-[#C9A46A] rounded-lg p-5 bg-[#FFF8EE] shadow-sm mb-6">
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-3">
+        <div>
+          <label class="block text-xs text-[#4A4038] mb-1">Mesa</label>
+          <select [(ngModel)]="filtroMesa" (ngModelChange)="buscar()"
+            class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE]">
+            <option value="todas">Todas</option>
+            <option *ngFor="let mesa of mesas" [ngValue]="mesa.id">Mesa {{ mesa.numero }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs text-[#4A4038] mb-1">Funcionário</label>
+          <select [(ngModel)]="filtroFuncionario" (ngModelChange)="buscar()"
+            class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE]">
+            <option value="todos">Todos</option>
+            <option *ngFor="let funcionario of funcionarios" [ngValue]="funcionario.id">{{ funcionario.nome }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs text-[#4A4038] mb-1">De</label>
+          <input type="date" [(ngModel)]="filtroDataInicio"
+            class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE]">
+        </div>
+
+        <div>
+          <label class="block text-xs text-[#4A4038] mb-1">Até</label>
+          <input type="date" [(ngModel)]="filtroDataFim"
+            class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE]">
+        </div>
+      </div>
+
+      <p class="text-xs text-[#4A4038] italic">
+        Filtro de mesa/funcionário é feito na API; filtro de data é aplicado sobre os resultados já carregados.
+      </p>
+    </div>
+
+    <!-- Lista -->
+    <div class="border border-[#C9A46A] rounded-lg overflow-hidden">
+      <div *ngIf="carregando" class="p-6 text-center text-[#4A4038] italic">Carregando histórico...</div>
+      <div *ngIf="!carregando && pedidosFiltrados().length === 0" class="p-6 text-center text-[#4A4038] italic">
+        Nenhum pedido encontrado para esse filtro.
+      </div>
+
+      <table *ngIf="!carregando && pedidosFiltrados().length > 0" class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-xs uppercase text-[#7B0F12] border-b border-[#C9A46A]">
+            <th class="px-4 py-3">Pedido</th>
+            <th class="px-4 py-3">Data</th>
+            <th class="px-4 py-3">Mesa</th>
+            <th class="px-4 py-3">Funcionário</th>
+            <th class="px-4 py-3 text-right">Valor total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pedido of pedidosFiltrados()" class="border-b border-[#E4DDD0] last:border-b-0">
+            <td class="px-4 py-3 text-[#7B0F12] font-bold">#{{ pedido.id }}</td>
+            <td class="px-4 py-3 text-[#4A4038]">{{ pedido.dataHora | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td class="px-4 py-3 text-[#4A4038]">Mesa {{ numeroMesa(pedido.idMesa) }}</td>
+            <td class="px-4 py-3 text-[#4A4038]">{{ nomeFuncionario(pedido.idFuncionario) }}</td>
+            <td class="px-4 py-3 text-right text-[#4A4038] font-bold">R$ {{ pedido.valorTotal | number:'1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
