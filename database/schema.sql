@@ -45,7 +45,7 @@ CREATE TABLE funcionarios (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     restaurante_id BIGINT NOT NULL,
     nome VARCHAR(100) NOT NULL,
-    codigo VARCHAR(10) NOT NULL,
+    codigo VARCHAR(255) NOT NULL,
     cargo VARCHAR(20) NOT NULL,
     ativo BOOLEAN,
 
