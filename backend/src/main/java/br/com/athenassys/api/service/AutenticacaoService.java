@@ -36,12 +36,6 @@ public class AutenticacaoService implements UserDetailsService {
                 .orElseThrow(() -> new BadCredentialsException("Usuário inexistente ou senha inválida"));
 
         if (!passwordEncoder.matches(dados.codigo(), funcionario.getCodigo())) {
-            System.out.println(
-                    "USER: [[" + dados.nome() + "]] " +
-                    "\nPASSWORD: [[" + dados.codigo() + "]] " +
-                    "\nRESTAURANTE: [[" + dados.idRestaurante() + "]] " +
-                    "\n FUNCIONARIO: [[" + funcionario + "]]"
-            );
             throw new BadCredentialsException("Usuário inexistente ou senha inválida");
         }
 

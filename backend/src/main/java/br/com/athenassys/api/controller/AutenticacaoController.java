@@ -35,7 +35,7 @@ public class AutenticacaoController {
         var authenticationToken = new UsernamePasswordAuthenticationToken(dados.username(), dados.senha());
         var authentication = manager.authenticate(authenticationToken);
 
-        var tokenJWT = tokenService.gerarToken((Restaurante) authentication.getPrincipal());
+        var tokenJWT = tokenService.gerarTokenRestaurante((Restaurante) authentication.getPrincipal());
 
         return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }
@@ -45,7 +45,7 @@ public class AutenticacaoController {
 
         var funcionario = autenticacaoService.autenticarFuncionario(dados);
 
-        var tokenJWT = tokenService.gerarToken(funcionario);
+        var tokenJWT = tokenService.gerarTokenFuncionario(funcionario);
 
         return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }
