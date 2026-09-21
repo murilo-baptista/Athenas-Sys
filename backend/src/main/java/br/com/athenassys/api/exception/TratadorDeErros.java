@@ -28,7 +28,7 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(TratadorDeErros.class);
     private static final Map<String, DadosErro> MAPA = Map.of(
-            "uk_restaurantes_cnpj", new DadosErro("cnpj", "Já existe um restaurante cadastrado com esse CNPJ."),
+            "   uk_restaurantes_cnpj", new DadosErro("cnpj", "Já existe um restaurante cadastrado com esse CNPJ."),
             "uk_restaurantes_email", new DadosErro("email", "Já existe um restaurante cadastrado com esse e-mail."),
             "uk_mesas_restaurante_numero", new DadosErro("numero", "Já existe uma mesa cadastrada com esse número neste restaurante."),
             "uk_funcionarios_restaurante_codigo", new DadosErro("codigo", "Já existe um funcionário cadastrado com esse código neste restaurante."),

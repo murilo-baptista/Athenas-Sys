@@ -38,33 +38,24 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             if (tipo.equals("RESTAURANTE")) {
                 var restaurante = restauranteRepository.findByEmail(subject);
-                var authentication = new UsernamePasswordAuthenticationToken(restaurante, null, restaurante.get().getAuthorities());
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                restaurante.ifPresent(r -> {
+                    var authentication = new UsernamePasswordAuthenticationToken(r, null, r.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                });
 
             } else if (tipo.equals("FUNCIONARIO")) {
                 var idRestaurante = tokenService.getRestauranteId(tokenJWT);
-
                 var funcionario = funcionarioRepository.findByNomeAndRestauranteId(subject, idRestaurante);
-                var authentication = new UsernamePasswordAuthenticationToken(funcionario, null, funcionario.get().getAuthorities());
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                funcionario.ifPresent(f -> {
+                    var authentication = new UsernamePasswordAuthenticationToken(f, null, f.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                });
             }
         }
         filterChain.doFilter(request, response);
     }
-
-//    protected void doFilterInternalFuncionario(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//
-//        var tokenJWT = recuperarToken(request);
-//        var tipo = tokenService
-//
-//        if (tokenJWT != null) {
-//            var subject = tokenService.getSubject(tokenJWT);
-//            System.out.println("SUBJECT: [[" + subject + "]]");
-////            var funcionario = funcionarioRepository.findByNomeAndRestauranteId(nome, idRestaurante)
-//        }
-//    }
 
     private String recuperarToken(HttpServletRequest request) {
         var authoriztionHeader = request.getHeader("Authorization");
