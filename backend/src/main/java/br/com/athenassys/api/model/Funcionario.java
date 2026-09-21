@@ -83,4 +83,9 @@ public class Funcionario implements UserDetails {
     public String getUsername() {
         return this.nome;
     }
+
+    @Override
+    public boolean isEnabled() {
+        return this.ativo;
+    }
 }

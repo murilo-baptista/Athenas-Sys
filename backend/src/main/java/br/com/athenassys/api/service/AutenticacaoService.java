@@ -38,6 +38,10 @@ public class AutenticacaoService implements UserDetailsService {
                 .findByNomeAndRestauranteId(dados.nome(), dados.idRestaurante())
                 .orElseThrow(() -> new BadCredentialsException("Funcionário não encontrado! Nome ou senha incorretos."));
 
+        if (!funcionario.isEnabled()) {
+            throw new BadCredentialsException("Usuário inexistente ou senha inválida");
+        }
+
         if (!passwordEncoder.matches(dados.codigo(), funcionario.getCodigo())) {
             throw new BadCredentialsException("Usuário inexistente ou senha inválida");
         }
