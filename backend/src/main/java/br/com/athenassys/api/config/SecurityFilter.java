@@ -38,7 +38,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
             if (tipo.equals("RESTAURANTE")) {
                 var restaurante = restauranteRepository.findByEmail(subject);
-                var authentication = new UsernamePasswordAuthenticationToken(restaurante, null, restaurante.getAuthorities());
+                var authentication = new UsernamePasswordAuthenticationToken(restaurante, null, restaurante.get().getAuthorities());
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 

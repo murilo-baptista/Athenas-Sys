@@ -26,14 +26,17 @@ public class AutenticacaoService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return restauranteRepository.findByEmail(username);
+
+        return restauranteRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Restaurante não encontrado! Nome ou senha incorretos."));
+
     }
 
     public Funcionario autenticarFuncionario(DadosAutenticacaoFuncionario dados) throws UsernameNotFoundException {
 
         var funcionario = funcionarioRepository
                 .findByNomeAndRestauranteId(dados.nome(), dados.idRestaurante())
-                .orElseThrow(() -> new BadCredentialsException("Usuário inexistente ou senha inválida"));
+                .orElseThrow(() -> new BadCredentialsException("Funcionário não encontrado! Nome ou senha incorretos."));
 
         if (!passwordEncoder.matches(dados.codigo(), funcionario.getCodigo())) {
             throw new BadCredentialsException("Usuário inexistente ou senha inválida");
