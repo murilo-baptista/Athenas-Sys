@@ -53,8 +53,8 @@ CREATE TABLE funcionarios (
         FOREIGN KEY (restaurante_id)
         REFERENCES restaurantes(id),
 
-    CONSTRAINT uk_funcionarios_restaurante_codigo
-        UNIQUE (restaurante_id, codigo)
+    CONSTRAINT uk_funcionarios_restaurante_nome
+        UNIQUE (restaurante_id, nome)
 );
 
 
