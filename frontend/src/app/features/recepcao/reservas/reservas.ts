@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { ReservaService } from '../../../core/services/reserva.service';
 import { MesaService } from '../../../core/services/mesa.service';
 import { ReservaListagem, DadosCadastroReserva } from '../../../core/models/reserva.model';
-import { Mesa } from '../../../core/models/mesa.model';
+import { MesaListagem } from '../../../core/models/mesa.model';
 
 interface FormularioReserva {
   idMesa: number | null;
@@ -25,7 +25,7 @@ interface FormularioReserva {
 export class ReservasComponent implements OnInit {
 
   reservas: ReservaListagem[] = [];
-  mesas: Mesa[] = [];
+  mesas: MesaListagem[] = [];
 
   carregando = false;
   mensagemErro = '';
