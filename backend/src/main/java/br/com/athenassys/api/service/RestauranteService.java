@@ -9,6 +9,7 @@ import br.com.athenassys.api.repository.RestauranteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,11 +17,14 @@ import org.springframework.stereotype.Service;
 public class RestauranteService {
 
     private final RestauranteRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
     public Restaurante cadastrar(
             DadosCadastroRestaurante dados) {
 
-        var restaurante = new Restaurante(dados);
+        var senha = passwordEncoder.encode(dados.senha());
+
+        var restaurante = new Restaurante(dados, senha);
         return repository.save(restaurante);
     }
 

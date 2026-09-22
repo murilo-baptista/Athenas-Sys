@@ -45,11 +45,11 @@ public class Funcionario implements UserDetails {
     private Cargo cargo;
     private Boolean ativo;
 
-    public Funcionario(DadosCadastroFuncionario dados, Restaurante restaurante) {
+    public Funcionario(DadosCadastroFuncionario dados, String codigo, Restaurante restaurante) {
         this.ativo = true;
         this.restaurante = restaurante;
         this.nome = dados.nome();
-        this.codigo = dados.codigo();
+        this.codigo = codigo;
         this.cargo = dados.cargo();
     }
 

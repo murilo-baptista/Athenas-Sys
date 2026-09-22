@@ -43,13 +43,13 @@ public class Restaurante implements UserDetails {
     private String senha;
     private Boolean ativo;
 
-    public Restaurante(DadosCadastroRestaurante dados) {
+    public Restaurante(DadosCadastroRestaurante dados, String senha) {
         this.ativo = true;
         this.nome = dados.nome();
         this.email = dados.email();
         this.telefone = dados.telefone();
         this.cnpj = dados.cnpj();
-        this.senha = dados.senha();
+        this.senha = senha;
     }
 
     public void atualizarDados(DadosAtualizacaoRestaurante dados) {

@@ -10,6 +10,7 @@ import br.com.athenassys.api.repository.RestauranteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,7 @@ public class FuncionarioService {
 
     private final RestauranteRepository restauranteRepository;
     private final FuncionarioRepository funcionarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Funcionario cadastrar(
             DadosCadastroFuncionario dados,
@@ -26,7 +28,8 @@ public class FuncionarioService {
         var restaurante = restauranteRepository
                 .findById(idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
-        var funcionario = new Funcionario(dados, restaurante);
+        var codigo = passwordEncoder.encode(dados.codigo());
+        var funcionario = new Funcionario(dados, codigo, restaurante);
 
         return funcionarioRepository.save(funcionario);
     }
