@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,6 +21,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import javax.naming.AuthenticationException;
 import java.util.List;
 import java.util.Map;
 
@@ -131,6 +133,7 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
+    //Trata erro 409 de dados violados, principalmente para tratar campos únicos duplicados
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> tratarViolacaoIntegridade(DataIntegrityViolationException ex) {
 
@@ -156,7 +159,16 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
         );
     }
 
-    //Trata qualquer tipo de erro para evitar vazamento de dados e informações internas
+    //Trata erro 401 para credenciais incorretas
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<String> tratarErroCredenciaisIncorretas(BadCredentialsException ex) {
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                "Usuário ou senha incorretos!"
+        );
+    }
+
+    //Trata qualquer tipo de erro para evitar vazamento de dados e informações internas, tornando o erro em 500
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> tratarErroNaoTratado(Exception ex) {
 
