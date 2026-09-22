@@ -3,7 +3,6 @@ package br.com.athenassys.api.controller;
 import br.com.athenassys.api.dto.autenticacao.DadosAutenticacaoFuncionario;
 import br.com.athenassys.api.dto.autenticacao.DadosAutenticacaoRestaurante;
 import br.com.athenassys.api.dto.autenticacao.DadosTokenJWT;
-import br.com.athenassys.api.model.Funcionario;
 import br.com.athenassys.api.model.Restaurante;
 import br.com.athenassys.api.service.AutenticacaoService;
 import br.com.athenassys.api.service.TokenService;
