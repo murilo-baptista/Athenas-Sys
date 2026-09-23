@@ -4,7 +4,22 @@
 
     <a routerLink="/gerente" class="text-sm text-[#4A4038] hover:text-[#7B0F12]">&larr; Painel do gerente</a>
 
-    <h1 class="text-xl font-bold text-[#7B0F12] mt-2 mb-6 tracking-wide">Cardápio</h1>
+    <div class="flex items-center justify-between mt-2 mb-6">
+      <h1 class="text-xl font-bold text-[#7B0F12] tracking-wide">Cardápio</h1>
+      <button
+        type="button"
+        (click)="alternarQrCode()"
+        class="px-4 py-2 rounded-md border border-[#C9A46A] text-[#7B0F12] text-sm hover:bg-[#F5EEE0]">
+        {{ mostrarQrCode ? 'Esconder QR Code' : 'Mostrar QR Code' }}
+      </button>
+    </div>
+
+    <div *ngIf="mostrarQrCode" class="border border-[#C9A46A] rounded-lg p-6 bg-[#FFF8EE] shadow-sm mb-8 flex flex-col items-center">
+      <qrcode [qrdata]="urlCardapio" [width]="200" errorCorrectionLevel="M"></qrcode>
+      <p class="text-xs text-[#4A4038] italic mt-3 text-center">
+        Aponta para esta página. Uma versão pública do cardápio, sem necessidade de login, ainda está pendente.
+      </p>
+    </div>
 
     <p *ngIf="mensagemErro" class="text-[#7B0F12] text-sm mb-4">{{ mensagemErro }}</p>
     <p *ngIf="carregando" class="text-center text-[#4A4038] italic py-6">Carregando cardápio...</p>

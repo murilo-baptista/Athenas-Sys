@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { QRCodeComponent } from 'angularx-qrcode';
 import { CategoriaService } from '../../../core/services/categoria.service';
 import { ProdutoService } from '../../../core/services/produto.service';
 import { CategoriaListagem } from '../../../core/models/categoria.model';
@@ -15,7 +16,7 @@ interface CategoriaComProdutos {
 @Component({
   selector: 'app-visualizacao-cardapio',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, QRCodeComponent],
   templateUrl: './visualizacao-cardapio.html'
 })
 export class VisualizacaoCardapioComponent implements OnInit {
@@ -24,12 +25,18 @@ export class VisualizacaoCardapioComponent implements OnInit {
   carregando = false;
   mensagemErro = '';
 
+  mostrarQrCode = false;
+  urlCardapio = '';
+
   constructor(
     private categoriaService: CategoriaService,
     private produtoService: ProdutoService
   ) {}
 
   ngOnInit(): void {
+    // Por enquanto, o QR Code aponta para esta mesma página. Uma versão
+    // pública/estática do cardápio, sem exigir login, é um passo futuro.
+    this.urlCardapio = window.location.href;
     this.carregar();
   }
 
@@ -66,5 +73,9 @@ export class VisualizacaoCardapioComponent implements OnInit {
       nome: categoria.nome,
       produtos: produtos.filter(produto => produto.idCategoria === categoria.id)
     }));
+  }
+
+  alternarQrCode(): void {
+    this.mostrarQrCode = !this.mostrarQrCode;
   }
 }
