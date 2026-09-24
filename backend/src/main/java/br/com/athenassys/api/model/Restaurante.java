@@ -2,7 +2,6 @@ package br.com.athenassys.api.model;
 
 import br.com.athenassys.api.dto.restaurante.DadosAtualizacaoRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosCadastroRestaurante;
-import br.com.athenassys.api.enums.Cargo;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
