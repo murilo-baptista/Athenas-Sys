@@ -4,6 +4,7 @@ import br.com.athenassys.api.dto.funcionario.DadosAtualizacaoFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosCadastroFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosDetalhamentoFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosListagemFuncionario;
+import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
 import br.com.athenassys.api.service.FuncionarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -77,5 +78,16 @@ public class FuncionarioController {
         var funcionario = service.buscarPorId(idFuncionario, idRestaurante);
 
         return ResponseEntity.ok(new DadosDetalhamentoFuncionario(funcionario));
+    }
+
+    @PatchMapping("/{idFuncionario}/alterarCodigo")
+    @Transactional
+    public ResponseEntity<String> alterarCodigo(
+            @PathVariable Long idRestaurante,
+            @PathVariable Long idFuncionario,
+            @RequestBody @Valid DadosAlteracaoChave dados) {
+
+        service.alterarCodigo(dados, idRestaurante, idFuncionario);
+        return ResponseEntity.ok("O código foi alterado!");
     }
 }

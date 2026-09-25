@@ -74,6 +74,10 @@ public class Funcionario implements UserDetails {
         );
     }
 
+    public void atualizarCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
     @Override
     public @Nullable String getPassword() {
         return this.codigo;

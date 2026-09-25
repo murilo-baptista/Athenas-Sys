@@ -3,10 +3,13 @@ package br.com.athenassys.api.service;
 import br.com.athenassys.api.dto.funcionario.DadosAtualizacaoFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosCadastroFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosListagemFuncionario;
+import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
+import br.com.athenassys.api.exception.SenhaIncorretaException;
 import br.com.athenassys.api.model.Funcionario;
 import br.com.athenassys.api.repository.FuncionarioRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -67,5 +70,21 @@ public class FuncionarioService {
         return funcionarioRepository
                 .findByIdAndRestauranteId(idFuncionario, idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado."));
+    }
+
+    public Funcionario alterarCodigo(DadosAlteracaoChave dados, Long idRestaurante, Long idFuncionario) {
+
+        var funcionario = funcionarioRepository
+                .findByIdAndRestauranteId(idFuncionario, idRestaurante)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado."));
+
+        if (!passwordEncoder.matches(dados.chaveAtual(), funcionario.getCodigo())) {
+            throw new SenhaIncorretaException("Código atual incorreto!");
+        }
+
+        var codigo = passwordEncoder.encode(dados.chaveNova());
+
+        funcionario.atualizarCodigo(codigo);
+        return funcionario;
     }
 }

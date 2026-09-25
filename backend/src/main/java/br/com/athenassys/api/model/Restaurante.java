@@ -1,6 +1,5 @@
 package br.com.athenassys.api.model;
 
-import br.com.athenassys.api.dto.restaurante.DadosAlterarSenha;
 import br.com.athenassys.api.dto.restaurante.DadosAtualizacaoRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosCadastroRestaurante;
 import jakarta.persistence.*;

@@ -1,5 +1,6 @@
 package br.com.athenassys.api.controller;
 
+import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
 import br.com.athenassys.api.dto.restaurante.*;
 import br.com.athenassys.api.model.Restaurante;
 import br.com.athenassys.api.service.RestauranteService;
@@ -74,7 +75,7 @@ public class RestauranteController {
     @Transactional
     public ResponseEntity<String> alterarSenha(
             @PathVariable Long idRestaurante,
-            @RequestBody @Valid DadosAlterarSenha dados,
+            @RequestBody @Valid DadosAlteracaoChave dados,
             @AuthenticationPrincipal Restaurante restaurante) {
 
         if (!restaurante.getId().equals(idRestaurante)) {

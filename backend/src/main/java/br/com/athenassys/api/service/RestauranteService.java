@@ -1,6 +1,6 @@
 package br.com.athenassys.api.service;
 
-import br.com.athenassys.api.dto.restaurante.DadosAlterarSenha;
+import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
 import br.com.athenassys.api.dto.restaurante.DadosAtualizacaoRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosCadastroRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosListagemRestaurante;
@@ -64,16 +64,16 @@ public class RestauranteService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
     }
 
-    public Restaurante alterarSenha(DadosAlterarSenha dados, Long idRestaurante) {
+    public Restaurante alterarSenha(DadosAlteracaoChave dados, Long idRestaurante) {
 
         var restaurante = repository
                 .findById(idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
 
-        if (!passwordEncoder.matches(dados.senhaAtual(), restaurante.getSenha())) {
+        if (!passwordEncoder.matches(dados.chaveAtual(), restaurante.getSenha())) {
             throw new SenhaIncorretaException("Senha atual incorreta!");
         }
-        var senha = passwordEncoder.encode(dados.senhaNova());
+        var senha = passwordEncoder.encode(dados.chaveNova());
 
         restaurante.alterarSenha(senha);
         return restaurante;
