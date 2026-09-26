@@ -7,6 +7,7 @@
     <h1 class="text-xl font-bold text-[#7B0F12] mt-2 mb-6 tracking-wide">Funcionários</h1>
 
     <p *ngIf="mensagemErro" class="text-[#7B0F12] text-sm mb-4">{{ mensagemErro }}</p>
+    <p *ngIf="mensagemSucesso" class="text-[#244A37] text-sm mb-4">{{ mensagemSucesso }}</p>
 
     <!-- Formulário -->
     <div class="border border-[#C9A46A] rounded-lg p-5 bg-[#FFF8EE] shadow-sm mb-8">
@@ -38,7 +39,7 @@
       </div>
 
       <p *ngIf="idEmEdicao" class="text-xs text-[#4A4038] italic mb-3">
-        O código de acesso não pode ser alterado por aqui.
+        Para alterar o código de acesso, use o botão "Alterar código" na lista abaixo.
       </p>
 
       <div class="flex gap-3">
@@ -60,16 +61,51 @@
         Nenhum funcionário cadastrado ainda.
       </div>
 
-      <div *ngFor="let funcionario of funcionarios"
-        class="flex items-center justify-between px-5 py-3 border-b border-[#E4DDD0] last:border-b-0">
-        <div class="text-sm text-[#4A4038]">
-          <span class="font-bold text-[#7B0F12]">{{ funcionario.nome }}</span>
-          &middot; {{ cargoRotulo(funcionario.cargo) }}
+      <div *ngFor="let funcionario of funcionarios" class="border-b border-[#E4DDD0] last:border-b-0">
+
+        <div class="flex items-center justify-between px-5 py-3">
+          <div class="text-sm text-[#4A4038]">
+            <span class="font-bold text-[#7B0F12]">{{ funcionario.nome }}</span>
+            &middot; {{ cargoRotulo(funcionario.cargo) }}
+          </div>
+          <div class="flex gap-4">
+            <button type="button" class="text-xs underline text-[#7B0F12]" (click)="editar(funcionario)">Editar</button>
+            <button type="button" class="text-xs underline text-[#7B0F12]" (click)="iniciarAlteracaoCodigo(funcionario)">Alterar código</button>
+            <button type="button" class="text-xs underline text-[#9a2a2a]" (click)="remover(funcionario)">Remover</button>
+          </div>
         </div>
-        <div class="flex gap-4">
-          <button type="button" class="text-xs underline text-[#7B0F12]" (click)="editar(funcionario)">Editar</button>
-          <button type="button" class="text-xs underline text-[#9a2a2a]" (click)="remover(funcionario)">Remover</button>
+
+        <!-- Formulário inline de troca de código -->
+        <div *ngIf="idAlterandoCodigo === funcionario.id" class="px-5 pb-4 bg-[#F5EEE0]">
+          <p class="text-xs text-[#4A4038] italic pt-3 mb-2">
+            O código atual não é exibido por segurança. Informe o novo código e a senha de "{{ funcionario.nome }}" para confirmar.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+            <div>
+              <label class="block text-xs text-[#4A4038] mb-1">Novo código</label>
+              <input type="text" [(ngModel)]="formCodigo.novoCodigo" placeholder="Ex: 5678"
+                class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE] focus:outline-none focus:border-[#7B0F12]">
+            </div>
+            <div>
+              <label class="block text-xs text-[#4A4038] mb-1">Senha do funcionário</label>
+              <input type="password" [(ngModel)]="formCodigo.senha" placeholder="Confirmação de senha"
+                class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE] focus:outline-none focus:border-[#7B0F12]">
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <button type="button" [disabled]="salvandoCodigo" (click)="confirmarAlteracaoCodigo(funcionario)"
+              class="px-4 py-2 rounded-md bg-[#7B0F12] text-[#FFF8EE] text-sm disabled:opacity-60">
+              {{ salvandoCodigo ? 'Confirmando...' : 'Confirmar novo código' }}
+            </button>
+            <button type="button" (click)="cancelarAlteracaoCodigo()"
+              class="px-4 py-2 rounded-md border border-[#7B0F12] text-[#7B0F12] text-sm">
+              Cancelar
+            </button>
+          </div>
         </div>
+
       </div>
     </div>
 
