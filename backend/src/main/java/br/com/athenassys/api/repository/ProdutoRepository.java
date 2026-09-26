@@ -1,7 +1,6 @@
 package br.com.athenassys.api.repository;
 
 import br.com.athenassys.api.model.Produto;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,5 @@
 package br.com.athenassys.api.repository;
 
-import br.com.athenassys.api.model.Pedido;
 import br.com.athenassys.api.model.Reserva;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

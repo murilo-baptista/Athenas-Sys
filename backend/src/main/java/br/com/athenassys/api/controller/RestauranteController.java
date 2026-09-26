@@ -1,16 +1,19 @@
 package br.com.athenassys.api.controller;
 
-import br.com.athenassys.api.dto.restaurante.DadosAtualizacaoRestaurante;
-import br.com.athenassys.api.dto.restaurante.DadosCadastroRestaurante;
-import br.com.athenassys.api.dto.restaurante.DadosDetalhamentoRestaurante;
-import br.com.athenassys.api.dto.restaurante.DadosListagemRestaurante;
+import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
+import br.com.athenassys.api.dto.restaurante.*;
+import br.com.athenassys.api.model.Restaurante;
 import br.com.athenassys.api.service.RestauranteService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
+import br.com.athenassys.api.service.TokenService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -20,21 +23,24 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class RestauranteController {
 
     private final RestauranteService service;
+    private final TokenService tokenService;
 
     @PostMapping
     @Transactional
-    public ResponseEntity<DadosDetalhamentoRestaurante> cadastrar(
+    public ResponseEntity<DadosDetalhamentoTokenRestaurante> cadastrar(
             @RequestBody @Valid DadosCadastroRestaurante dados,
             UriComponentsBuilder uriBuilder) {
 
         var restaurante = service.cadastrar(dados);
+        var token = tokenService.gerarTokenRestaurante(restaurante);
+        var dadosRestaurante = new DadosDetalhamentoRestaurante(restaurante);
 
         var uri = uriBuilder.path("restaurantes/{id}")
                 .buildAndExpand(restaurante.getId())
                 .toUri();
 
         return ResponseEntity.created(uri)
-                .body(new DadosDetalhamentoRestaurante(restaurante));
+                .body(new DadosDetalhamentoTokenRestaurante(dadosRestaurante, token));
     }
 
     @GetMapping
@@ -68,5 +74,21 @@ public class RestauranteController {
 
         var restaurante = service.buscarPorId(idRestaurante);
         return ResponseEntity.ok(new DadosDetalhamentoRestaurante(restaurante));
+    }
+
+    @PatchMapping("/{idRestaurante}/alterarSenha")
+    @Transactional
+    public ResponseEntity<String> alterarSenha(
+            @PathVariable Long idRestaurante,
+            @RequestBody @Valid DadosAlteracaoChave dados,
+            @AuthenticationPrincipal Restaurante restaurante) {
+
+        if (!restaurante.getId().equals(idRestaurante)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                    "Não foi possível alterar a senha!"
+            );
+        }
+        service.alterarSenha(dados, idRestaurante);
+        return ResponseEntity.ok("Sua senha foi alterada!");
     }
 }
