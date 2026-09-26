@@ -11,6 +11,11 @@ interface FormularioFuncionario {
   cargo: CargoFuncionario | null;
 }
 
+interface FormularioCodigo {
+  novoCodigo: string;
+  senha: string;
+}
+
 @Component({
   selector: 'app-config-funcionarios',
   standalone: true,
@@ -23,9 +28,14 @@ export class ConfigFuncionariosComponent implements OnInit {
   carregando = false;
   salvando = false;
   mensagemErro = '';
+  mensagemSucesso = '';
 
   idEmEdicao: number | null = null;
   form: FormularioFuncionario = this.formVazio();
+
+  idAlterandoCodigo: number | null = null;
+  formCodigo: FormularioCodigo = this.formCodigoVazio();
+  salvandoCodigo = false;
 
   cargos: CargoFuncionario[] = ['GERENTE', 'RECEPCAO', 'GARCOM', 'COZINHA'];
 
@@ -37,6 +47,10 @@ export class ConfigFuncionariosComponent implements OnInit {
 
   private formVazio(): FormularioFuncionario {
     return { nome: '', codigo: '', cargo: null };
+  }
+
+  private formCodigoVazio(): FormularioCodigo {
+    return { novoCodigo: '', senha: '' };
   }
 
   carregar(): void {
@@ -113,6 +127,44 @@ export class ConfigFuncionariosComponent implements OnInit {
     this.funcionarioService.remover(funcionario.id).subscribe({
       next: () => this.carregar(),
       error: () => (this.mensagemErro = `Não foi possível remover "${funcionario.nome}".`)
+    });
+  }
+
+  iniciarAlteracaoCodigo(funcionario: Funcionario): void {
+    this.idAlterandoCodigo = funcionario.id;
+    this.formCodigo = this.formCodigoVazio();
+    this.mensagemErro = '';
+    this.mensagemSucesso = '';
+  }
+
+  cancelarAlteracaoCodigo(): void {
+    this.idAlterandoCodigo = null;
+    this.formCodigo = this.formCodigoVazio();
+  }
+
+  confirmarAlteracaoCodigo(funcionario: Funcionario): void {
+    if (!this.formCodigo.novoCodigo.trim() || !this.formCodigo.senha.trim()) {
+      this.mensagemErro = 'Preencha o novo código e a senha do funcionário.';
+      return;
+    }
+
+    this.salvandoCodigo = true;
+    this.mensagemErro = '';
+    this.mensagemSucesso = '';
+
+    this.funcionarioService.alterarCodigo(funcionario.id, {
+      novoCodigo: this.formCodigo.novoCodigo.trim(),
+      senha: this.formCodigo.senha
+    }).subscribe({
+      next: () => {
+        this.salvandoCodigo = false;
+        this.mensagemSucesso = `Código de "${funcionario.nome}" alterado com sucesso.`;
+        this.cancelarAlteracaoCodigo();
+      },
+      error: () => {
+        this.salvandoCodigo = false;
+        this.mensagemErro = 'Não foi possível alterar o código. Verifique a senha informada.';
+      }
     });
   }
 }
