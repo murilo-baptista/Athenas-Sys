@@ -168,8 +168,8 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
     }
 
     //Trata erro 401 para senha incorreta
-    @ExceptionHandler(SenhaIncorretaException.class)
-    public ResponseEntity<String> tratarErroSenhaIncorreta(SenhaIncorretaException ex) {
+    @ExceptionHandler(ChaveIncorretaException.class)
+    public ResponseEntity<String> tratarErroSenhaIncorreta(ChaveIncorretaException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 

@@ -5,7 +5,7 @@ import br.com.athenassys.api.dto.restaurante.DadosAtualizacaoRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosCadastroRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosListagemRestaurante;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
-import br.com.athenassys.api.exception.SenhaIncorretaException;
+import br.com.athenassys.api.exception.ChaveIncorretaException;
 import br.com.athenassys.api.model.Restaurante;
 import br.com.athenassys.api.repository.RestauranteRepository;
 import lombok.RequiredArgsConstructor;
@@ -71,7 +71,7 @@ public class RestauranteService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
 
         if (!passwordEncoder.matches(dados.chaveAtual(), restaurante.getSenha())) {
-            throw new SenhaIncorretaException("Senha atual incorreta!");
+            throw new ChaveIncorretaException("Senha atual incorreta!");
         }
         var senha = passwordEncoder.encode(dados.chaveNova());
 
