@@ -4,8 +4,10 @@ import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
 import br.com.athenassys.api.dto.restaurante.*;
 import br.com.athenassys.api.model.Restaurante;
 import br.com.athenassys.api.service.RestauranteService;
+import br.com.athenassys.api.service.TokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,21 +23,24 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class RestauranteController {
 
     private final RestauranteService service;
+    private final TokenService tokenService;
 
     @PostMapping
     @Transactional
-    public ResponseEntity<DadosDetalhamentoRestaurante> cadastrar(
+    public ResponseEntity<DadosDetalhamentoTokenRestaurante> cadastrar(
             @RequestBody @Valid DadosCadastroRestaurante dados,
             UriComponentsBuilder uriBuilder) {
 
         var restaurante = service.cadastrar(dados);
+        var token = tokenService.gerarTokenRestaurante(restaurante);
+        var dadosRestaurante = new DadosDetalhamentoRestaurante(restaurante);
 
         var uri = uriBuilder.path("restaurantes/{id}")
                 .buildAndExpand(restaurante.getId())
                 .toUri();
 
         return ResponseEntity.created(uri)
-                .body(new DadosDetalhamentoRestaurante(restaurante));
+                .body(new DadosDetalhamentoTokenRestaurante(dadosRestaurante, token));
     }
 
     @GetMapping
