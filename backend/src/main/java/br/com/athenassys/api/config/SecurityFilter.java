@@ -28,8 +28,16 @@ public class SecurityFilter extends OncePerRequestFilter {
     private FuncionarioRepository funcionarioRepository;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
+        if (request.getMethod().equals("OPTIONS")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         var tokenJWT = recuperarToken(request);
 
         if (tokenJWT != null) {
