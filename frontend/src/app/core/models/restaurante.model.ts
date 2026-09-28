@@ -19,3 +19,8 @@ export interface AtualizarRestauranteRequest {
   email: string;
   telefone: string;
 }
+
+export interface CadastroRestauranteResponse {
+  restaurante: Restaurante;
+  token: string;
+}
