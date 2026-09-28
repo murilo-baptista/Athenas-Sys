@@ -67,11 +67,16 @@ export class CadastroRestauranteComponent {
       cnpj: this.form.cnpj,
       senha: this.form.senha
     }).subscribe({
-      next: (restaurante) => {
+      next: (resposta) => {
         this.carregando = false;
-        // Guarda o id do restaurante recém-criado para usar nas próximas
-        // etapas do wizard (cadastro de mesas e de funcionários).
-        this.authService.definirRestauranteIdTemporario(restaurante.id!, restaurante.nome);
+        // O back-end já devolve um token junto com o restaurante recém-criado.
+        // Guardamos ele na sessão para que as próximas etapas do wizard
+        // (cadastro de mesas e de funcionários) já enviem o Authorization.
+        this.authService.iniciarSessaoAposCadastro(
+          resposta.token,
+          resposta.restaurante.id!,
+          resposta.restaurante.nome
+        );
         this.router.navigate(['/cadastro-mesas']);
       },
       error: (erro) => {
