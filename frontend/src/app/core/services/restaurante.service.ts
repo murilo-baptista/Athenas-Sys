@@ -6,6 +6,7 @@ import {
   CadastroRestauranteRequest,
   CadastroRestauranteResponse,
   AtualizarRestauranteRequest,
+  AlterarSenhaRequest,
   Restaurante
 } from '../models/restaurante.model';
 import { Page } from '../models/pagina.model';
@@ -36,5 +37,9 @@ export class RestauranteService {
 
   buscarPorId(id: number): Observable<Restaurante> {
     return this.http.get<Restaurante>(`${this.baseUrl}/${id}`);
+  }
+
+  alterarSenha(id: number, dados: AlterarSenhaRequest): Observable<string> {
+    return this.http.patch(`${this.baseUrl}/${id}/alterarSenha`, dados, { responseType: 'text' });
   }
 }
