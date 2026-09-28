@@ -1,9 +1,11 @@
 package br.com.athenassys.api.service;
 
+import br.com.athenassys.api.client.OpenCnpjClient;
 import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
 import br.com.athenassys.api.dto.restaurante.DadosAtualizacaoRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosCadastroRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosListagemRestaurante;
+import br.com.athenassys.api.exception.CnpjInexistenteException;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.exception.ChaveIncorretaException;
 import br.com.athenassys.api.model.Restaurante;
@@ -18,12 +20,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RestauranteService {
 
-    private final RestauranteRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private final RestauranteRepository repository;
+    private final OpenCnpjClient client;
 
     public Restaurante cadastrar(
             DadosCadastroRestaurante dados) {
 
+        if (!client.cnpjExiste(dados.cnpj())) {
+            throw new CnpjInexistenteException("CNJP não encontrado! Verifique se foi digitado corretamente.");
+        }
         var senha = passwordEncoder.encode(dados.senha());
 
         var restaurante = new Restaurante(dados, senha);
