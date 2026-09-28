@@ -110,6 +110,12 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
         );
     }
 
+    // Trata erro 400 e 503 para CNPJ inexistente ou API quebrada
+    @ExceptionHandler(ErroCnpjException.class)
+    public ResponseEntity<String> tratarCpnjInexistente(ErroCnpjException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+    }
+
     // Trata erro 405 para Requisições HTTP não suportadas
     @Override
     protected @Nullable ResponseEntity<Object> handleHttpRequestMethodNotSupported(
