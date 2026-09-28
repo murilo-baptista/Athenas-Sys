@@ -7,18 +7,24 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 
 @Component
 public class OpenCnpjClient {
 
     private final String ENDERECO = "https://api.opencnpj.org/";
 
-    public int obterStatus(String endereco) {
+    public int obterStatus(String cnpj) {
 
-        HttpClient client = HttpClient.newHttpClient();
+        var endereco = ENDERECO + cnpj;
+
+        HttpClient client = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(10))
+                .build();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(endereco))
                 .GET()
+                .timeout(Duration.ofSeconds(10))
                 .build();
         HttpResponse<String> response = null;
 
@@ -34,11 +40,5 @@ public class OpenCnpjClient {
             throw new RuntimeException(e);
 
         }
-    }
-
-    public boolean cnpjExiste(String cnpj) {
-        var endereco = ENDERECO + cnpj;
-
-        return obterStatus(endereco) == 200;
     }
 }

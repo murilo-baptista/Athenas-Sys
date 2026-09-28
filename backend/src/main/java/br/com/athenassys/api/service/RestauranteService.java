@@ -5,7 +5,7 @@ import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
 import br.com.athenassys.api.dto.restaurante.DadosAtualizacaoRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosCadastroRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosListagemRestaurante;
-import br.com.athenassys.api.exception.CnpjInexistenteException;
+import br.com.athenassys.api.exception.ErroCnpjException;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.exception.ChaveIncorretaException;
 import br.com.athenassys.api.model.Restaurante;
@@ -13,6 +13,7 @@ import br.com.athenassys.api.repository.RestauranteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +28,16 @@ public class RestauranteService {
     public Restaurante cadastrar(
             DadosCadastroRestaurante dados) {
 
-        if (!client.cnpjExiste(dados.cnpj())) {
-            throw new CnpjInexistenteException("CNJP não encontrado! Verifique se foi digitado corretamente.");
+        var cnpjStatus = client.obterStatus(dados.cnpj());
+
+        if (cnpjStatus == 400) {
+            throw new ErroCnpjException("CNPJ inválido! Verifique se foi digitado corretamente.", HttpStatus.BAD_REQUEST);
+
+        } else if (cnpjStatus == 404) {
+            throw new ErroCnpjException("CNPJ não encontrado no release publicado! Verifique se foi digitado corretamente.", HttpStatus.BAD_REQUEST);
+
+        } else if (cnpjStatus == 502) {
+            throw new ErroCnpjException("Falha temporária ao buscar o CNPJ e carregar os metadados!", HttpStatus.SERVICE_UNAVAILABLE);
         }
         var senha = passwordEncoder.encode(dados.senha());
 
