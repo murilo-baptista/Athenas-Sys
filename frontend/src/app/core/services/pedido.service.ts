@@ -4,6 +4,7 @@ import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
 import { Page } from '../models/pagina.model';
+import { TAMANHO_PAGINA_MAXIMA } from '../constants/paginacao';
 import {
   DadosAtualizacaoPedido,
   DadosCadastroPedido,
@@ -30,7 +31,7 @@ export class PedidoService {
   }
 
   listar(idMesa?: number, idFuncionario?: number): Observable<PedidoListagem[]> {
-    let params = new HttpParams();
+    let params = new HttpParams().set('size', TAMANHO_PAGINA_MAXIMA);
     if (idMesa) {
       params = params.set('idMesa', idMesa);
     }

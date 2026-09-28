@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
 import { Page } from '../models/pagina.model';
+import { TAMANHO_PAGINA_MAXIMA } from '../constants/paginacao';
 import {
   CategoriaDetalhamento,
   CategoriaListagem,
@@ -24,8 +25,9 @@ export class CategoriaService {
   }
 
   listarPorRestaurante(): Observable<CategoriaListagem[]> {
+    const params = new HttpParams().set('size', TAMANHO_PAGINA_MAXIMA);
     return this.http
-      .get<Page<CategoriaListagem>>(`${this.baseUrl}/${this.restauranteId}/categorias`)
+      .get<Page<CategoriaListagem>>(`${this.baseUrl}/${this.restauranteId}/categorias`, { params })
       .pipe(map(pagina => pagina.content));
   }
 
