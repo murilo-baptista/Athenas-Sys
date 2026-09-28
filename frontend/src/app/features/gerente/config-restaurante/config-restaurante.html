@@ -52,10 +52,35 @@
 
       <!-- Senha -->
       <div class="border border-[#C9A46A] rounded-lg p-5 bg-[#FFF8EE] shadow-sm mb-6">
-        <p class="text-xs font-bold uppercase tracking-wide text-[#7B0F12] mb-2">Senha</p>
-        <p class="text-sm text-[#4A4038] italic">
-          A troca de senha ainda não está disponível — a API do back-end não expõe esse endpoint no momento.
-        </p>
+        <p class="text-xs font-bold uppercase tracking-wide text-[#7B0F12] mb-3">Alterar senha</p>
+
+        <p *ngIf="mensagemErroSenha" class="text-[#7B0F12] text-sm mb-3">{{ mensagemErroSenha }}</p>
+        <p *ngIf="mensagemSucessoSenha" class="text-[#244A37] text-sm mb-3">{{ mensagemSucessoSenha }}</p>
+
+        <div class="grid grid-cols-1 gap-3 mb-3">
+          <div>
+            <label class="block text-xs text-[#4A4038] mb-1">Senha atual</label>
+            <input type="password" autocomplete="current-password" [(ngModel)]="formSenha.chaveAtual"
+              class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE] focus:outline-none focus:border-[#7B0F12]">
+          </div>
+
+          <div>
+            <label class="block text-xs text-[#4A4038] mb-1">Nova senha</label>
+            <input type="password" autocomplete="new-password" [(ngModel)]="formSenha.chaveNova"
+              class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE] focus:outline-none focus:border-[#7B0F12]">
+          </div>
+
+          <div>
+            <label class="block text-xs text-[#4A4038] mb-1">Confirmar nova senha</label>
+            <input type="password" autocomplete="new-password" [(ngModel)]="formSenha.confirmacao"
+              class="w-full border border-[#C9A46A] rounded-md px-3 py-2 text-sm text-[#4A4038] bg-[#FFF8EE] focus:outline-none focus:border-[#7B0F12]">
+          </div>
+        </div>
+
+        <button type="button" [disabled]="salvandoSenha" (click)="alterarSenha()"
+          class="px-5 py-2 rounded-md bg-[#7B0F12] text-[#FFF8EE] text-sm disabled:opacity-60">
+          {{ salvandoSenha ? 'Alterando...' : 'Alterar senha' }}
+        </button>
       </div>
 
       <!-- Zona de risco -->

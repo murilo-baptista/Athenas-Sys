@@ -12,6 +12,12 @@ interface FormularioRestaurante {
   telefone: string;
 }
 
+interface FormularioSenha {
+  chaveAtual: string;
+  chaveNova: string;
+  confirmacao: string;
+}
+
 @Component({
   selector: 'app-config-restaurante',
   standalone: true,
@@ -28,6 +34,11 @@ export class ConfigRestauranteComponent implements OnInit {
 
   form: FormularioRestaurante = { nome: '', email: '', telefone: '' };
 
+  formSenha: FormularioSenha = this.formSenhaVazio();
+  salvandoSenha = false;
+  mensagemErroSenha = '';
+  mensagemSucessoSenha = '';
+
   constructor(
     private restauranteService: RestauranteService,
     private authService: AuthService,
@@ -36,6 +47,10 @@ export class ConfigRestauranteComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregar();
+  }
+
+  private formSenhaVazio(): FormularioSenha {
+    return { chaveAtual: '', chaveNova: '', confirmacao: '' };
   }
 
   private carregar(): void {
@@ -87,6 +102,44 @@ export class ConfigRestauranteComponent implements OnInit {
       error: () => {
         this.salvando = false;
         this.mensagemErro = 'Não foi possível salvar os dados do restaurante.';
+      }
+    });
+  }
+
+  alterarSenha(): void {
+    if (!this.restaurante?.id) return;
+
+    this.mensagemErroSenha = '';
+    this.mensagemSucessoSenha = '';
+
+    const { chaveAtual, chaveNova, confirmacao } = this.formSenha;
+
+    if (!chaveAtual || !chaveNova || !confirmacao) {
+      this.mensagemErroSenha = 'Preencha todos os campos de senha.';
+      return;
+    }
+    if (chaveNova !== confirmacao) {
+      this.mensagemErroSenha = 'A nova senha e a confirmação não coincidem.';
+      return;
+    }
+    if (chaveNova === chaveAtual) {
+      this.mensagemErroSenha = 'A nova senha deve ser diferente da atual.';
+      return;
+    }
+
+    this.salvandoSenha = true;
+
+    this.restauranteService.alterarSenha(this.restaurante.id, { chaveAtual, chaveNova }).subscribe({
+      next: () => {
+        this.salvandoSenha = false;
+        this.formSenha = this.formSenhaVazio();
+        this.mensagemSucessoSenha = 'Senha alterada com sucesso.';
+      },
+      error: (erro) => {
+        this.salvandoSenha = false;
+        this.mensagemErroSenha = erro.status === 401
+          ? 'A senha atual está incorreta.'
+          : 'Não foi possível alterar a senha.';
       }
     });
   }
