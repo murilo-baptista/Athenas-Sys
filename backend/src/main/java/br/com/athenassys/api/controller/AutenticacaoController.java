@@ -31,12 +31,13 @@ public class AutenticacaoController {
 
     @PostMapping ("/login")
     public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacaoRestaurante dados) {
-        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.username(), dados.senha());
+        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.usuario(), dados.senha());
         var authentication = manager.authenticate(authenticationToken);
 
-        var tokenJWT = tokenService.gerarTokenRestaurante((Restaurante) authentication.getPrincipal());
+        var restaurante = (Restaurante) authentication.getPrincipal();
+        var tokenJWT = tokenService.gerarTokenRestaurante(restaurante);
 
-        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
+        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT, restaurante.getId(), restaurante.getNome(), null, null, null));
     }
 
     @PostMapping ("/funcionario/login")
@@ -46,6 +47,6 @@ public class AutenticacaoController {
 
         var tokenJWT = tokenService.gerarTokenFuncionario(funcionario);
 
-        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
+        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT, null, null, funcionario.getId(), funcionario.getNome(), funcionario.getCargo().toString()));
     }
 }

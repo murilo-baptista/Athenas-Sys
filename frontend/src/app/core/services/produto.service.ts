@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
 import { Page } from '../models/pagina.model';
+import { TAMANHO_PAGINA_MAXIMA } from '../constants/paginacao';
 import {
   DadosAtualizacaoProduto,
   DadosCadastroProduto,
@@ -24,8 +25,9 @@ export class ProdutoService {
   }
 
   listarPorRestaurante(): Observable<ProdutoListagem[]> {
+    const params = new HttpParams().set('size', TAMANHO_PAGINA_MAXIMA);
     return this.http
-      .get<Page<ProdutoListagem>>(`${this.baseUrl}/${this.restauranteId}/produtos`)
+      .get<Page<ProdutoListagem>>(`${this.baseUrl}/${this.restauranteId}/produtos`, { params })
       .pipe(map(pagina => pagina.content));
   }
 
