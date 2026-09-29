@@ -17,10 +17,10 @@ interface AreaConfig {
 export class MenuComponent {
 
   private readonly areas: Record<string, AreaConfig> = {
-    gerente: { cargo: 'Gerente', destino: '/gerente' },
-    recepcionista: { cargo: 'Recepção', destino: '/recepcao' },
-    garcom: { cargo: 'Garçom', destino: '/garcom' },
-    cozinha: { cargo: 'Cozinha', destino: '/cozinha' }
+    gerente: { cargo: 'GERENTE', destino: '/gerente' },
+    recepcionista: { cargo: 'RECEPCAO', destino: '/recepcao' },
+    garcom: { cargo: 'GARCOM', destino: '/garcom' },
+    cozinha: { cargo: 'COZINHA', destino: '/cozinha' }
   };
 
   constructor(private router: Router) {}
