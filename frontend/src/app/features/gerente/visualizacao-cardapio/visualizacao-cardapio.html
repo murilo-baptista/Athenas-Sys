@@ -1,72 +1,56 @@
-<div class="min-h-screen bg-[#FFF8EE] font-['Georgia',serif]">
+<div class="pagina">
 
-  <div class="max-w-3xl mx-auto px-6 py-10">
+  <div class="container">
 
-    <a routerLink="/gerente" class="text-sm text-[#4A4038] hover:text-[#7B0F12]">&larr; Painel do gerente</a>
+    <a routerLink="/gerente" class="link-voltar">&larr; Painel do gerente</a>
 
-    <div class="flex items-center justify-between flex-wrap gap-3 mt-2 mb-6">
-      <h1 class="text-xl font-bold text-[#7B0F12] tracking-wide">Cardápio</h1>
+    <div class="cabecalho">
+      <h1 class="titulo">Cardápio</h1>
 
-      <div class="flex flex-wrap gap-2">
-        <button
-          type="button"
-          (click)="salvarImagem()"
-          [disabled]="!podeExportar()"
-          class="px-4 py-2 rounded-md border border-[#C9A46A] text-[#7B0F12] text-sm hover:bg-[#F5EEE0] disabled:opacity-60">
+      <div class="exportar">
+        <button type="button" (click)="salvarImagem()" [disabled]="!podeExportar()" class="btn btn-contorno">
           {{ exportando ? 'Gerando...' : 'Salvar como imagem' }}
         </button>
-        <button
-          type="button"
-          (click)="salvarPdf()"
-          [disabled]="!podeExportar()"
-          class="px-4 py-2 rounded-md border border-[#C9A46A] text-[#7B0F12] text-sm hover:bg-[#F5EEE0] disabled:opacity-60">
+        <button type="button" (click)="salvarPdf()" [disabled]="!podeExportar()" class="btn btn-contorno">
           {{ exportando ? 'Gerando...' : 'Salvar como PDF' }}
         </button>
-        <button
-          type="button"
-          (click)="alternarQrCode()"
-          class="px-4 py-2 rounded-md border border-[#C9A46A] text-[#7B0F12] text-sm hover:bg-[#F5EEE0]">
+        <button type="button" (click)="alternarQrCode()" class="btn btn-contorno">
           {{ mostrarQrCode ? 'Esconder QR Code' : 'Mostrar QR Code' }}
         </button>
       </div>
     </div>
 
-    <div *ngIf="mostrarQrCode" class="border border-[#C9A46A] rounded-lg p-6 bg-[#FFF8EE] shadow-sm mb-8 flex flex-col items-center">
+    <div *ngIf="mostrarQrCode" class="card qr-box">
       <qrcode [qrdata]="urlCardapio" [width]="200" errorCorrectionLevel="M"></qrcode>
-      <p class="text-xs text-[#4A4038] italic mt-3 text-center">
+      <p class="qr-nota">
         Aponta para esta página. Uma versão pública do cardápio, sem necessidade de login, ainda está pendente.
       </p>
     </div>
 
-    <p *ngIf="mensagemErro" class="text-[#7B0F12] text-sm mb-4">{{ mensagemErro }}</p>
-    <p *ngIf="carregando" class="text-center text-[#4A4038] italic py-6">Carregando cardápio...</p>
+    <p *ngIf="mensagemErro" class="msg-erro">{{ mensagemErro }}</p>
+    <p *ngIf="carregando" class="carregando">Carregando cardápio...</p>
 
-    <p *ngIf="!carregando && categorias.length === 0 && !mensagemErro" class="text-center text-[#4A4038] italic py-6">
+    <p *ngIf="!carregando && categorias.length === 0 && !mensagemErro" class="carregando">
       Nenhuma categoria cadastrada ainda.
     </p>
 
     <!-- Tudo que estiver dentro desta div é o que sai na imagem e no PDF -->
-    <div #areaCardapio class="bg-[#FFF8EE] px-2 py-4">
+    <div #areaCardapio class="area-cardapio">
 
-      <div *ngFor="let categoria of categorias" class="mb-8">
+      <div *ngFor="let categoria of categorias" class="categoria">
 
-        <h2 class="text-sm font-bold uppercase tracking-wide text-[#7B0F12] border-b border-[#C9A46A] pb-2 mb-3">
-          {{ categoria.nome }}
-        </h2>
+        <h2 class="categoria-titulo">{{ categoria.nome }}</h2>
 
-        <p *ngIf="categoria.produtos.length === 0" class="text-sm text-[#4A4038] italic mb-2">
+        <p *ngIf="categoria.produtos.length === 0" class="categoria-vazia">
           Nenhum produto nesta categoria.
         </p>
 
-        <div *ngFor="let produto of categoria.produtos"
-          class="flex items-start justify-between py-2 border-b border-[#E4DDD0] last:border-b-0">
-          <div class="pr-4">
-            <p class="text-sm font-bold text-[#4A4038]">{{ produto.nome }}</p>
-            <p *ngIf="produto.descricao" class="text-xs text-[#4A4038] opacity-75">{{ produto.descricao }}</p>
+        <div *ngFor="let produto of categoria.produtos" class="produto">
+          <div class="produto-info">
+            <p class="produto-nome">{{ produto.nome }}</p>
+            <p *ngIf="produto.descricao" class="produto-descricao">{{ produto.descricao }}</p>
           </div>
-          <span class="text-sm font-bold text-[#7B0F12] whitespace-nowrap">
-            R$ {{ produto.preco | number:'1.2-2' }}
-          </span>
+          <span class="produto-preco">R$ {{ produto.preco | number:'1.2-2' }}</span>
         </div>
 
       </div>
