@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit {
       { titulo: 'Ticket médio', valor: formatoMoeda.format(resumo.ticketMedio) },
       { titulo: 'Pedidos em andamento', valor: String(resumo.pedidosEmAndamento) },
       { titulo: 'Mesas ocupadas', valor: String(resumo.mesasOcupadas) },
-      { titulo: 'Mesas disponíveis', valor: String(resumo.mesasDisponiveis) },
+      { titulo: 'Mesas livres', valor: String(resumo.mesasDisponiveis) },
     ];
   }
 
