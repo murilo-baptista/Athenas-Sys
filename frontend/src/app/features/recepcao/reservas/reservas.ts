@@ -20,7 +20,8 @@ interface FormularioReserva {
   selector: 'app-reservas',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './reservas.html'
+  templateUrl: './reservas.html',
+  styleUrl: './reservas.css'
 })
 export class ReservasComponent implements OnInit {
 
