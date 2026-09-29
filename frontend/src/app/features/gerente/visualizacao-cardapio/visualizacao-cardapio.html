@@ -4,14 +4,31 @@
 
     <a routerLink="/gerente" class="text-sm text-[#4A4038] hover:text-[#7B0F12]">&larr; Painel do gerente</a>
 
-    <div class="flex items-center justify-between mt-2 mb-6">
+    <div class="flex items-center justify-between flex-wrap gap-3 mt-2 mb-6">
       <h1 class="text-xl font-bold text-[#7B0F12] tracking-wide">Cardápio</h1>
-      <button
-        type="button"
-        (click)="alternarQrCode()"
-        class="px-4 py-2 rounded-md border border-[#C9A46A] text-[#7B0F12] text-sm hover:bg-[#F5EEE0]">
-        {{ mostrarQrCode ? 'Esconder QR Code' : 'Mostrar QR Code' }}
-      </button>
+
+      <div class="flex flex-wrap gap-2">
+        <button
+          type="button"
+          (click)="salvarImagem()"
+          [disabled]="!podeExportar()"
+          class="px-4 py-2 rounded-md border border-[#C9A46A] text-[#7B0F12] text-sm hover:bg-[#F5EEE0] disabled:opacity-60">
+          {{ exportando ? 'Gerando...' : 'Salvar como imagem' }}
+        </button>
+        <button
+          type="button"
+          (click)="salvarPdf()"
+          [disabled]="!podeExportar()"
+          class="px-4 py-2 rounded-md border border-[#C9A46A] text-[#7B0F12] text-sm hover:bg-[#F5EEE0] disabled:opacity-60">
+          {{ exportando ? 'Gerando...' : 'Salvar como PDF' }}
+        </button>
+        <button
+          type="button"
+          (click)="alternarQrCode()"
+          class="px-4 py-2 rounded-md border border-[#C9A46A] text-[#7B0F12] text-sm hover:bg-[#F5EEE0]">
+          {{ mostrarQrCode ? 'Esconder QR Code' : 'Mostrar QR Code' }}
+        </button>
+      </div>
     </div>
 
     <div *ngIf="mostrarQrCode" class="border border-[#C9A46A] rounded-lg p-6 bg-[#FFF8EE] shadow-sm mb-8 flex flex-col items-center">
@@ -28,25 +45,30 @@
       Nenhuma categoria cadastrada ainda.
     </p>
 
-    <div *ngFor="let categoria of categorias" class="mb-8">
+    <!-- Tudo que estiver dentro desta div é o que sai na imagem e no PDF -->
+    <div #areaCardapio class="bg-[#FFF8EE] px-2 py-4">
 
-      <h2 class="text-sm font-bold uppercase tracking-wide text-[#7B0F12] border-b border-[#C9A46A] pb-2 mb-3">
-        {{ categoria.nome }}
-      </h2>
+      <div *ngFor="let categoria of categorias" class="mb-8">
 
-      <p *ngIf="categoria.produtos.length === 0" class="text-sm text-[#4A4038] italic mb-2">
-        Nenhum produto nesta categoria.
-      </p>
+        <h2 class="text-sm font-bold uppercase tracking-wide text-[#7B0F12] border-b border-[#C9A46A] pb-2 mb-3">
+          {{ categoria.nome }}
+        </h2>
 
-      <div *ngFor="let produto of categoria.produtos"
-        class="flex items-start justify-between py-2 border-b border-[#E4DDD0] last:border-b-0">
-        <div class="pr-4">
-          <p class="text-sm font-bold text-[#4A4038]">{{ produto.nome }}</p>
-          <p *ngIf="produto.descricao" class="text-xs text-[#4A4038] opacity-75">{{ produto.descricao }}</p>
+        <p *ngIf="categoria.produtos.length === 0" class="text-sm text-[#4A4038] italic mb-2">
+          Nenhum produto nesta categoria.
+        </p>
+
+        <div *ngFor="let produto of categoria.produtos"
+          class="flex items-start justify-between py-2 border-b border-[#E4DDD0] last:border-b-0">
+          <div class="pr-4">
+            <p class="text-sm font-bold text-[#4A4038]">{{ produto.nome }}</p>
+            <p *ngIf="produto.descricao" class="text-xs text-[#4A4038] opacity-75">{{ produto.descricao }}</p>
+          </div>
+          <span class="text-sm font-bold text-[#7B0F12] whitespace-nowrap">
+            R$ {{ produto.preco | number:'1.2-2' }}
+          </span>
         </div>
-        <span class="text-sm font-bold text-[#7B0F12] whitespace-nowrap">
-          R$ {{ produto.preco | number:'1.2-2' }}
-        </span>
+
       </div>
 
     </div>
