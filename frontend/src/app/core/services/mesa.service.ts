@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AuthService } from './auth.service';
 import { Page } from '../models/pagina.model';
+import { TAMANHO_PAGINA_MAXIMA } from '../constants/paginacao';
 import {
   DadosAtualizacaoMesa,
   DadosCadastroMesa,
@@ -33,8 +34,9 @@ export class MesaService {
   }
 
   listarPorRestaurante(): Observable<MesaListagem[]> {
+    const params = new HttpParams().set('size', TAMANHO_PAGINA_MAXIMA);
     return this.http
-      .get<Page<MesaListagem>>(`${this.baseUrl}/${this.restauranteId}/mesas`)
+      .get<Page<MesaListagem>>(`${this.baseUrl}/${this.restauranteId}/mesas`, { params })
       .pipe(map(pagina => pagina.content));
   }
 
