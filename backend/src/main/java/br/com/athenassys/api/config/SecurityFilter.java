@@ -41,25 +41,30 @@ public class SecurityFilter extends OncePerRequestFilter {
         var tokenJWT = recuperarToken(request);
 
         if (tokenJWT != null) {
-            var subject = tokenService.getSubject(tokenJWT);
-            var tipo = tokenService.getTipo(tokenJWT);
+            try {
 
-            if (tipo.equals("RESTAURANTE")) {
-                var restaurante = restauranteRepository.findByEmail(subject);
+                var subject = tokenService.getSubject(tokenJWT);
+                var tipo = tokenService.getTipo(tokenJWT);
 
-                restaurante.ifPresent(r -> {
-                    var authentication = new UsernamePasswordAuthenticationToken(r, null, r.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                });
+                if (tipo.equals("RESTAURANTE")) {
+                    var restaurante = restauranteRepository.findByEmail(subject);
 
-            } else if (tipo.equals("FUNCIONARIO")) {
-                var idRestaurante = tokenService.getRestauranteId(tokenJWT);
-                var funcionario = funcionarioRepository.findByNomeAndRestauranteId(subject, idRestaurante);
+                    restaurante.ifPresent(r -> {
+                        var authentication = new UsernamePasswordAuthenticationToken(r, null, r.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    });
 
-                funcionario.ifPresent(f -> {
-                    var authentication = new UsernamePasswordAuthenticationToken(f, null, f.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                });
+                } else if (tipo.equals("FUNCIONARIO")) {
+                    var idRestaurante = tokenService.getRestauranteId(tokenJWT);
+                    var funcionario = funcionarioRepository.findByNomeAndRestauranteId(subject, idRestaurante);
+
+                    funcionario.ifPresent(f -> {
+                        var authentication = new UsernamePasswordAuthenticationToken(f, null, f.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    });
+                }
+            } catch (Exception ex) {
+                // token invalido/expirado -> segue sem autenticar, quem decide dps é o authorizeHttpRequests
             }
         }
         filterChain.doFilter(request, response);
