@@ -9,7 +9,8 @@ import { CategoriaListagem } from '../../../core/models/categoria.model';
   selector: 'app-cadastro-categorias',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './cadastro-categorias.html'
+  templateUrl: './cadastro-categorias.html',
+  styleUrl: './cadastro-categorias.css'
 })
 export class CadastroCategoriasComponent implements OnInit {
 
