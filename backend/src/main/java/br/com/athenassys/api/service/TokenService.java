@@ -43,7 +43,7 @@ public class TokenService {
                     .withIssuer("API Athenas Sys")
                     .withSubject(funcionario.getUsername())
                     .withClaim("tipo", "FUNCIONARIO")
-                    .withClaim("idRestaurante", funcionario.getRestaurante().getId())
+                    .withClaim("restauranteId", funcionario.getRestaurante().getId())
                     .withExpiresAt(dataExpiracao())
                     .sign(algoritimo);
 
@@ -91,7 +91,7 @@ public class TokenService {
                     .withIssuer("API Athenas Sys")
                     .build()
                     .verify(tokenJWT)
-                    .getClaim("idRestaurante")
+                    .getClaim("restauranteId")
                     .asLong();
 
         } catch (JWTVerificationException exception) {

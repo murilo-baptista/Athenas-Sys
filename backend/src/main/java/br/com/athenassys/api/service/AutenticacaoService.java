@@ -35,7 +35,7 @@ public class AutenticacaoService implements UserDetailsService {
     public Funcionario autenticarFuncionario(DadosAutenticacaoFuncionario dados) throws UsernameNotFoundException {
 
         var funcionario = funcionarioRepository
-                .findByNomeAndRestauranteId(dados.nome(), dados.idRestaurante())
+                .findByNomeAndRestauranteId(dados.usuario(), dados.restauranteId())
                 .orElseThrow(() -> new BadCredentialsException("Funcionário não encontrado! Nome ou senha incorretos."));
 
         if (!funcionario.isEnabled()) {

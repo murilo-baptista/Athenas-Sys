@@ -2,8 +2,8 @@ package br.com.athenassys.api.dto.autenticacao;
 
 public record DadosAutenticacaoFuncionario(
 
-        String nome,
+        String usuario,
         String codigo,
-        Long idRestaurante
+        Long restauranteId
 ) {
 }
