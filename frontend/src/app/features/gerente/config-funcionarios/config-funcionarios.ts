@@ -20,7 +20,8 @@ interface FormularioCodigo {
   selector: 'app-config-funcionarios',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './config-funcionarios.html'
+  templateUrl: './config-funcionarios.html',
+  styleUrl: './config-funcionarios.css'
 })
 export class ConfigFuncionariosComponent implements OnInit {
 

@@ -13,7 +13,8 @@ import { Funcionario } from '../../../core/models/funcionario.model';
   selector: 'app-historico-pedidos',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './historico-pedidos.html'
+  templateUrl: './historico-pedidos.html',
+  styleUrl: './historico-pedidos.css'
 })
 export class HistoricoPedidosComponent implements OnInit {
 

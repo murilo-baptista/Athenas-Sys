@@ -14,7 +14,8 @@ interface FormularioMesa {
   selector: 'app-config-mesas',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './config-mesas.html'
+  templateUrl: './config-mesas.html',
+  styleUrl: './config-mesas.css'
 })
 export class ConfigMesasComponent implements OnInit {
 

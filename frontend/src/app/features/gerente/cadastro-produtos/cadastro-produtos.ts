@@ -18,7 +18,8 @@ interface FormularioProduto {
   selector: 'app-cadastro-produtos',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './cadastro-produtos.html'
+  templateUrl: './cadastro-produtos.html',
+  styleUrl: './cadastro-produtos.css'
 })
 export class CadastroProdutosComponent implements OnInit {
 

@@ -21,7 +21,8 @@ const COR_FUNDO = '#FFF8EE';
   selector: 'app-visualizacao-cardapio',
   standalone: true,
   imports: [CommonModule, RouterLink, QRCodeComponent],
-  templateUrl: './visualizacao-cardapio.html'
+  templateUrl: './visualizacao-cardapio.html',
+  styleUrl: './visualizacao-cardapio.css'
 })
 export class VisualizacaoCardapioComponent implements OnInit {
 

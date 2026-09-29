@@ -22,7 +22,8 @@ interface FormularioSenha {
   selector: 'app-config-restaurante',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './config-restaurante.html'
+  templateUrl: './config-restaurante.html',
+  styleUrl: './config-restaurante.css'
 })
 export class ConfigRestauranteComponent implements OnInit {
 
