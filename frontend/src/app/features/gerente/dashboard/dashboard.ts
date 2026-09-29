@@ -35,8 +35,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private carregarResumo(): void {
-    const restauranteId = this.authService.getRestauranteId();
-    if (!restauranteId) {
+    if (!this.authService.getRestauranteId()) {
       this.router.navigate(['/login']);
       return;
     }
@@ -44,7 +43,7 @@ export class DashboardComponent implements OnInit {
     this.carregando = true;
     this.mensagemErro = '';
 
-    this.dashboardService.buscarResumo(restauranteId).subscribe({
+    this.dashboardService.buscarResumo().subscribe({
       next: (resumo) => {
         this.cartoes = this.montarCartoes(resumo);
         this.carregando = false;
@@ -63,7 +62,6 @@ export class DashboardComponent implements OnInit {
       { titulo: 'Pedidos hoje', valor: String(resumo.pedidosHoje) },
       { titulo: 'Faturamento hoje', valor: formatoMoeda.format(resumo.faturamentoHoje) },
       { titulo: 'Ticket médio', valor: formatoMoeda.format(resumo.ticketMedio) },
-      { titulo: 'Pedidos em andamento', valor: String(resumo.pedidosEmAndamento) },
       { titulo: 'Mesas ocupadas', valor: String(resumo.mesasOcupadas) },
       { titulo: 'Mesas livres', valor: String(resumo.mesasDisponiveis) },
     ];
