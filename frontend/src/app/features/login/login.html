@@ -13,8 +13,7 @@
       <div class="banner">
         <img src="assets/imagens/banner-bordo.jpeg" alt="Athenas - Gestão inteligente para restaurantes" class="banner-img">
         <div class="banner-content">
-          <div class="banner-logo-placeholder">logo<br>transparente</div>
-          <h2 class="banner-title">ATHENAS</h2>
+          <img src="assets/imagens/logo-transparente.png" alt="Athenas - Gestão inteligente para restaurantes" class="banner-logo">
           <p class="banner-subtitle">Gestão inteligente<br>para restaurantes</p>
         </div>
       </div>
@@ -31,14 +30,14 @@
 
         <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
 
-          <label class="field-label" for="usuario">NOME DO RESTAURANTE</label>
+          <label class="field-label" for="usuario">EMAIL DO RESTAURANTE</label>
           <div class="input-wrapper">
             <img src="assets/imagens/icone-usuario.png" alt="" class="input-icon">
             <input
               id="usuario"
               name="usuario"
               type="text"
-              placeholder="Ex: Restaurante Athenas"
+              placeholder="Ex: restaurante@gmail.com"
               [(ngModel)]="usuario"
               required
             >

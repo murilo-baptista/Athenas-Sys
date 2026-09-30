@@ -2,6 +2,7 @@ package br.com.athenassys.api.controller;
 
 import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
 import br.com.athenassys.api.dto.restaurante.*;
+import br.com.athenassys.api.model.Funcionario;
 import br.com.athenassys.api.model.Restaurante;
 import br.com.athenassys.api.service.RestauranteService;
 import br.com.athenassys.api.service.TokenService;
@@ -81,9 +82,15 @@ public class RestauranteController {
     public ResponseEntity<String> alterarSenha(
             @PathVariable Long idRestaurante,
             @RequestBody @Valid DadosAlteracaoChave dados,
-            @AuthenticationPrincipal Restaurante restaurante) {
+            @AuthenticationPrincipal Funcionario funcionario) {
 
-        if (!restaurante.getId().equals(idRestaurante)) {
+        if (funcionario == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    "Usuário não autenticado!"
+            );
+        }
+
+        if (!funcionario.getRestaurante().getId().equals(idRestaurante)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                     "Não foi possível alterar a senha!"
             );

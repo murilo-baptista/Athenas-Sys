@@ -12,8 +12,8 @@ interface FormularioFuncionario {
 }
 
 interface FormularioCodigo {
-  novoCodigo: string;
-  senha: string;
+  chaveNova: string;
+  chaveAtual: string;
 }
 
 @Component({
@@ -51,7 +51,7 @@ export class ConfigFuncionariosComponent implements OnInit {
   }
 
   private formCodigoVazio(): FormularioCodigo {
-    return { novoCodigo: '', senha: '' };
+    return { chaveNova: '', chaveAtual: '' };
   }
 
   carregar(): void {
@@ -144,7 +144,7 @@ export class ConfigFuncionariosComponent implements OnInit {
   }
 
   confirmarAlteracaoCodigo(funcionario: Funcionario): void {
-    if (!this.formCodigo.novoCodigo.trim() || !this.formCodigo.senha.trim()) {
+    if (!this.formCodigo.chaveNova.trim() || !this.formCodigo.chaveAtual.trim()) {
       this.mensagemErro = 'Preencha o novo código e a senha do funcionário.';
       return;
     }
@@ -154,8 +154,8 @@ export class ConfigFuncionariosComponent implements OnInit {
     this.mensagemSucesso = '';
 
     this.funcionarioService.alterarCodigo(funcionario.id, {
-      novoCodigo: this.formCodigo.novoCodigo.trim(),
-      senha: this.formCodigo.senha
+      chaveNova: this.formCodigo.chaveNova.trim(),
+      chaveAtual: this.formCodigo.chaveAtual
     }).subscribe({
       next: () => {
         this.salvandoCodigo = false;

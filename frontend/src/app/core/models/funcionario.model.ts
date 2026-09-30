@@ -17,8 +17,8 @@ export interface AtualizarFuncionarioRequest {
   cargo: CargoFuncionario;
 }
 
-/** Usado no endpoint .../funcionarios/{id}/alterarCodigo — exige a senha do próprio funcionário como confirmação, e o novo código é definido pelo gerente. */
+/** Usado no endpoint .../funcionarios/{id}/alterarCodigo — exige o código do próprio funcionário como confirmação, e o novo código é definido pelo gerente. */
 export interface AlterarCodigoRequest {
-  senha: string;
-  novoCodigo: string;
+  chaveAtual: string;
+  chaveNova: string;
 }
