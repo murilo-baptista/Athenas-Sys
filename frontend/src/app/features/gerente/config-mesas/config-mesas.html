@@ -1,0 +1,60 @@
+<div class="pagina">
+
+  <div class="container">
+
+    <a routerLink="/gerente" class="link-voltar">&larr; Painel do gerente</a>
+
+    <h1 class="titulo">Mesas do restaurante</h1>
+
+    <p *ngIf="mensagemErro" class="msg-erro">{{ mensagemErro }}</p>
+
+    <!-- Formulário -->
+    <div class="card">
+      <p class="card-titulo">
+        {{ idEmEdicao ? 'Alterar mesa' : 'Nova mesa' }}
+      </p>
+
+      <div class="form-linha">
+        <div class="campo">
+          <label>Número</label>
+          <input type="number" [(ngModel)]="form.numero" min="1" placeholder="Ex: 12" class="input input-curto">
+        </div>
+
+        <div class="campo">
+          <label>Capacidade (lugares)</label>
+          <input type="number" [(ngModel)]="form.capacidade" min="1" placeholder="Ex: 4" class="input input-curto">
+        </div>
+
+        <button type="button" [disabled]="salvando" (click)="salvar()" class="btn btn-primario">
+          {{ idEmEdicao ? 'Salvar' : 'Adicionar' }}
+        </button>
+
+        <button type="button" *ngIf="idEmEdicao" (click)="cancelarEdicao()" class="btn btn-secundario">
+          Cancelar
+        </button>
+      </div>
+    </div>
+
+    <!-- Lista -->
+    <div class="lista">
+      <div *ngIf="carregando" class="lista-vazia">Carregando mesas...</div>
+      <div *ngIf="!carregando && mesas.length === 0" class="lista-vazia">
+        Nenhuma mesa cadastrada ainda.
+      </div>
+
+      <div *ngFor="let mesa of mesas" class="item">
+        <div class="item-texto">
+          <span class="destaque">Mesa {{ mesa.numero }}</span>
+          &middot; {{ mesa.capacidade }} lugares
+          &middot; <span class="mesa-status">{{ mesa.status === 'LIVRE' ? 'Livre' : 'Ocupada' }}</span>
+        </div>
+        <div class="acoes">
+          <button type="button" class="link-acao" (click)="editar(mesa)">Editar</button>
+          <button type="button" class="link-acao link-perigo" (click)="remover(mesa)">Remover</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

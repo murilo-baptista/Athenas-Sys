@@ -1,0 +1,105 @@
+<div class="pagina">
+
+  <div class="container">
+
+    <a routerLink="/gerente" class="link-voltar">&larr; Painel do gerente</a>
+
+    <h1 class="titulo">Funcionários</h1>
+
+    <p *ngIf="mensagemErro" class="msg-erro">{{ mensagemErro }}</p>
+    <p *ngIf="mensagemSucesso" class="msg-sucesso">{{ mensagemSucesso }}</p>
+
+    <!-- Formulário -->
+    <div class="card">
+      <p class="card-titulo">
+        {{ idEmEdicao ? 'Alterar funcionário' : 'Novo funcionário' }}
+      </p>
+
+      <div class="grid grid-tres">
+        <div class="campo">
+          <label>Nome</label>
+          <input type="text" [(ngModel)]="form.nome" placeholder="Ex: Ana Souza" class="input">
+        </div>
+
+        <div class="campo" *ngIf="!idEmEdicao">
+          <label>Código de acesso</label>
+          <input type="text" [(ngModel)]="form.codigo" placeholder="Ex: 1234" class="input">
+        </div>
+
+        <div class="campo">
+          <label>Cargo</label>
+          <select [(ngModel)]="form.cargo" class="input">
+            <option [ngValue]="null" disabled>Selecione</option>
+            <option *ngFor="let cargo of cargos" [ngValue]="cargo">{{ cargoRotulo(cargo) }}</option>
+          </select>
+        </div>
+      </div>
+
+      <p *ngIf="idEmEdicao" class="nota">
+        Para alterar o código de acesso, use o botão "Alterar código" na lista abaixo.
+      </p>
+
+      <div class="botoes">
+        <button type="button" [disabled]="salvando" (click)="salvar()" class="btn btn-primario">
+          {{ idEmEdicao ? 'Salvar' : 'Adicionar' }}
+        </button>
+        <button type="button" *ngIf="idEmEdicao" (click)="cancelarEdicao()" class="btn btn-secundario">
+          Cancelar
+        </button>
+      </div>
+    </div>
+
+    <!-- Lista -->
+    <div class="lista">
+      <div *ngIf="carregando" class="lista-vazia">Carregando funcionários...</div>
+      <div *ngIf="!carregando && funcionarios.length === 0" class="lista-vazia">
+        Nenhum funcionário cadastrado ainda.
+      </div>
+
+      <div *ngFor="let funcionario of funcionarios" class="item-bloco">
+
+        <div class="item-topo">
+          <div class="item-texto">
+            <span class="destaque">{{ funcionario.nome }}</span>
+            &middot; {{ cargoRotulo(funcionario.cargo) }}
+          </div>
+          <div class="acoes">
+            <button type="button" class="link-acao" (click)="editar(funcionario)">Editar</button>
+            <button type="button" class="link-acao" (click)="iniciarAlteracaoCodigo(funcionario)">Alterar código</button>
+            <button type="button" class="link-acao link-perigo" (click)="remover(funcionario)">Remover</button>
+          </div>
+        </div>
+
+        <!-- Formulário inline de troca de código -->
+        <div *ngIf="idAlterandoCodigo === funcionario.id" class="troca-codigo">
+          <p class="nota nota-topo">
+            O código atual não é exibido por segurança. Informe o novo código e a senha de "{{ funcionario.nome }}" para confirmar.
+          </p>
+
+          <div class="grid grid-duas">
+            <div class="campo">
+              <label>Novo código</label>
+              <input type="text" [(ngModel)]="formCodigo.chaveNova" placeholder="Ex: 5678" class="input">
+            </div>
+            <div class="campo">
+              <label>Senha do funcionário</label>
+              <input type="password" [(ngModel)]="formCodigo.chaveAtual" placeholder="Confirmação de senha" class="input">
+            </div>
+          </div>
+
+          <div class="botoes">
+            <button type="button" [disabled]="salvandoCodigo" (click)="confirmarAlteracaoCodigo(funcionario)" class="btn btn-primario">
+              {{ salvandoCodigo ? 'Confirmando...' : 'Confirmar novo código' }}
+            </button>
+            <button type="button" (click)="cancelarAlteracaoCodigo()" class="btn btn-secundario">
+              Cancelar
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</div>

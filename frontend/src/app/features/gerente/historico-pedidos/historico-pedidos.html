@@ -1,0 +1,77 @@
+<div class="pagina">
+
+  <div class="container">
+
+    <a routerLink="/gerente" class="link-voltar">&larr; Painel do gerente</a>
+
+    <h1 class="titulo">Histórico de pedidos</h1>
+
+    <p *ngIf="mensagemErro" class="msg-erro">{{ mensagemErro }}</p>
+
+    <!-- Filtros -->
+    <div class="card card-filtros">
+      <div class="grid-filtros">
+        <div class="campo">
+          <label>Mesa</label>
+          <select [(ngModel)]="filtroMesa" (ngModelChange)="buscar()" class="input">
+            <option value="todas">Todas</option>
+            <option *ngFor="let mesa of mesas" [ngValue]="mesa.id">Mesa {{ mesa.numero }}</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label>Funcionário</label>
+          <select [(ngModel)]="filtroFuncionario" (ngModelChange)="buscar()" class="input">
+            <option value="todos">Todos</option>
+            <option *ngFor="let funcionario of funcionarios" [ngValue]="funcionario.id">{{ funcionario.nome }}</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label>De</label>
+          <input type="date" [(ngModel)]="filtroDataInicio" class="input">
+        </div>
+
+        <div class="campo">
+          <label>Até</label>
+          <input type="date" [(ngModel)]="filtroDataFim" class="input">
+        </div>
+      </div>
+
+      <p class="nota">
+        Filtro de mesa/funcionário é feito na API; filtro de data é aplicado sobre os resultados já carregados.
+      </p>
+    </div>
+
+    <!-- Lista -->
+    <div class="lista">
+      <div *ngIf="carregando" class="lista-vazia">Carregando histórico...</div>
+      <div *ngIf="!carregando && pedidosFiltrados().length === 0" class="lista-vazia">
+        Nenhum pedido encontrado para esse filtro.
+      </div>
+
+      <table *ngIf="!carregando && pedidosFiltrados().length > 0" class="tabela">
+        <thead>
+          <tr>
+            <th>Pedido</th>
+            <th>Data</th>
+            <th>Mesa</th>
+            <th>Funcionário</th>
+            <th class="direita">Valor total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pedido of pedidosFiltrados()">
+            <td class="destaque">#{{ pedido.id }}</td>
+            <td>{{ pedido.dataHora | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>Mesa {{ numeroMesa(pedido.idMesa) }}</td>
+            <td>{{ nomeFuncionario(pedido.idFuncionario) }}</td>
+            <td class="direita valor">R$ {{ pedido.valorTotal | number:'1.2-2' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>

@@ -1,27 +1,40 @@
-export type StatusPedido = 'EM ANDAMENTO' | 'ENTREGUE' | 'CANCELADO';
+import { ItemPedidoDetalhamento } from './item-pedido.model';
 
-export interface Pedido {
+export interface DadosCadastroItemPedido {
+  idProduto: number;
+  quantidade: number;
+  observacao?: string;
+}
+
+export interface DadosCadastroPedido {
+  idMesa: number;
+  idFuncionario: number;
+  observacao?: string;
+  itens: DadosCadastroItemPedido[];
+}
+
+export interface DadosAtualizacaoPedido {
+  idMesa?: number;
+  idFuncionario?: number;
+  observacao?: string;
+}
+
+export interface PedidoListagem {
   id: number;
-  status: StatusPedido;
-  horarioEnvio: string;
-  observacao?: string;
+  dataHora: string;
+  observacao: string | null;
   valorTotal: number;
-  mesa: number;
-  funcionario: number;
-  horarioPronto?: string;
-  horarioEntregue?: string;
-  minutosEmAndamento?: number;
+  idMesa: number;
+  idFuncionario: number;
 }
 
-export interface CriarPedidoRequest {
-  mesa: number;
-  funcionario: number;
-  observacao?: string;
-  itens: string[];
-}
-
-export interface AtualizarPedidoRequest {
-  mesa: number;
-  funcionario: number;
-  observacao?: string;
+export interface PedidoDetalhamento {
+  id: number;
+  dataHora: string;
+  valorTotal: number;
+  observacao: string | null;
+  idRestaurante: number;
+  idMesa: number;
+  idFuncionario: number;
+  itens: ItemPedidoDetalhamento[];
 }

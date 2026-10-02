@@ -1,0 +1,115 @@
+<div class="pagina">
+
+  <div class="container">
+
+    <a routerLink="/recepcao" class="link-voltar">&larr; Mapa de mesas</a>
+
+    <h1 class="titulo">Reservas</h1>
+
+    <p *ngIf="mensagemErro" class="msg-erro">{{ mensagemErro }}</p>
+
+    <div class="layout">
+
+      <!-- Formulário -->
+      <div class="card card-form">
+        <p class="card-titulo">
+          {{ idEmEdicao ? 'Alterar reserva' : 'Nova reserva' }}
+        </p>
+
+        <div class="campo bloco">
+          <label>Mesa</label>
+          <select [(ngModel)]="form.idMesa" class="input">
+            <option [ngValue]="null" disabled>Selecione a mesa</option>
+            <option *ngFor="let mesa of mesas" [ngValue]="mesa.id">Mesa {{ mesa.numero }} ({{ mesa.capacidade }} lugares)</option>
+          </select>
+        </div>
+
+        <div class="grid-duas">
+          <div class="campo">
+            <label>Nome do cliente</label>
+            <input type="text" [(ngModel)]="form.nomeCliente" placeholder="Ex: Maria Souza" class="input">
+          </div>
+          <div class="campo">
+            <label>Telefone</label>
+            <input type="text" [(ngModel)]="form.telefone" placeholder="11999990000" class="input">
+          </div>
+        </div>
+
+        <div class="grid-duas">
+          <div class="campo">
+            <label>Data</label>
+            <input type="date" [(ngModel)]="form.data" class="input">
+          </div>
+          <div class="campo">
+            <label>Horário</label>
+            <input type="time" [(ngModel)]="form.horario" class="input">
+          </div>
+        </div>
+
+        <div class="campo bloco campo-pessoas">
+          <label>Nº de pessoas</label>
+          <input type="number" [(ngModel)]="form.numPessoas" min="1" class="input">
+        </div>
+
+        <div class="botoes">
+          <button type="button" [disabled]="salvando" (click)="salvar()" class="btn btn-primario btn-largo">
+            {{ idEmEdicao ? 'Salvar alterações' : 'Confirmar reserva' }}
+          </button>
+          <button type="button" *ngIf="idEmEdicao" (click)="cancelarEdicao()" class="btn btn-secundario">
+            Cancelar
+          </button>
+        </div>
+      </div>
+
+      <!-- Listagem + filtros -->
+      <div class="card">
+        <p class="card-titulo">Reservas cadastradas</p>
+
+        <div class="grid-filtros">
+          <div class="campo">
+            <label>Mesa</label>
+            <select [(ngModel)]="filtroMesa" class="input">
+              <option value="todas">Todas</option>
+              <option *ngFor="let mesa of mesas" [ngValue]="mesa.id">Mesa {{ mesa.numero }}</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label>De</label>
+            <input type="date" [(ngModel)]="filtroDataInicio" class="input">
+          </div>
+          <div class="campo">
+            <label>Até</label>
+            <input type="date" [(ngModel)]="filtroDataFim" class="input">
+          </div>
+        </div>
+
+        <div class="reservas">
+          <p *ngIf="carregando" class="carregando">Carregando reservas...</p>
+          <p *ngIf="!carregando && reservasFiltradas().length === 0" class="carregando">
+            Nenhuma reserva encontrada.
+          </p>
+
+          <div *ngFor="let reserva of reservasFiltradas()" class="reserva">
+            <div class="reserva-topo">
+              <span class="destaque">Mesa {{ numeroMesa(reserva.idMesa) }}</span>
+              <span class="status" [ngClass]="'status-' + reserva.status.toLowerCase()">
+                {{ statusRotulo(reserva.status) }}
+              </span>
+            </div>
+            <p class="reserva-cliente">{{ reserva.nomeCliente }} &middot; {{ reserva.telefone }}</p>
+            <p class="reserva-detalhe">{{ reserva.dataHora | date:'dd/MM/yyyy HH:mm' }} &middot; {{ reserva.numPessoas }} pessoa(s)</p>
+
+            <div class="acoes" *ngIf="reserva.status === 'ATIVA'">
+              <button type="button" class="link-acao" (click)="iniciarEdicao(reserva)">Alterar</button>
+              <button type="button" class="link-acao" (click)="concluir(reserva)">Concluir</button>
+              <button type="button" class="link-acao link-perigo" (click)="cancelar(reserva)">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

@@ -3,13 +3,16 @@ package br.com.athenassys.api.service;
 import br.com.athenassys.api.dto.funcionario.DadosAtualizacaoFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosCadastroFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosListagemFuncionario;
+import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
+import br.com.athenassys.api.exception.ChaveIncorretaException;
 import br.com.athenassys.api.model.Funcionario;
 import br.com.athenassys.api.repository.FuncionarioRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +21,7 @@ public class FuncionarioService {
 
     private final RestauranteRepository restauranteRepository;
     private final FuncionarioRepository funcionarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Funcionario cadastrar(
             DadosCadastroFuncionario dados,
@@ -26,7 +30,8 @@ public class FuncionarioService {
         var restaurante = restauranteRepository
                 .findById(idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
-        var funcionario = new Funcionario(dados, restaurante);
+        var codigo = passwordEncoder.encode(dados.codigo());
+        var funcionario = new Funcionario(dados, codigo, restaurante);
 
         return funcionarioRepository.save(funcionario);
     }
@@ -64,5 +69,21 @@ public class FuncionarioService {
         return funcionarioRepository
                 .findByIdAndRestauranteId(idFuncionario, idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado."));
+    }
+
+    public Funcionario alterarCodigo(DadosAlteracaoChave dados, Long idRestaurante, Long idFuncionario) {
+
+        var funcionario = funcionarioRepository
+                .findByIdAndRestauranteId(idFuncionario, idRestaurante)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado."));
+
+        if (!passwordEncoder.matches(dados.chaveAtual(), funcionario.getCodigo())) {
+            throw new ChaveIncorretaException("Código atual incorreto!");
+        }
+
+        var codigo = passwordEncoder.encode(dados.chaveNova());
+
+        funcionario.atualizarCodigo(codigo);
+        return funcionario;
     }
 }

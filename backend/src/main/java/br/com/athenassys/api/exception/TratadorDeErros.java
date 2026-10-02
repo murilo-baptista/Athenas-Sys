@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -109,6 +110,12 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
         );
     }
 
+    // Trata erro 400 e 503 para CNPJ inexistente ou API quebrada
+    @ExceptionHandler(ErroCnpjException.class)
+    public ResponseEntity<String> tratarCpnjInexistente(ErroCnpjException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+    }
+
     // Trata erro 405 para Requisições HTTP não suportadas
     @Override
     protected @Nullable ResponseEntity<Object> handleHttpRequestMethodNotSupported(
@@ -131,6 +138,7 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
+    //Trata erro 409 de dados violados, principalmente para tratar campos únicos duplicados
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> tratarViolacaoIntegridade(DataIntegrityViolationException ex) {
 
@@ -156,7 +164,22 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
         );
     }
 
-    //Trata qualquer tipo de erro para evitar vazamento de dados e informações internas
+    //Trata erro 401 para credenciais incorretas
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<String> tratarErroCredenciaisIncorretas(BadCredentialsException ex) {
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                "Usuário ou senha incorretos!"
+        );
+    }
+
+    //Trata erro 401 para senha incorreta
+    @ExceptionHandler(ChaveIncorretaException.class)
+    public ResponseEntity<String> tratarErroSenhaIncorreta(ChaveIncorretaException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
+    //Trata qualquer tipo de erro para evitar vazamento de dados e informações internas, tornando o erro em 500
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> tratarErroNaoTratado(Exception ex) {
 

@@ -45,7 +45,7 @@ CREATE TABLE funcionarios (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     restaurante_id BIGINT NOT NULL,
     nome VARCHAR(100) NOT NULL,
-    codigo VARCHAR(10) NOT NULL,
+    codigo VARCHAR(255) NOT NULL,
     cargo VARCHAR(20) NOT NULL,
     ativo BOOLEAN,
 
@@ -53,8 +53,8 @@ CREATE TABLE funcionarios (
         FOREIGN KEY (restaurante_id)
         REFERENCES restaurantes(id),
 
-    CONSTRAINT uk_funcionarios_restaurante_codigo
-        UNIQUE (restaurante_id, codigo)
+    CONSTRAINT uk_funcionarios_restaurante_nome
+        UNIQUE (restaurante_id, nome)
 );
 
 

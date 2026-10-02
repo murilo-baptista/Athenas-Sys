@@ -1,0 +1,49 @@
+<div class="pagina">
+
+  <div class="container">
+
+    <a routerLink="/gerente" class="link-voltar">&larr; Painel do gerente</a>
+
+    <h1 class="titulo">Categorias do cardápio</h1>
+
+    <p *ngIf="mensagemErro" class="msg-erro">{{ mensagemErro }}</p>
+
+    <div class="card">
+      <p class="card-titulo">
+        {{ idEmEdicao ? 'Alterar categoria' : 'Nova categoria' }}
+      </p>
+
+      <div class="form-linha">
+        <div class="campo campo-grande">
+          <label>Nome</label>
+          <input type="text" [(ngModel)]="nome" placeholder="Ex: Entradas, Bebidas, Sobremesas..." class="input">
+        </div>
+
+        <button type="button" [disabled]="salvando" (click)="salvar()" class="btn btn-primario">
+          {{ idEmEdicao ? 'Salvar' : 'Adicionar' }}
+        </button>
+
+        <button type="button" *ngIf="idEmEdicao" (click)="cancelarEdicao()" class="btn btn-secundario">
+          Cancelar
+        </button>
+      </div>
+    </div>
+
+    <div class="lista">
+      <div *ngIf="carregando" class="lista-vazia">Carregando categorias...</div>
+      <div *ngIf="!carregando && categorias.length === 0" class="lista-vazia">
+        Nenhuma categoria cadastrada ainda.
+      </div>
+
+      <div *ngFor="let categoria of categorias" class="item">
+        <span class="item-texto">{{ categoria.nome }}</span>
+        <div class="acoes">
+          <button type="button" class="link-acao" (click)="editar(categoria)">Editar</button>
+          <button type="button" class="link-acao link-perigo" (click)="remover(categoria)">Remover</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

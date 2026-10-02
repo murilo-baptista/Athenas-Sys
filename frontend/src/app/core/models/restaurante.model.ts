@@ -19,3 +19,14 @@ export interface AtualizarRestauranteRequest {
   email: string;
   telefone: string;
 }
+
+export interface CadastroRestauranteResponse {
+  restaurante: Restaurante;
+  token: string;
+}
+
+/** PATCH /restaurantes/{id}/alterarSenha (DadosAlteracaoChave no back-end) */
+export interface AlterarSenhaRequest {
+  chaveAtual: string;
+  chaveNova: string;
+}

@@ -1,0 +1,62 @@
+<div class="pagina">
+
+  <div class="container">
+
+    <a routerLink="/gerente" class="link-voltar">&larr; Painel do gerente</a>
+
+    <div class="cabecalho">
+      <h1 class="titulo">Cardápio</h1>
+
+      <div class="exportar">
+        <button type="button" (click)="salvarImagem()" [disabled]="!podeExportar()" class="btn btn-contorno">
+          {{ exportando ? 'Gerando...' : 'Salvar como imagem' }}
+        </button>
+        <button type="button" (click)="salvarPdf()" [disabled]="!podeExportar()" class="btn btn-contorno">
+          {{ exportando ? 'Gerando...' : 'Salvar como PDF' }}
+        </button>
+        <button type="button" (click)="alternarQrCode()" class="btn btn-contorno">
+          {{ mostrarQrCode ? 'Esconder QR Code' : 'Mostrar QR Code' }}
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="mostrarQrCode" class="card qr-box">
+      <qrcode [qrdata]="urlCardapio" [width]="200" errorCorrectionLevel="M"></qrcode>
+      <p class="qr-nota">
+        Aponta para esta página. Uma versão pública do cardápio, sem necessidade de login, ainda está pendente.
+      </p>
+    </div>
+
+    <p *ngIf="mensagemErro" class="msg-erro">{{ mensagemErro }}</p>
+    <p *ngIf="carregando" class="carregando">Carregando cardápio...</p>
+
+    <p *ngIf="!carregando && categorias.length === 0 && !mensagemErro" class="carregando">
+      Nenhuma categoria cadastrada ainda.
+    </p>
+
+    <!-- Tudo que estiver dentro desta div é o que sai na imagem e no PDF -->
+    <div #areaCardapio class="area-cardapio">
+
+      <div *ngFor="let categoria of categorias" class="categoria">
+
+        <h2 class="categoria-titulo">{{ categoria.nome }}</h2>
+
+        <p *ngIf="categoria.produtos.length === 0" class="categoria-vazia">
+          Nenhum produto nesta categoria.
+        </p>
+
+        <div *ngFor="let produto of categoria.produtos" class="produto">
+          <div class="produto-info">
+            <p class="produto-nome">{{ produto.nome }}</p>
+            <p *ngIf="produto.descricao" class="produto-descricao">{{ produto.descricao }}</p>
+          </div>
+          <span class="produto-preco">R$ {{ produto.preco | number:'1.2-2' }}</span>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

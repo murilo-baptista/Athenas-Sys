@@ -73,13 +73,8 @@ export class AuthService {
     return this.getSessao()?.token ?? null;
   }
 
-//  getRestauranteId(): number | null {
-//    return this.getSessao()?.restauranteId ?? null;
-//  }
-//  Volte a usar quando a autenticação do backend estiver feita.
-
   getRestauranteId(): number | null {
-    return 1;
+    return this.getSessao()?.restauranteId ?? null;
   }
 
   getCargoFuncionario(): string | null {
@@ -90,12 +85,16 @@ export class AuthService {
     return !!this.getToken();
   }
 
-  /** Usado no meio do wizard de cadastro, antes de existir um login completo. */
-  definirRestauranteIdTemporario(id: number, nomeRestaurante: string): void {
+  /**
+   * Usado logo após cadastrar um restaurante: o back-end já devolve um token
+   * válido na resposta do cadastro (POST /restaurantes), então a sessão do
+   * wizard (mesas e funcionários) já nasce autenticada.
+   */
+  iniciarSessaoAposCadastro(token: string, restauranteId: number, nomeRestaurante: string): void {
     this.salvarSessao({
-      token: '',
+      token,
       tipo: 'RESTAURANTE',
-      restauranteId: id,
+      restauranteId,
       nomeRestaurante
     });
   }

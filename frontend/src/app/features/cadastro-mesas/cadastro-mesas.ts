@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MesaService } from '../../core/services/mesa.service';
 import { AuthService } from '../../core/services/auth.service';
-import { Mesa } from '../../core/models/mesa.model';
+import { MesaListagem } from '../../core/models/mesa.model';
 
 @Component({
   selector: 'app-cadastro-mesas',
@@ -18,7 +18,7 @@ export class CadastroMesasComponent implements OnInit {
   numeroMesa = '';
   capacidadeMesa: number | null = null;
 
-  mesas: Mesa[] = [];
+  mesas: MesaListagem[] = [];
 
   carregando = false;
   salvando = false;

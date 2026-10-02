@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DashboardService, ResumoDashboard } from '../../../core/services/dashboard.service';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -12,7 +12,7 @@ interface CartaoResumo {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -35,8 +35,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private carregarResumo(): void {
-    const restauranteId = this.authService.getRestauranteId();
-    if (!restauranteId) {
+    if (!this.authService.getRestauranteId()) {
       this.router.navigate(['/login']);
       return;
     }
@@ -44,7 +43,7 @@ export class DashboardComponent implements OnInit {
     this.carregando = true;
     this.mensagemErro = '';
 
-    this.dashboardService.buscarResumo(restauranteId).subscribe({
+    this.dashboardService.buscarResumo().subscribe({
       next: (resumo) => {
         this.cartoes = this.montarCartoes(resumo);
         this.carregando = false;
@@ -63,9 +62,8 @@ export class DashboardComponent implements OnInit {
       { titulo: 'Pedidos hoje', valor: String(resumo.pedidosHoje) },
       { titulo: 'Faturamento hoje', valor: formatoMoeda.format(resumo.faturamentoHoje) },
       { titulo: 'Ticket médio', valor: formatoMoeda.format(resumo.ticketMedio) },
-      { titulo: 'Pedidos em andamento', valor: String(resumo.pedidosEmAndamento) },
       { titulo: 'Mesas ocupadas', valor: String(resumo.mesasOcupadas) },
-      { titulo: 'Mesas disponíveis', valor: String(resumo.mesasDisponiveis) },
+      { titulo: 'Mesas livres', valor: String(resumo.mesasDisponiveis) },
     ];
   }
 

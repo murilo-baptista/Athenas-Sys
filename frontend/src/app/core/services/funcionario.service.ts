@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CriarFuncionarioRequest, AtualizarFuncionarioRequest, Funcionario } from '../models/funcionario.model';
+import { CriarFuncionarioRequest, AtualizarFuncionarioRequest, AlterarCodigoRequest, Funcionario } from '../models/funcionario.model';
 import { Page } from '../models/pagina.model';
 import { AuthService } from './auth.service';
 
@@ -31,5 +31,9 @@ export class FuncionarioService {
 
   remover(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${this.restauranteId}/funcionarios/${id}`);
+  }
+
+  alterarCodigo(id: number, dados: AlterarCodigoRequest): Observable<void> {
+    return this.http.patch<void>(`${this.baseUrl}/${this.restauranteId}/funcionarios/${id}/alterarCodigo`, dados);
   }
 }

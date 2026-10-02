@@ -1,0 +1,92 @@
+<div class="pagina">
+
+  <div class="container">
+
+    <a routerLink="/gerente" class="link-voltar">&larr; Painel do gerente</a>
+
+    <h1 class="titulo">Configurações do restaurante</h1>
+
+    <p *ngIf="carregando" class="carregando">Carregando dados do restaurante...</p>
+
+    <div *ngIf="!carregando && restaurante">
+
+      <p *ngIf="mensagemErro" class="msg-erro">{{ mensagemErro }}</p>
+      <p *ngIf="mensagemSucesso" class="msg-sucesso">{{ mensagemSucesso }}</p>
+
+      <!-- Dados da conta -->
+      <div class="card">
+        <p class="card-titulo">Dados da conta</p>
+
+        <div class="grid">
+          <div class="campo">
+            <label>Nome do restaurante</label>
+            <input type="text" [(ngModel)]="form.nome" class="input">
+          </div>
+
+          <div class="campo">
+            <label>E-mail</label>
+            <input type="email" [(ngModel)]="form.email" class="input">
+          </div>
+
+          <div class="campo">
+            <label>Telefone</label>
+            <input type="text" [(ngModel)]="form.telefone" class="input">
+          </div>
+
+          <div class="campo">
+            <label>CNPJ</label>
+            <input type="text" [value]="restaurante.cnpj" disabled class="input input-desabilitado">
+            <p class="ajuda">O CNPJ não pode ser alterado.</p>
+          </div>
+        </div>
+
+        <button type="button" [disabled]="salvando" (click)="salvar()" class="btn btn-primario">
+          {{ salvando ? 'Salvando...' : 'Salvar alterações' }}
+        </button>
+      </div>
+
+      <!-- Senha -->
+      <div class="card">
+        <p class="card-titulo">Alterar senha</p>
+
+        <p *ngIf="mensagemErroSenha" class="msg-erro">{{ mensagemErroSenha }}</p>
+        <p *ngIf="mensagemSucessoSenha" class="msg-sucesso">{{ mensagemSucessoSenha }}</p>
+
+        <div class="grid">
+          <div class="campo">
+            <label>Senha atual</label>
+            <input type="password" autocomplete="current-password" [(ngModel)]="formSenha.chaveAtual" class="input">
+          </div>
+
+          <div class="campo">
+            <label>Nova senha</label>
+            <input type="password" autocomplete="new-password" [(ngModel)]="formSenha.chaveNova" class="input">
+          </div>
+
+          <div class="campo">
+            <label>Confirmar nova senha</label>
+            <input type="password" autocomplete="new-password" [(ngModel)]="formSenha.confirmacao" class="input">
+          </div>
+        </div>
+
+        <button type="button" [disabled]="salvandoSenha" (click)="alterarSenha()" class="btn btn-primario">
+          {{ salvandoSenha ? 'Alterando...' : 'Alterar senha' }}
+        </button>
+      </div>
+
+      <!-- Zona de risco -->
+      <div class="zona-risco">
+        <p class="zona-risco-titulo">Zona de risco</p>
+        <p class="zona-risco-texto">
+          Desativar o restaurante remove o acesso de todos os funcionários e não pode ser desfeito por aqui.
+        </p>
+        <button type="button" (click)="desativarConta()" class="btn btn-perigo">
+          Desativar restaurante
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
