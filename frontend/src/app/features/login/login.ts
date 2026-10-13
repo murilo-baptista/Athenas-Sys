@@ -38,9 +38,16 @@ export class LoginComponent {
       },
       error: (erro) => {
         this.carregando = false;
-        this.mensagemErro = erro.status === 401
-          ? 'Usuário ou senha inválidos.'
-          : 'Não foi possível entrar agora. Tente novamente em instantes.';
+
+        if (erro.status === 401) {
+          this.mensagemErro = 'Usuário ou senha inválidos.';
+        } else if (erro.status === 403) {
+          // Contrato previsto pelo back-end (ainda sem rota/formato definitivo):
+          // restaurante desativado responde 403 com uma mensagem própria.
+          this.mensagemErro = erro.error?.mensagem || 'Esta conta está desativada.';
+        } else {
+          this.mensagemErro = 'Não foi possível entrar agora. Tente novamente em instantes.';
+        }
       }
     });
   }

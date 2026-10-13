@@ -25,6 +25,15 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         authService.logout();
         router.navigate(['/login']);
       }
+
+      // 403: sem permissão para a ação (cargo errado, ou restaurante da URL
+      // diferente do restaurante do token). Sem token, trata como "não
+      // logado" e volta pro login. Com token, deixa o erro seguir pro
+      // componente mostrar a mensagem — o back continua sendo a barreira real.
+      if (erro.status === 403 && !token) {
+        router.navigate(['/login']);
+      }
+
       return throwError(() => erro);
     })
   );
