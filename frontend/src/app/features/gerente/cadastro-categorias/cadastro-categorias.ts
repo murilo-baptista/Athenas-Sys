@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CategoriaService } from '../../../core/services/categoria.service';
 import { CategoriaListagem } from '../../../core/models/categoria.model';
+import { ProdutoService } from '../../../core/services/produto.service';
+import { ProdutoListagem } from '../../../core/models/produto.model';
 
 @Component({
   selector: 'app-cadastro-categorias',
@@ -15,6 +17,7 @@ import { CategoriaListagem } from '../../../core/models/categoria.model';
 export class CadastroCategoriasComponent implements OnInit {
 
   categorias: CategoriaListagem[] = [];
+  produtos: ProdutoListagem[] = [];
   carregando = false;
   salvando = false;
   mensagemErro = '';
@@ -22,7 +25,10 @@ export class CadastroCategoriasComponent implements OnInit {
   idEmEdicao: number | null = null;
   nome = '';
 
-  constructor(private categoriaService: CategoriaService) {}
+  constructor(
+    private categoriaService: CategoriaService,
+    private produtoService: ProdutoService
+  ) {}
 
   ngOnInit(): void {
     this.carregar();
@@ -39,6 +45,11 @@ export class CadastroCategoriasComponent implements OnInit {
         this.carregando = false;
         this.mensagemErro = 'Não foi possível carregar as categorias.';
       }
+    });
+
+    // carregado à parte, só para contar produtos por categoria no aviso de remoção
+    this.produtoService.listarPorRestaurante().subscribe({
+      next: (produtos) => (this.produtos = produtos)
     });
   }
 
@@ -80,13 +91,19 @@ export class CadastroCategoriasComponent implements OnInit {
   }
 
   remover(categoria: CategoriaListagem): void {
-    if (!confirm(`Remover a categoria "${categoria.nome}"? Produtos vinculados a ela podem ser afetados.`)) {
+    const quantidadeProdutos = this.produtos.filter(p => p.idCategoria === categoria.id).length;
+
+    const mensagem = quantidadeProdutos > 0
+      ? `Esta categoria tem ${quantidadeProdutos} produto(s). Eles também serão desativados. Deseja continuar?`
+      : `Remover a categoria "${categoria.nome}"?`;
+
+    if (!confirm(mensagem)) {
       return;
     }
 
     this.categoriaService.desativar(categoria.id).subscribe({
-      next: () => this.carregar(),
-      error: () => (this.mensagemErro = `Não foi possível remover "${categoria.nome}" — verifique se ainda há produtos vinculados a ela.`)
+      next: () => this.carregar(), // recarrega categorias e produtos, já que os produtos saem da lista
+      error: () => (this.mensagemErro = `Não foi possível remover "${categoria.nome}".`)
     });
   }
 }
