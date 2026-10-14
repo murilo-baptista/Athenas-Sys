@@ -66,6 +66,10 @@
 
           <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>
 
+          <a href="#" class="forgot-link" *ngIf="contaDesativada" (click)="onReativar($event)">
+            Reativar meu restaurante
+          </a>
+
           <button type="submit" class="btn-entrar" [disabled]="carregando">
             {{ carregando ? 'ENTRANDO...' : 'ENTRAR' }}
           </button>
