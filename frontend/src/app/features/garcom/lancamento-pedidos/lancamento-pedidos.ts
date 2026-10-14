@@ -9,6 +9,7 @@ import { ProdutoService } from '../../../core/services/produto.service';
 import { PedidoService } from '../../../core/services/pedido.service';
 import { ItemPedidoService } from '../../../core/services/item-pedido.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { FecharContaComponent } from '../fechar-conta/fechar-conta';
 
 import { MesaListagem } from '../../../core/models/mesa.model';
 import { ProdutoListagem } from '../../../core/models/produto.model';
@@ -43,16 +44,16 @@ const INTERVALO_ATUALIZACAO_MS = 15000;
 @Component({
   selector: 'app-lancamento-pedidos',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FecharContaComponent],
   templateUrl: './lancamento-pedidos.html',
   styleUrl: './lancamento-pedidos.css'
 })
 export class LancamentoPedidosComponent implements OnInit, OnDestroy {
 
   nomeGarcom = '';
-  abaAtiva: 'novo' | 'andamento' = 'novo';
+  abaAtiva: 'novo' | 'andamento' | 'conta' = 'novo';
 
-  // ---------- Novo pedido ----------
+  // Novo pedido 
   mesas: MesaListagem[] = [];
   produtos: ProdutoListagem[] = [];
   mesaSelecionada: number | null = null;
@@ -63,7 +64,7 @@ export class LancamentoPedidosComponent implements OnInit, OnDestroy {
   carrinho: ItemCarrinho[] = [];
   enviando = false;
 
-  // ---------- Em andamento ----------
+  // Em andamento 
   itensAcompanhamento: ItemAcompanhamento[] = [];
   carregando = false;
   filtroAtivo: 'todos' | StatusItemPedido = 'todos';
@@ -104,7 +105,7 @@ export class LancamentoPedidosComponent implements OnInit, OnDestroy {
     this.polling?.unsubscribe();
   }
 
-  // ===================== Novo pedido =====================
+  // Novo pedido 
 
   adicionarAoCarrinho(): void {
     if (!this.produtoSelecionado || this.quantidadeSelecionada < 1) return;
@@ -165,7 +166,7 @@ export class LancamentoPedidosComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ===================== Em andamento =====================
+  // Em andamento 
 
   carregarAndamento(): void {
     this.carregando = this.itensAcompanhamento.length === 0;
