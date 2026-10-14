@@ -10,3 +10,9 @@ export interface ConfirmarCodigoRequest {
   codigo: string;
   novaSenha: string;
 }
+
+/** Reativação do restaurante não troca senha, só confirma o código. */
+export interface ConfirmarCodigoReativacaoRequest {
+  email: string;
+  codigo: string;
+}
