@@ -1,0 +1,47 @@
+<div class="recuperar-page">
+  <div class="recuperar-card">
+
+    <h1 class="card-title">RECUPERAR SENHA</h1>
+
+    <p class="card-subtitle" *ngIf="etapa === 'EMAIL'">
+      Informe o e-mail do restaurante para receber um código.
+    </p>
+    <p class="card-subtitle" *ngIf="etapa === 'CODIGO'">
+      Digite o código recebido e defina a nova senha.
+    </p>
+
+    <p class="msg-info" *ngIf="mensagemInfo">{{ mensagemInfo }}</p>
+    <p class="msg-erro" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+
+    <!-- Etapa 1: informar e-mail -->
+    <form *ngIf="etapa === 'EMAIL'" (ngSubmit)="solicitarCodigo()" #formEmail="ngForm">
+      <label class="field-label" for="email">E-MAIL DO RESTAURANTE</label>
+      <input id="email" name="email" type="email" [(ngModel)]="email" required
+        placeholder="Ex: restaurante@gmail.com">
+
+      <button type="submit" class="btn-principal" [disabled]="carregando">
+        {{ carregando ? 'ENVIANDO...' : 'ENVIAR CÓDIGO' }}
+      </button>
+    </form>
+
+    <!-- Etapa 2: código + nova senha -->
+    <form *ngIf="etapa === 'CODIGO'" (ngSubmit)="confirmarCodigo()" #formCodigo="ngForm">
+      <label class="field-label" for="codigo">CÓDIGO RECEBIDO</label>
+      <input id="codigo" name="codigo" type="text" [(ngModel)]="codigo" required
+        placeholder="Digite o código">
+
+      <label class="field-label" for="novaSenha">NOVA SENHA</label>
+      <input id="novaSenha" name="novaSenha" type="password" [(ngModel)]="novaSenha" required>
+
+      <label class="field-label" for="confirmacaoSenha">CONFIRMAR NOVA SENHA</label>
+      <input id="confirmacaoSenha" name="confirmacaoSenha" type="password" [(ngModel)]="confirmacaoSenha" required>
+
+      <button type="submit" class="btn-principal" [disabled]="carregando">
+        {{ carregando ? 'CONFIRMANDO...' : 'CONFIRMAR' }}
+      </button>
+    </form>
+
+    <button type="button" class="btn-voltar" (click)="voltarParaLogin()">Voltar para o login</button>
+
+  </div>
+</div>

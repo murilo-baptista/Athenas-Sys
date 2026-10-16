@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './features/login/login';
+import { RecuperarSenhaComponent } from './features/recuperar-senha/recuperar-senha';
 import { MenuComponent } from './features/menu/menu';
 import { AutenticacaoComponent } from './features/autenticacao/autenticacao';
 import { CadastroRestauranteComponent } from './features/cadastro-restaurante/cadastro-restaurante';
@@ -24,6 +25,7 @@ export const routes: Routes = [
 
   // 1. Login do restaurante
   { path: 'login', component: LoginComponent },
+  { path: 'recuperar-senha', component: RecuperarSenhaComponent },
 
   // 2. Cadastro (Wizard de Onboarding: Restaurante -> Mesas -> Funcionários)
   { path: 'cadastro-restaurante', component: CadastroRestauranteComponent },
