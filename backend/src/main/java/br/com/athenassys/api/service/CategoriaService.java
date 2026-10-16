@@ -6,6 +6,7 @@ import br.com.athenassys.api.dto.categoria.DadosListagemCategoria;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.Categoria;
 import br.com.athenassys.api.repository.CategoriaRepository;
+import br.com.athenassys.api.repository.ProdutoRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ public class CategoriaService {
 
     private final RestauranteRepository restauranteRepository;
     private final CategoriaRepository categoriaRepository;
+    private final ProdutoRepository produtoRepository;
 
     public Categoria cadastrar(
             DadosCadastroCategoria dados,
@@ -56,6 +58,13 @@ public class CategoriaService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria não encontrada."));
 
         categoria.desativar();
+
+        var produtos = produtoRepository
+                .findAllByCategoriaIdAndRestauranteIdAndAtivoTrue(idCategoria, idRestaurante);
+
+        for (var produto : produtos) {
+            produto.desativar();
+        }
         return categoria;
     }
 
