@@ -14,6 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class ReservaService {
@@ -41,8 +44,36 @@ public class ReservaService {
 
     public Page<DadosListagemReserva> listar(
             Long idRestaurante,
+            Long idMesa,
+            LocalDate data,
             Pageable paginacao) {
 
+        LocalDateTime inicio;
+        LocalDateTime fim;
+
+        if (idMesa != null && data != null) {
+            inicio = data.atStartOfDay();
+            fim = data.atTime(23, 59, 59);
+
+            return reservaRepository
+                    .findAllByRestauranteIdAndMesaIdAndDataHoraBetween(
+                            idRestaurante, idMesa, inicio, fim, paginacao)
+                    .map(DadosListagemReserva::new);
+
+        } else if (idMesa != null && data == null) {
+            return reservaRepository
+                    .findAllByRestauranteIdAndMesaId(idRestaurante, idMesa, paginacao)
+                    .map(DadosListagemReserva::new);
+
+        } else if (idMesa == null && data != null) {
+            inicio = data.atStartOfDay();
+            fim = data.atTime(23, 59, 59);
+
+            return reservaRepository
+                    .findAllByRestauranteIdAndDataHoraBetween(idRestaurante, inicio, fim, paginacao)
+                    .map(DadosListagemReserva::new);
+
+        }
         return reservaRepository.findAllByRestauranteId(idRestaurante, paginacao)
                 .map(DadosListagemReserva::new);
     }
