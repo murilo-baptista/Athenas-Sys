@@ -101,6 +101,10 @@ public class SecurityConfig {
                     req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/pedidos/{idPedido}/itens/{idItemPedido}/entregar").hasAnyRole("GERENTE", "GARCOM");
                     req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/pedidos/{idPedido}/itens/{idItemPedido}/cancelar").hasAnyRole("GERENTE", "GARCOM");
 
+                    //Alterar chave
+                    req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/alterarSenha").hasAnyRole("GERENTE");
+                    req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/funcionarios/{idFuncionario}/alterarCodigo").hasAnyRole("GERENTE");
+
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
