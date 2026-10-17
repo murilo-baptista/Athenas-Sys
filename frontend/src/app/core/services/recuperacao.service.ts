@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, delay, throwError } from 'rxjs';
-import { ConfirmarCodigoRequest, SolicitarCodigoRequest } from '../models/recuperacao.model';
+import { ConfirmarCodigoRequest, ConfirmarCodigoReativacaoRequest, SolicitarCodigoRequest } from '../models/recuperacao.model';
 
 /**
  * ===================== SERVIÇO TEMPORÁRIO (FAKE) =====================
@@ -28,6 +28,19 @@ export class RecuperacaoService {
    * Qualquer outro valor simula "código incorreto".
    */
   confirmarCodigo(dados: ConfirmarCodigoRequest): Observable<void> {
+    if (dados.codigo !== '000000') {
+      return throwError(() => ({ status: 400, error: { mensagem: 'Código incorreto.' } })).pipe(delay(400));
+    }
+    return of(undefined).pipe(delay(600));
+  }
+
+  /** Mesmo mecanismo de "esqueci minha senha", usado para reativar um restaurante desativado. */
+  solicitarCodigoReativacao(dados: SolicitarCodigoRequest): Observable<void> {
+    return of(undefined).pipe(delay(600));
+  }
+
+  /** Confirma o código de reativação. Código fixo "000000" simula sucesso, igual à recuperação de senha. */
+  confirmarReativacao(dados: ConfirmarCodigoReativacaoRequest): Observable<void> {
     if (dados.codigo !== '000000') {
       return throwError(() => ({ status: 400, error: { mensagem: 'Código incorreto.' } })).pipe(delay(400));
     }
