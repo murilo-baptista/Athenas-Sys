@@ -1,0 +1,73 @@
+<div class="conta-panel">
+
+  <p class="conta-erro" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+  <p class="conta-sucesso" *ngIf="mensagemSucesso">{{ mensagemSucesso }}</p>
+
+  <label class="conta-label" for="mesaConta">MESA OCUPADA:</label>
+  <select
+    id="mesaConta"
+    class="conta-select"
+    [ngModel]="mesaSelecionada"
+    (ngModelChange)="aoSelecionarMesa($event)">
+    <option [ngValue]="null" disabled>
+      {{ carregandoMesas ? 'Carregando mesas...' : (mesasOcupadas.length === 0 ? 'Nenhuma mesa ocupada' : 'Selecione a mesa') }}
+    </option>
+    <option *ngFor="let mesa of mesasOcupadas" [ngValue]="mesa.id">Mesa {{ mesa.numero }}</option>
+  </select>
+
+  <ng-container *ngIf="mesaSelecionada">
+
+    <div class="conta-vazio" *ngIf="carregandoConta">Calculando a conta...</div>
+
+    <ng-container *ngIf="!carregandoConta && contaCompleta">
+
+      <div class="conta-vazio" *ngIf="linhas.length === 0">
+        Nenhum item lançado nesta mesa. Você ainda pode liberá-la.
+      </div>
+
+      <ul class="conta-lista" *ngIf="linhas.length > 0">
+        <li class="conta-item" *ngFor="let linha of linhas">
+          <span class="conta-item-nome">{{ linha.quantidade }}x {{ linha.nomeProduto }}</span>
+          <span class="conta-item-status" [ngClass]="'st-' + linha.status.toLowerCase()">
+            {{ statusRotulo(linha.status) }}
+          </span>
+          <span class="conta-item-valor">R$ {{ linha.subtotal | number:'1.2-2' }}</span>
+        </li>
+      </ul>
+
+      <div class="conta-total">
+        <span>TOTAL</span>
+        <strong>R$ {{ total | number:'1.2-2' }}</strong>
+      </div>
+
+      <p class="conta-aviso" *ngIf="itensNaoEntregues > 0">
+        Ainda há {{ itensNaoEntregues }} {{ itensNaoEntregues === 1 ? 'item não entregue' : 'itens não entregues' }}.
+        Entregue (ou cancele) para poder fechar a conta.
+      </p>
+
+      <div class="conta-acoes" *ngIf="!confirmando">
+        <button type="button" class="conta-btn-fechar" [disabled]="!podeFechar()" (click)="pedirConfirmacao()">
+          FECHAR CONTA E LIBERAR MESA
+        </button>
+      </div>
+
+      <div class="conta-confirmacao" *ngIf="confirmando">
+        <p>
+          Fechar a conta da Mesa {{ mesaAtual?.numero }} no valor de
+          <strong>R$ {{ total | number:'1.2-2' }}</strong> e liberar a mesa?
+        </p>
+        <div class="conta-confirmacao-botoes">
+          <button type="button" class="conta-btn-voltar" [disabled]="fechando" (click)="cancelarConfirmacao()">
+            VOLTAR
+          </button>
+          <button type="button" class="conta-btn-fechar" [disabled]="fechando" (click)="confirmarFechamento()">
+            {{ fechando ? 'FECHANDO...' : 'CONFIRMAR' }}
+          </button>
+        </div>
+      </div>
+
+    </ng-container>
+
+  </ng-container>
+
+</div>
