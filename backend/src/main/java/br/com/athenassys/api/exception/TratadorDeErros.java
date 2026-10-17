@@ -32,7 +32,7 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
             "uk_restaurantes_cnpj", new DadosErro("cnpj", "Já existe um restaurante cadastrado com esse CNPJ."),
             "uk_restaurantes_email", new DadosErro("email", "Já existe um restaurante cadastrado com esse e-mail."),
             "uk_mesas_restaurante_numero", new DadosErro("numero", "Já existe uma mesa cadastrada com esse número neste restaurante."),
-            "uk_funcionarios_restaurante_codigo", new DadosErro("codigo", "Já existe um funcionário cadastrado com esse código neste restaurante."),
+            "uk_funcionarios_restaurante_nome", new DadosErro("nome", "Já existe um funcionário cadastrado com esse nome neste restaurante."),
             "uk_categorias_restaurante_nome", new DadosErro("nome", "Já existe uma categoria cadastrada com esse nome neste restaurante."),
             "uk_produtos_restaurante_nome", new DadosErro("nome", "Já existe um produto cadastrado com esse nome neste restaurante.")
     );
