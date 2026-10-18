@@ -3,6 +3,7 @@ package br.com.athenassys.api.service;
 import br.com.athenassys.api.dto.produto.DadosAtualizacaoProduto;
 import br.com.athenassys.api.dto.produto.DadosCadastroProduto;
 import br.com.athenassys.api.dto.produto.DadosListagemProduto;
+import br.com.athenassys.api.exception.EntidadeDesativadaException;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.exception.StatusInvalidoException;
 import br.com.athenassys.api.model.Categoria;
@@ -92,7 +93,7 @@ public class ProdutoService {
         var categoria = produto.getCategoria();
 
         if (categoria.getAtivo() == false) {
-            throw new StatusInvalidoException(
+            throw new EntidadeDesativadaException(
                     "Produto sem categoria. Para reativar este produto, certifique-se de que a categoria dele está ativa");
         }
 
