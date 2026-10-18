@@ -66,16 +66,20 @@ public class Funcionario implements UserDetails {
         this.ativo = false;
     }
 
+    public void reativar() {
+        this.ativo = true;
+    }
+
+    public void alterarCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
     //Segurança
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(
                 new SimpleGrantedAuthority("ROLE_" + this.cargo)
         );
-    }
-
-    public void atualizarCodigo(String codigo) {
-        this.codigo = codigo;
     }
 
     @Override

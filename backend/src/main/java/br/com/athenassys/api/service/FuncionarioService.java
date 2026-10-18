@@ -83,7 +83,7 @@ public class FuncionarioService {
 
         var codigo = passwordEncoder.encode(dados.chaveNova());
 
-        funcionario.atualizarCodigo(codigo);
+        funcionario.alterarCodigo(codigo);
         return funcionario;
     }
 }
