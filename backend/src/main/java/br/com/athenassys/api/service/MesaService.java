@@ -85,4 +85,14 @@ public class MesaService {
         mesa.desocupar();
         return mesa;
     }
+
+    public Mesa reativar(Long idMesa, Long idRestaurante) {
+
+        var mesa = mesaRepository
+                .findByIdAndRestauranteId(idMesa, idRestaurante)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Mesa não encontrada"));
+
+        mesa.reativar();
+        return mesa;
+    }
 }

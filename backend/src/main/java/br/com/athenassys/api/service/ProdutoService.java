@@ -5,6 +5,7 @@ import br.com.athenassys.api.dto.produto.DadosCadastroProduto;
 import br.com.athenassys.api.dto.produto.DadosListagemProduto;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.Categoria;
+import br.com.athenassys.api.model.Mesa;
 import br.com.athenassys.api.model.Produto;
 import br.com.athenassys.api.repository.CategoriaRepository;
 import br.com.athenassys.api.repository.ProdutoRepository;
@@ -79,5 +80,15 @@ public class ProdutoService {
         return produtoRepository
                 .findByIdAndRestauranteId(idProduto, idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado."));
+    }
+
+    public Produto reativar(Long idProduto, Long idRestaurante) {
+
+        var produto = produtoRepository
+                .findByIdAndRestauranteId(idProduto, idRestaurante)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrada"));
+
+        produto.reativar();
+        return produto;
     }
 }

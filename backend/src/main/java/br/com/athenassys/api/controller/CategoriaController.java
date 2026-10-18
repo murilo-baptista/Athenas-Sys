@@ -4,6 +4,7 @@ import br.com.athenassys.api.dto.categoria.DadosAtualizacaoCategoria;
 import br.com.athenassys.api.dto.categoria.DadosCadastroCategoria;
 import br.com.athenassys.api.dto.categoria.DadosDetalhamentoCategoria;
 import br.com.athenassys.api.dto.categoria.DadosListagemCategoria;
+import br.com.athenassys.api.dto.mesa.DadosDetalhamentoMesa;
 import br.com.athenassys.api.service.CategoriaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -76,6 +77,16 @@ public class CategoriaController {
 
         var categoria = service.buscarPorId(idCategoria, idRestaurante);
 
+        return ResponseEntity.ok(new DadosDetalhamentoCategoria(categoria));
+    }
+
+    @PatchMapping("/{idCategoria}/reativar")
+    @Transactional
+    public ResponseEntity<DadosDetalhamentoCategoria> reativar(
+            @PathVariable Long idRestaurante,
+            @PathVariable Long idCategoria
+    ) {
+        var categoria = service.reativar(idCategoria, idRestaurante);
         return ResponseEntity.ok(new DadosDetalhamentoCategoria(categoria));
     }
 }

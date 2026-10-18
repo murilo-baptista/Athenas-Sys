@@ -1,5 +1,6 @@
 package br.com.athenassys.api.controller;
 
+import br.com.athenassys.api.dto.mesa.DadosDetalhamentoMesa;
 import br.com.athenassys.api.dto.produto.DadosAtualizacaoProduto;
 import br.com.athenassys.api.dto.produto.DadosCadastroProduto;
 import br.com.athenassys.api.dto.produto.DadosDetalhamentoProduto;
@@ -76,6 +77,16 @@ public class ProdutoController {
 
         var produto = service.buscarPorId(idProduto, idRestaurante);
 
+        return ResponseEntity.ok(new DadosDetalhamentoProduto(produto));
+    }
+
+    @PatchMapping("/{idProduto}/reativar")
+    @Transactional
+    public ResponseEntity<DadosDetalhamentoProduto> reativar(
+            @PathVariable Long idRestaurante,
+            @PathVariable Long idProduto
+    ) {
+        var produto = service.reativar(idProduto, idRestaurante);
         return ResponseEntity.ok(new DadosDetalhamentoProduto(produto));
     }
 }

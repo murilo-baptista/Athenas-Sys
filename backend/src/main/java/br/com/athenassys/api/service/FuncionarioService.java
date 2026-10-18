@@ -7,6 +7,7 @@ import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.exception.ChaveIncorretaException;
 import br.com.athenassys.api.model.Funcionario;
+import br.com.athenassys.api.model.Mesa;
 import br.com.athenassys.api.repository.FuncionarioRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
 import lombok.RequiredArgsConstructor;
@@ -84,6 +85,16 @@ public class FuncionarioService {
         var codigo = passwordEncoder.encode(dados.chaveNova());
 
         funcionario.alterarCodigo(codigo);
+        return funcionario;
+    }
+
+    public Funcionario reativar(Long idFuncionario, Long idRestaurante) {
+
+        var funcionario = funcionarioRepository
+                .findByIdAndRestauranteId(idFuncionario, idRestaurante)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrada"));
+
+        funcionario.reativar();
         return funcionario;
     }
 }
