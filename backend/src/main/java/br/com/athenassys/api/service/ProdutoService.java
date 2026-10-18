@@ -4,6 +4,7 @@ import br.com.athenassys.api.dto.produto.DadosAtualizacaoProduto;
 import br.com.athenassys.api.dto.produto.DadosCadastroProduto;
 import br.com.athenassys.api.dto.produto.DadosListagemProduto;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
+import br.com.athenassys.api.exception.StatusInvalidoException;
 import br.com.athenassys.api.model.Categoria;
 import br.com.athenassys.api.model.Mesa;
 import br.com.athenassys.api.model.Produto;
@@ -87,6 +88,13 @@ public class ProdutoService {
         var produto = produtoRepository
                 .findByIdAndRestauranteId(idProduto, idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrada"));
+
+        var categoria = produto.getCategoria();
+
+        if (categoria.getAtivo() == false) {
+            throw new StatusInvalidoException(
+                    "Produto sem categoria. Para reativar este produto, certifique-se de que a categoria dele está ativa");
+        }
 
         produto.reativar();
         return produto;
