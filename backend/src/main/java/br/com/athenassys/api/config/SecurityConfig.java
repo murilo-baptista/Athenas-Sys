@@ -88,8 +88,6 @@ public class SecurityConfig {
                     req.requestMatchers(HttpMethod.PUT, "/restaurantes/{idRestaurante}/pedidos/{idPedido}").hasAnyRole("GERENTE", "GARCOM");
                     req.requestMatchers(HttpMethod.GET, "/restaurantes/{idRestaurante}/pedidos").hasAnyRole("GERENTE", "GARCOM", "COZINHA");
                     req.requestMatchers(HttpMethod.GET, "/restaurantes/{idRestaurante}/pedidos/{idPedido}").hasAnyRole("GERENTE", "GARCOM", "COZINHA");
-                    req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/pedidos/{idPedido}/entregar").hasAnyRole("GERENTE", "GARCOM");
-                    req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/pedidos/{idPedido}/cancelar").hasAnyRole("GERENTE", "GARCOM");
 
                     //Itens
                     req.requestMatchers(HttpMethod.POST, "/restaurantes/{idRestaurante}/pedidos/{idPedido}/itens").hasAnyRole("GERENTE", "GARCOM");
