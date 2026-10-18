@@ -3,6 +3,7 @@ package br.com.athenassys.api.service;
 import br.com.athenassys.api.dto.mesa.DadosAtualizacaoMesa;
 import br.com.athenassys.api.dto.mesa.DadosCadastroMesa;
 import br.com.athenassys.api.dto.mesa.DadosListagemMesa;
+import br.com.athenassys.api.exception.EntidadeDesativadaException;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.Mesa;
 import br.com.athenassys.api.repository.MesaRepository;
@@ -26,8 +27,18 @@ public class MesaService {
         var restaurante = restauranteRepository
                 .findById(idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
-        var mesa = new Mesa(dados, restaurante);
 
+        var entidade = mesaRepository.findByNumeroAndRestauranteId(dados.numero(), idRestaurante);
+
+        if (entidade.isPresent() && !Boolean.TRUE.equals(entidade.get().getAtivo())) {
+            throw new EntidadeDesativadaException(
+                    "ENTIDADE_DESATIVADA",
+                    "mesa",
+                    entidade.get().getId(),
+                    "A mesa " + entidade.get().getNumero() + " foi removida, deseja recriar?");
+        }
+
+        var mesa = new Mesa(dados, restaurante);
         return mesaRepository.save(mesa);
     }
 

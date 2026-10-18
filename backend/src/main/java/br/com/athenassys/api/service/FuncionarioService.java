@@ -4,6 +4,7 @@ import br.com.athenassys.api.dto.funcionario.DadosAtualizacaoFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosCadastroFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosListagemFuncionario;
 import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
+import br.com.athenassys.api.exception.EntidadeDesativadaException;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.exception.ChaveIncorretaException;
 import br.com.athenassys.api.model.Funcionario;
@@ -32,8 +33,18 @@ public class FuncionarioService {
                 .findById(idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
         var codigo = passwordEncoder.encode(dados.codigo());
-        var funcionario = new Funcionario(dados, codigo, restaurante);
 
+        var entidade = funcionarioRepository.findByNomeAndRestauranteId(dados.nome(), idRestaurante);
+
+        if (entidade.isPresent() && !Boolean.TRUE.equals(entidade.get().getAtivo())) {
+            throw new EntidadeDesativadaException(
+                    "ENTIDADE_DESATIVADA",
+                    "categoria",
+                    entidade.get().getId(),
+                    "O funcionário " + entidade.get().getNome() + " foi removido, deseja recriar?");
+        }
+
+        var funcionario = new Funcionario(dados, codigo, restaurante);
         return funcionarioRepository.save(funcionario);
     }
 

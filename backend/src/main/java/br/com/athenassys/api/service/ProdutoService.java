@@ -37,6 +37,16 @@ public class ProdutoService {
                 .findByIdAndRestauranteId(dados.idCategoria(), idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria não encontrada."));
 
+        var entidade = produtoRepository.findByNomeAndRestauranteId(dados.nome(), idRestaurante);
+
+        if (entidade.isPresent() && !Boolean.TRUE.equals(entidade.get().getAtivo())) {
+            throw new EntidadeDesativadaException(
+                    "ENTIDADE_DESATIVADA",
+                    "categoria",
+                    entidade.get().getId(),
+                    "O produto " + entidade.get().getNome() + " foi removido, deseja recriar?");
+        }
+
         var produto = new Produto(dados, restaurante, categoria);
         return produtoRepository.save(produto);
     }
@@ -94,6 +104,9 @@ public class ProdutoService {
 
         if (categoria.getAtivo() == false) {
             throw new EntidadeDesativadaException(
+                    "ENTIDADE_DESATIVADA",
+                    "categoria",
+                    categoria.getId(),
                     "Produto sem categoria. Para reativar este produto, certifique-se de que a categoria dele está ativa");
         }
 
