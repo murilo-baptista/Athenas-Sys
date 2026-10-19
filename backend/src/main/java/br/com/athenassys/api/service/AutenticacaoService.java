@@ -6,6 +6,7 @@ import br.com.athenassys.api.model.Restaurante;
 import br.com.athenassys.api.repository.FuncionarioRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,13 +32,16 @@ public class AutenticacaoService implements UserDetailsService {
 
         return restauranteRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Restaurante não encontrado! Nome ou senha incorretos."));
-
     }
 
     public Funcionario autenticarFuncionario(DadosAutenticacaoFuncionario dados) throws UsernameNotFoundException {
 
-        var restaurante = (Restaurante) SecurityContextHolder.getContext()
+        var principal = SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
+
+        if (!(principal instanceof Restaurante restaurante)) {
+            throw new AccessDeniedException("Apenas o restaurante autenticado pode logar funcionários.");
+        }
 
         var funcionario = funcionarioRepository
                 .findByNomeAndRestauranteId(dados.usuario(), restaurante.getId())
