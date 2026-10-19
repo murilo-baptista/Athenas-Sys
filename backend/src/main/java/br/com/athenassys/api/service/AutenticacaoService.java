@@ -2,10 +2,12 @@ package br.com.athenassys.api.service;
 
 import br.com.athenassys.api.dto.autenticacao.DadosAutenticacaoFuncionario;
 import br.com.athenassys.api.model.Funcionario;
+import br.com.athenassys.api.model.Restaurante;
 import br.com.athenassys.api.repository.FuncionarioRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,8 +36,11 @@ public class AutenticacaoService implements UserDetailsService {
 
     public Funcionario autenticarFuncionario(DadosAutenticacaoFuncionario dados) throws UsernameNotFoundException {
 
+        var restaurante = (Restaurante) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+
         var funcionario = funcionarioRepository
-                .findByNomeAndRestauranteId(dados.usuario(), dados.restauranteId())
+                .findByNomeAndRestauranteId(dados.usuario(), restaurante.getId())
                 .orElseThrow(() -> new BadCredentialsException("Funcionário não encontrado! Nome ou senha incorretos."));
 
         if (!funcionario.isEnabled()) {
