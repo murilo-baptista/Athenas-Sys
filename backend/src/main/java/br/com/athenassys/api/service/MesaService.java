@@ -35,7 +35,7 @@ public class MesaService {
                     "ENTIDADE_DESATIVADA",
                     "mesa",
                     entidade.get().getId(),
-                    "A mesa " + entidade.get().getNumero() + " foi removida, deseja recriar?");
+                    "A mesa " + entidade.get().getNumero() + " foi removida, deseja reativar?");
         }
 
         var mesa = new Mesa(dados, restaurante);
@@ -101,7 +101,7 @@ public class MesaService {
 
         var mesa = mesaRepository
                 .findByIdAndRestauranteId(idMesa, idRestaurante)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Mesa não encontrada"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Mesa não encontrada."));
 
         mesa.reativar();
         return mesa;

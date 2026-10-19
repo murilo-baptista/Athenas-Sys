@@ -1,14 +1,13 @@
 package br.com.athenassys.api.service;
 
+import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
 import br.com.athenassys.api.dto.funcionario.DadosAtualizacaoFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosCadastroFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosListagemFuncionario;
-import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
+import br.com.athenassys.api.exception.ChaveIncorretaException;
 import br.com.athenassys.api.exception.EntidadeDesativadaException;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
-import br.com.athenassys.api.exception.ChaveIncorretaException;
 import br.com.athenassys.api.model.Funcionario;
-import br.com.athenassys.api.model.Mesa;
 import br.com.athenassys.api.repository.FuncionarioRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,9 +38,9 @@ public class FuncionarioService {
         if (entidade.isPresent() && !Boolean.TRUE.equals(entidade.get().getAtivo())) {
             throw new EntidadeDesativadaException(
                     "ENTIDADE_DESATIVADA",
-                    "categoria",
+                    "funcionario",
                     entidade.get().getId(),
-                    "O funcionário " + entidade.get().getNome() + " foi removido, deseja recriar?");
+                    "O funcionário " + entidade.get().getNome() + " foi removido, deseja reativar?");
         }
 
         var funcionario = new Funcionario(dados, codigo, restaurante);
@@ -103,7 +102,7 @@ public class FuncionarioService {
 
         var funcionario = funcionarioRepository
                 .findByIdAndRestauranteId(idFuncionario, idRestaurante)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrada"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado."));
 
         funcionario.reativar();
         return funcionario;

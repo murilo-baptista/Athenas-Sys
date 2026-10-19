@@ -1,6 +1,5 @@
 package br.com.athenassys.api.controller;
 
-import br.com.athenassys.api.dto.mesa.DadosDetalhamentoMesa;
 import br.com.athenassys.api.dto.produto.DadosAtualizacaoProduto;
 import br.com.athenassys.api.dto.produto.DadosCadastroProduto;
 import br.com.athenassys.api.dto.produto.DadosDetalhamentoProduto;

@@ -5,9 +5,7 @@ import br.com.athenassys.api.dto.produto.DadosCadastroProduto;
 import br.com.athenassys.api.dto.produto.DadosListagemProduto;
 import br.com.athenassys.api.exception.EntidadeDesativadaException;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
-import br.com.athenassys.api.exception.StatusInvalidoException;
 import br.com.athenassys.api.model.Categoria;
-import br.com.athenassys.api.model.Mesa;
 import br.com.athenassys.api.model.Produto;
 import br.com.athenassys.api.repository.CategoriaRepository;
 import br.com.athenassys.api.repository.ProdutoRepository;
@@ -42,9 +40,9 @@ public class ProdutoService {
         if (entidade.isPresent() && !Boolean.TRUE.equals(entidade.get().getAtivo())) {
             throw new EntidadeDesativadaException(
                     "ENTIDADE_DESATIVADA",
-                    "categoria",
+                    "produto",
                     entidade.get().getId(),
-                    "O produto " + entidade.get().getNome() + " foi removido, deseja recriar?");
+                    "O produto " + entidade.get().getNome() + " foi removido, deseja reativar?");
         }
 
         var produto = new Produto(dados, restaurante, categoria);
@@ -98,7 +96,7 @@ public class ProdutoService {
 
         var produto = produtoRepository
                 .findByIdAndRestauranteId(idProduto, idRestaurante)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrada"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado."));
 
         var categoria = produto.getCategoria();
 
@@ -107,7 +105,7 @@ public class ProdutoService {
                     "ENTIDADE_DESATIVADA",
                     "categoria",
                     categoria.getId(),
-                    "Produto sem categoria. Para reativar este produto, certifique-se de que a categoria dele está ativa");
+                    "Produto sem categoria. Para reativar este produto, certifique-se de que a categoria dele está ativa.");
         }
 
         produto.reativar();

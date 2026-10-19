@@ -6,7 +6,6 @@ import br.com.athenassys.api.dto.categoria.DadosListagemCategoria;
 import br.com.athenassys.api.exception.EntidadeDesativadaException;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.Categoria;
-import br.com.athenassys.api.model.Mesa;
 import br.com.athenassys.api.repository.CategoriaRepository;
 import br.com.athenassys.api.repository.ProdutoRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
@@ -38,7 +37,7 @@ public class CategoriaService {
                     "ENTIDADE_DESATIVADA",
                     "categoria",
                     entidade.get().getId(),
-                    "A categoria " + entidade.get().getNome() + " foi removida, deseja recriar?");
+                    "A categoria " + entidade.get().getNome() + " foi removida, deseja reativar?");
         }
 
         var categoria = new Categoria(dados, restaurante);
@@ -91,7 +90,7 @@ public class CategoriaService {
 
         var categoria = categoriaRepository
                 .findByIdAndRestauranteId(idCategoria, idRestaurante)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria não encontrada"));
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria não encontrada."));
 
         categoria.reativar();
         return categoria;
