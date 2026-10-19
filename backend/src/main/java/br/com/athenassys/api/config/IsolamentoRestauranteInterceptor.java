@@ -27,19 +27,33 @@ public class IsolamentoRestauranteInterceptor implements HandlerInterceptor {
         @SuppressWarnings("unchecked")
         var variaveis = (Map<String, String>) request
                 .getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        var idDaUrl = Long.valueOf(variaveis.get("idRestaurante"));
+        if (variaveis == null) {
+            return true;
+        }
+        var idTexto = variaveis.get("idRestaurante");
 
-        Long idDoToken = null;
-        if (auth.getPrincipal() instanceof Restaurante r) {
-            idDoToken = r.getId();
-            
-        } else if (auth.getPrincipal() instanceof Funcionario f) {
-            idDoToken = f.getRestaurante().getId();
+        if (idTexto == null) {
+            return true;
+        }
+        try {
+            var idDaUrl = Long.valueOf(idTexto);
+
+            Long idDoToken = null;
+            if (auth.getPrincipal() instanceof Restaurante r) {
+                idDoToken = r.getId();
+
+            } else if (auth.getPrincipal() instanceof Funcionario f) {
+                idDoToken = f.getRestaurante().getId();
+            }
+
+            if (!idDaUrl.equals(idDoToken)) {
+                throw new AccessDeniedException("Restaurante diferente do autenticado!");
+            }
+
+        } catch (NumberFormatException ex) {
+            return true;
         }
 
-        if (!idDaUrl.equals(idDoToken)) {
-            throw new AccessDeniedException("Restaurante diferente do autenticado!");
-        }
         return true;
     }
 }
