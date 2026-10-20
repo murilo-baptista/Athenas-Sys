@@ -78,4 +78,14 @@ public class ProdutoController {
 
         return ResponseEntity.ok(new DadosDetalhamentoProduto(produto));
     }
+
+    @PatchMapping("/{idProduto}/reativar")
+    @Transactional
+    public ResponseEntity<DadosDetalhamentoProduto> reativar(
+            @PathVariable Long idRestaurante,
+            @PathVariable Long idProduto
+    ) {
+        var produto = service.reativar(idProduto, idRestaurante);
+        return ResponseEntity.ok(new DadosDetalhamentoProduto(produto));
+    }
 }

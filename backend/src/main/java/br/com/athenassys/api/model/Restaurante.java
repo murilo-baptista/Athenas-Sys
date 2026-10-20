@@ -67,6 +67,10 @@ public class Restaurante implements UserDetails {
         this.ativo = false;
     }
 
+    public void reativar() {
+        this.ativo = true;
+    }
+
     public void alterarSenha(String senha) {
         this.senha = senha;
     }

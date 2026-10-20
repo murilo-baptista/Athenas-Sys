@@ -1,11 +1,12 @@
 package br.com.athenassys.api.service;
 
+import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
 import br.com.athenassys.api.dto.funcionario.DadosAtualizacaoFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosCadastroFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosListagemFuncionario;
-import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
-import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.exception.ChaveIncorretaException;
+import br.com.athenassys.api.exception.EntidadeDesativadaException;
+import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.Funcionario;
 import br.com.athenassys.api.repository.FuncionarioRepository;
 import br.com.athenassys.api.repository.RestauranteRepository;
@@ -31,8 +32,18 @@ public class FuncionarioService {
                 .findById(idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
         var codigo = passwordEncoder.encode(dados.codigo());
-        var funcionario = new Funcionario(dados, codigo, restaurante);
 
+        var entidade = funcionarioRepository.findByNomeAndRestauranteId(dados.nome(), idRestaurante);
+
+        if (entidade.isPresent() && !Boolean.TRUE.equals(entidade.get().getAtivo())) {
+            throw new EntidadeDesativadaException(
+                    "ENTIDADE_DESATIVADA",
+                    "funcionario",
+                    entidade.get().getId(),
+                    "O funcionário " + entidade.get().getNome() + " foi removido, deseja reativar?");
+        }
+
+        var funcionario = new Funcionario(dados, codigo, restaurante);
         return funcionarioRepository.save(funcionario);
     }
 
@@ -83,7 +94,17 @@ public class FuncionarioService {
 
         var codigo = passwordEncoder.encode(dados.chaveNova());
 
-        funcionario.atualizarCodigo(codigo);
+        funcionario.alterarCodigo(codigo);
+        return funcionario;
+    }
+
+    public Funcionario reativar(Long idFuncionario, Long idRestaurante) {
+
+        var funcionario = funcionarioRepository
+                .findByIdAndRestauranteId(idFuncionario, idRestaurante)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Funcionário não encontrado."));
+
+        funcionario.reativar();
         return funcionario;
     }
 }

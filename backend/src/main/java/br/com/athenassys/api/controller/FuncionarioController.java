@@ -1,10 +1,10 @@
 package br.com.athenassys.api.controller;
 
+import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
 import br.com.athenassys.api.dto.funcionario.DadosAtualizacaoFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosCadastroFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosDetalhamentoFuncionario;
 import br.com.athenassys.api.dto.funcionario.DadosListagemFuncionario;
-import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
 import br.com.athenassys.api.service.FuncionarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -89,5 +89,15 @@ public class FuncionarioController {
 
         service.alterarCodigo(dados, idRestaurante, idFuncionario);
         return ResponseEntity.ok("O código foi alterado!");
+    }
+
+    @PatchMapping("/{idFuncionario}/reativar")
+    @Transactional
+    public ResponseEntity<DadosDetalhamentoFuncionario> reativar(
+            @PathVariable Long idRestaurante,
+            @PathVariable Long idFuncionario
+    ) {
+        var funcionario = service.reativar(idFuncionario, idRestaurante);
+        return ResponseEntity.ok(new DadosDetalhamentoFuncionario(funcionario));
     }
 }

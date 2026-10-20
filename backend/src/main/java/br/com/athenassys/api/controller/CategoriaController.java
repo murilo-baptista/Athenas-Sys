@@ -78,4 +78,14 @@ public class CategoriaController {
 
         return ResponseEntity.ok(new DadosDetalhamentoCategoria(categoria));
     }
+
+    @PatchMapping("/{idCategoria}/reativar")
+    @Transactional
+    public ResponseEntity<DadosDetalhamentoCategoria> reativar(
+            @PathVariable Long idRestaurante,
+            @PathVariable Long idCategoria
+    ) {
+        var categoria = service.reativar(idCategoria, idRestaurante);
+        return ResponseEntity.ok(new DadosDetalhamentoCategoria(categoria));
+    }
 }

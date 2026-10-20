@@ -98,4 +98,14 @@ public class MesaController {
         var mesa = service.desocupar(idMesa, idRestaurante);
         return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
     }
+
+    @PatchMapping("/{idMesa}/reativar")
+    @Transactional
+    public ResponseEntity<DadosDetalhamentoMesa> reativar(
+            @PathVariable Long idRestaurante,
+            @PathVariable Long idMesa
+    ) {
+        var mesa = service.reativar(idMesa, idRestaurante);
+        return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
+    }
 }

@@ -3,6 +3,7 @@ package br.com.athenassys.api.service;
 import br.com.athenassys.api.dto.categoria.DadosAtualizacaoCategoria;
 import br.com.athenassys.api.dto.categoria.DadosCadastroCategoria;
 import br.com.athenassys.api.dto.categoria.DadosListagemCategoria;
+import br.com.athenassys.api.exception.EntidadeDesativadaException;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.Categoria;
 import br.com.athenassys.api.repository.CategoriaRepository;
@@ -28,8 +29,18 @@ public class CategoriaService {
         var restaurante = restauranteRepository
                 .findById(idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
-        var categoria = new Categoria(dados, restaurante);
 
+        var entidade = categoriaRepository.findByNomeAndRestauranteId(dados.nome(), idRestaurante);
+
+        if (entidade.isPresent() && !Boolean.TRUE.equals(entidade.get().getAtivo())) {
+            throw new EntidadeDesativadaException(
+                    "ENTIDADE_DESATIVADA",
+                    "categoria",
+                    entidade.get().getId(),
+                    "A categoria " + entidade.get().getNome() + " foi removida, deseja reativar?");
+        }
+
+        var categoria = new Categoria(dados, restaurante);
         return categoriaRepository.save(categoria);
     }
 
@@ -73,5 +84,15 @@ public class CategoriaService {
         return categoriaRepository
                 .findByIdAndRestauranteId(idCategoria, idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria não encontrada."));
+    }
+
+    public Categoria reativar(Long idCategoria, Long idRestaurante) {
+
+        var categoria = categoriaRepository
+                .findByIdAndRestauranteId(idCategoria, idRestaurante)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria não encontrada."));
+
+        categoria.reativar();
+        return categoria;
     }
 }
