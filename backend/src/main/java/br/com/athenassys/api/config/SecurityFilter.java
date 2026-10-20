@@ -49,28 +49,22 @@ public class SecurityFilter extends OncePerRequestFilter {
                 if (tipo.equals("RESTAURANTE")) {
                     var restaurante = restauranteRepository.findByEmail(subject);
 
-                    restaurante
-                            .filter(r -> r.isEnabled())
-                            .ifPresent(r -> {
-                                var authentication = new UsernamePasswordAuthenticationToken(
-                                        r, null, r.getAuthorities());
-                                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    restaurante.ifPresent(r -> {
+                        var authentication = new UsernamePasswordAuthenticationToken(r, null, r.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
                     });
 
                 } else if (tipo.equals("FUNCIONARIO")) {
                     var idRestaurante = tokenService.getRestauranteId(tokenJWT);
                     var funcionario = funcionarioRepository.findByNomeAndRestauranteId(subject, idRestaurante);
 
-                    funcionario
-                            .filter(f -> f.isEnabled())
-                            .ifPresent(f -> {
-                                var authentication = new UsernamePasswordAuthenticationToken(
-                                        f, null, f.getAuthorities());
-                                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    funcionario.ifPresent(f -> {
+                        var authentication = new UsernamePasswordAuthenticationToken(f, null, f.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
                     });
                 }
             } catch (Exception ex) {
-                // token invalido/expirado -> segue sem autenticar, quem decide depois é o authorizeHttpRequests
+                // token invalido/expirado -> segue sem autenticar, quem decide dps é o authorizeHttpRequests
             }
         }
         filterChain.doFilter(request, response);

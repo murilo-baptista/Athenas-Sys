@@ -59,7 +59,7 @@ public class SecurityConfig {
                     req.requestMatchers(HttpMethod.GET, "/restaurantes/{idRestaurante}/mesas").hasAnyRole("GERENTE", "RECEPCAO", "GARCOM", "COZINHA");
                     req.requestMatchers(HttpMethod.GET, "/restaurantes/{idRestaurante}/mesas/{idMesa}").hasAnyRole("GERENTE", "RECEPCAO");
                     req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/mesas/{idMesa}/ocupar").hasAnyRole("GERENTE", "RECEPCAO");
-                    req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/mesas/{idMesa}/desocupar").hasAnyRole("GERENTE", "RECEPCAO", "GARCOM");
+                    req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/mesas/{idMesa}/desocupar").hasAnyRole("GERENTE", "RECEPCAO");
 
                     //Reservas
                     req.requestMatchers(HttpMethod.POST, "/restaurantes/{idRestaurante}/reservas").hasAnyRole("GERENTE", "RECEPCAO");
@@ -88,6 +88,8 @@ public class SecurityConfig {
                     req.requestMatchers(HttpMethod.PUT, "/restaurantes/{idRestaurante}/pedidos/{idPedido}").hasAnyRole("GERENTE", "GARCOM");
                     req.requestMatchers(HttpMethod.GET, "/restaurantes/{idRestaurante}/pedidos").hasAnyRole("GERENTE", "GARCOM", "COZINHA");
                     req.requestMatchers(HttpMethod.GET, "/restaurantes/{idRestaurante}/pedidos/{idPedido}").hasAnyRole("GERENTE", "GARCOM", "COZINHA");
+                    req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/pedidos/{idPedido}/entregar").hasAnyRole("GERENTE", "GARCOM");
+                    req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/pedidos/{idPedido}/cancelar").hasAnyRole("GERENTE", "GARCOM");
 
                     //Itens
                     req.requestMatchers(HttpMethod.POST, "/restaurantes/{idRestaurante}/pedidos/{idPedido}/itens").hasAnyRole("GERENTE", "GARCOM");
@@ -98,10 +100,6 @@ public class SecurityConfig {
                     req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/pedidos/{idPedido}/itens/{idItemPedido}/marcarPronto").hasAnyRole("GERENTE", "COZINHA");
                     req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/pedidos/{idPedido}/itens/{idItemPedido}/entregar").hasAnyRole("GERENTE", "GARCOM");
                     req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/pedidos/{idPedido}/itens/{idItemPedido}/cancelar").hasAnyRole("GERENTE", "GARCOM");
-
-                    //Alterar chave
-                    req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/alterarSenha").hasAnyRole("GERENTE");
-                    req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/funcionarios/{idFuncionario}/alterarCodigo").hasAnyRole("GERENTE");
 
                     req.anyRequest().authenticated();
                 })
