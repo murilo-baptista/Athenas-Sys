@@ -1,5 +1,6 @@
 package br.com.athenassys.api.controller;
 
+import br.com.athenassys.api.config.LimitadorDeTentativas;
 import br.com.athenassys.api.dto.autenticacao.DadosAutenticacaoFuncionario;
 import br.com.athenassys.api.dto.autenticacao.DadosAutenticacaoRestaurante;
 import br.com.athenassys.api.dto.autenticacao.DadosTokenJWT;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,24 +31,56 @@ public class AutenticacaoController {
     @Autowired
     private AutenticacaoService autenticacaoService;
 
+    @Autowired
+    private LimitadorDeTentativas limitador;
+
     @PostMapping ("/login")
     public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacaoRestaurante dados) {
-        var authenticationToken = new UsernamePasswordAuthenticationToken(dados.usuario(), dados.senha());
-        var authentication = manager.authenticate(authenticationToken);
+        var chave = dados.usuario().trim().toLowerCase();
+        limitador.verificar(chave);
 
-        var restaurante = (Restaurante) authentication.getPrincipal();
-        var tokenJWT = tokenService.gerarTokenRestaurante(restaurante);
+        try {
+            var authenticationToken = new UsernamePasswordAuthenticationToken(dados.usuario(), dados.senha());
+            var authentication = manager.authenticate(authenticationToken);
+            limitador.limpar(chave);
 
-        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT, restaurante.getId(), restaurante.getNome(), null, null, null));
+            var restaurante = (Restaurante) authentication.getPrincipal();
+            var tokenJWT = tokenService.gerarTokenRestaurante(restaurante);
+
+            return ResponseEntity.ok(
+                    new DadosTokenJWT(tokenJWT,
+                            restaurante.getId(),
+                            restaurante.getNome(),
+                            null,
+                            null,
+                            null));
+
+        } catch (AuthenticationException ex) {
+            limitador.registrarFalha(chave);
+            throw ex;
+        }
     }
 
     @PostMapping ("/funcionario/login")
     public ResponseEntity efetuarLoginFuncionario(@RequestBody @Valid DadosAutenticacaoFuncionario dados) {
 
-        var funcionario = autenticacaoService.autenticarFuncionario(dados);
+        var chave = dados.usuario().trim().toLowerCase();
+        limitador.verificar(chave);
 
-        var tokenJWT = tokenService.gerarTokenFuncionario(funcionario);
+        try {
+            var funcionario = autenticacaoService.autenticarFuncionario(dados);
+            var tokenJWT = tokenService.gerarTokenFuncionario(funcionario);
+            return ResponseEntity.ok(
+                    new DadosTokenJWT(tokenJWT,
+                            null,
+                            null,
+                            funcionario.getId(),
+                            funcionario.getNome(),
+                            funcionario.getCargo().toString()));
 
-        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT, null, null, funcionario.getId(), funcionario.getNome(), funcionario.getCargo().toString()));
+        } catch (AuthenticationException ex) {
+            limitador.registrarFalha(chave);
+            throw ex;
+        }
     }
 }

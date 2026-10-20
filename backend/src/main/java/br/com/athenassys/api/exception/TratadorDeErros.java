@@ -194,6 +194,12 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado.");
     }
 
+    //Trata erro 429 para muitas tentativas (mais que 5 dentro de 15 minutos)
+    @ExceptionHandler(TentativasExcedidasException.class)
+    public ResponseEntity<String> tratarTentativasExcedidas(TentativasExcedidasException ex) {
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ex.getMessage());
+    }
+
     //Trata qualquer tipo de erro para evitar vazamento de dados e informações internas, tornando o erro em 500
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> tratarErroNaoTratado(Exception ex) {
