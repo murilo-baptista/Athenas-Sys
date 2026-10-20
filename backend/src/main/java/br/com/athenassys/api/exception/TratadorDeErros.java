@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,7 +34,7 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
             "uk_restaurantes_cnpj", new DadosErro("cnpj", "Já existe um restaurante cadastrado com esse CNPJ."),
             "uk_restaurantes_email", new DadosErro("email", "Já existe um restaurante cadastrado com esse e-mail."),
             "uk_mesas_restaurante_numero", new DadosErro("numero", "Já existe uma mesa cadastrada com esse número neste restaurante."),
-            "uk_funcionarios_restaurante_codigo", new DadosErro("codigo", "Já existe um funcionário cadastrado com esse código neste restaurante."),
+            "uk_funcionarios_restaurante_nome", new DadosErro("nome", "Já existe um funcionário cadastrado com esse nome neste restaurante."),
             "uk_categorias_restaurante_nome", new DadosErro("nome", "Já existe uma categoria cadastrada com esse nome neste restaurante."),
             "uk_produtos_restaurante_nome", new DadosErro("nome", "Já existe um produto cadastrado com esse nome neste restaurante.")
     );
@@ -177,6 +179,19 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ChaveIncorretaException.class)
     public ResponseEntity<String> tratarErroSenhaIncorreta(ChaveIncorretaException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
+    //Trata erro 401 para erros de autenticação
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<String> tratarFalhaAutenticacao(AuthenticationException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("Usuário inexistente ou senha inválida");
+    }
+
+    //Trata erro 403 para erro de acesso negado
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<String> tratarAcessoNegado(AccessDeniedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado.");
     }
 
     //Trata qualquer tipo de erro para evitar vazamento de dados e informações internas, tornando o erro em 500
