@@ -1,0 +1,53 @@
+package br.com.athenassys.api.controller;
+
+import br.com.athenassys.api.dto.recuperacao.DadosConfirmacaoReativacao;
+import br.com.athenassys.api.dto.recuperacao.DadosConfirmacaoRecuperacao;
+import br.com.athenassys.api.dto.recuperacao.DadosSolicitacaoCodigo;
+import br.com.athenassys.api.exception.CodigoInvalidoException;
+import br.com.athenassys.api.service.RecuperacaoContaService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/auth")
+public class RecuperacaoContaController {
+
+    @Autowired
+    private RecuperacaoContaService service;
+
+    @PostMapping("/recuperar-senha/solicitar")
+    public ResponseEntity<Void> solicitarRecuperacao(@RequestBody @Valid DadosSolicitacaoCodigo dados) {
+
+        service.solicitarRecuperacao(dados.email());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/recuperar-senha/confirmar")
+    @Transactional
+    public ResponseEntity<Void> confirmarRecuperacao(@RequestBody @Valid DadosConfirmacaoRecuperacao dados) throws CodigoInvalidoException {
+
+        service.confirmarRecuperacao(dados.email(), dados.codigo(), dados.novaSenha());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/reativar-conta/solicitar")
+    public ResponseEntity<Void> solicitarReativacao(@RequestBody @Valid DadosSolicitacaoCodigo dados) {
+
+        service.solicitarReativacao(dados.email());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/reativar-conta/confirmar")
+    @Transactional
+    public ResponseEntity<Void> confirmarReativacao(@RequestBody @Valid DadosConfirmacaoReativacao dados) throws CodigoInvalidoException {
+
+        service.confirmarReativacao(dados.email(), dados.codigo());
+        return ResponseEntity.noContent().build();
+    }
+}

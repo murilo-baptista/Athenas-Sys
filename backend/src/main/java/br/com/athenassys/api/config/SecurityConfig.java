@@ -39,6 +39,12 @@ public class SecurityConfig {
                     //Login
                     req.requestMatchers(HttpMethod.POST, "/auth/login").permitAll();
 
+                    //Recuperar Conta
+                    req.requestMatchers(HttpMethod.POST, "/auth/recuperar-senha/solicitar").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/auth/recuperar-senha/confirmar").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/auth/reativar-conta/solicitar").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/auth/reativar-conta/confirmar").permitAll();
+
                     //Restaurante
                     req.requestMatchers(HttpMethod.POST, "/restaurantes").permitAll();
                     req.requestMatchers(HttpMethod.PUT, "/restaurantes/{idRestaurante}").hasRole("GERENTE");
@@ -99,7 +105,7 @@ public class SecurityConfig {
                     req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/pedidos/{idPedido}/itens/{idItemPedido}/entregar").hasAnyRole("GERENTE", "GARCOM");
                     req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/pedidos/{idPedido}/itens/{idItemPedido}/cancelar").hasAnyRole("GERENTE", "GARCOM");
 
-                    //Alterar chave
+                    //Alterar Chave
                     req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/alterarSenha").hasAnyRole("GERENTE");
                     req.requestMatchers(HttpMethod.PATCH, "/restaurantes/{idRestaurante}/funcionarios/{idFuncionario}/alterarCodigo").hasAnyRole("GERENTE");
 
