@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,10 +16,10 @@ public class CodigoVerificacaoService {
 
     public enum Finalidade { RECUPERAR_SENHA, REATIVAR }
 
-    public final int MAXIMO_TENTATIVAS = 5;
-    public final Duration VALIDADE = Duration.ofMinutes(10);
+    private final int MAXIMO_TENTATIVAS = 5;
+    private final Duration VALIDADE = Duration.ofMinutes(10);
 
-    public record Codigo(String hash, Instant expiraEm, int tentativas) {}
+    private record Codigo(String hash, Instant expiraEm, int tentativas) {}
 
     private final Map<String, Codigo> codigos = new ConcurrentHashMap<>();
     private final SecureRandom random = new SecureRandom();
@@ -35,8 +34,8 @@ public class CodigoVerificacaoService {
     public String gerar(Finalidade finalidade, String email) {
         var codigo = String.format("%06d", random.nextInt(1_000_000));
 
-        codigos.put(chave(finalidade, email)),
-            new Codigo(passwordEncoder.encode(codigo), Instant.now().plus(VALIDADE), 0);
+        codigos.put(chave(finalidade, email),
+            new Codigo(passwordEncoder.encode(codigo), Instant.now().plus(VALIDADE), 0));
         return codigo;
     }
 
