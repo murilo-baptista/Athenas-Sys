@@ -26,13 +26,13 @@
           PEDIDOS EM ANDAMENTO
         </button>
         <button type="button" class="tab-btn" [class.active]="abaAtiva === 'conta'" (click)="abaAtiva = 'conta'">
-          FECHAR CONTA
+          CONTA DA MESA
         </button>
       </div>
 
       <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>
 
-      <!-- ABA: NOVO PEDIDO -->
+      <!-- ===================== ABA: NOVO PEDIDO ===================== -->
       <div class="tab-panel" *ngIf="abaAtiva === 'novo'">
 
         <label class="field-label" for="mesa">NÚMERO DA MESA:</label>
@@ -81,7 +81,7 @@
 
       </div>
 
-      <!-- ABA: PEDIDOS EM ANDAMENTO -->
+      <!-- ================= ABA: PEDIDOS EM ANDAMENTO ================= -->
       <div class="tab-panel andamento-panel" *ngIf="abaAtiva === 'andamento'">
 
         <!-- Filtros laterais -->
@@ -142,7 +142,7 @@
 
       </div>
 
-      <!-- ABA: FECHAR CONTA -->
+      <!-- ===================== ABA: CONTA DA MESA ===================== -->
       <div class="tab-panel" *ngIf="abaAtiva === 'conta'">
         <app-fechar-conta></app-fechar-conta>
       </div>
