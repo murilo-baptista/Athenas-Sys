@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CategoriaService } from '../../../core/services/categoria.service';
-import { CategoriaListagem } from '../../../core/models/categoria.model';
 import { ProdutoService } from '../../../core/services/produto.service';
+import { CategoriaListagem } from '../../../core/models/categoria.model';
 import { ProdutoListagem } from '../../../core/models/produto.model';
 
 @Component({
@@ -18,12 +18,18 @@ export class CadastroCategoriasComponent implements OnInit {
 
   categorias: CategoriaListagem[] = [];
   produtos: ProdutoListagem[] = [];
+  produtosCarregados = false;
   carregando = false;
   salvando = false;
   mensagemErro = '';
 
   idEmEdicao: number | null = null;
   nome = '';
+
+  // Confirmação de remoção (item 2 da V3)
+  categoriaParaRemover: CategoriaListagem | null = null;
+  produtosDaCategoria = 0;
+  removendo = false;
 
   constructor(
     private categoriaService: CategoriaService,
@@ -32,6 +38,7 @@ export class CadastroCategoriasComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregar();
+    this.carregarProdutos();
   }
 
   carregar(): void {
@@ -46,10 +53,19 @@ export class CadastroCategoriasComponent implements OnInit {
         this.mensagemErro = 'Não foi possível carregar as categorias.';
       }
     });
+  }
 
-    // carregado à parte, só para contar produtos por categoria no aviso de remoção
+  /** A lista de produtos é usada só para contar quantos pertencem a cada categoria. */
+  carregarProdutos(): void {
     this.produtoService.listarPorRestaurante().subscribe({
-      next: (produtos) => (this.produtos = produtos)
+      next: (produtos) => {
+        this.produtos = produtos;
+        this.produtosCarregados = true;
+      },
+      error: () => {
+        this.produtos = [];
+        this.produtosCarregados = false;
+      }
     });
   }
 
@@ -90,20 +106,56 @@ export class CadastroCategoriasComponent implements OnInit {
     });
   }
 
+  // ===================== Remover categoria =====================
+
   remover(categoria: CategoriaListagem): void {
-    const quantidadeProdutos = this.produtos.filter(p => p.idCategoria === categoria.id).length;
+    this.mensagemErro = '';
+    this.produtosDaCategoria = this.produtos.filter(p => p.idCategoria === categoria.id).length;
+    this.categoriaParaRemover = categoria;
+  }
 
-    const mensagem = quantidadeProdutos > 0
-      ? `Esta categoria tem ${quantidadeProdutos} produto(s). Eles também serão desativados. Deseja continuar?`
-      : `Remover a categoria "${categoria.nome}"?`;
+  cancelarRemocao(): void {
+    if (this.removendo) return;
+    this.categoriaParaRemover = null;
+  }
 
-    if (!confirm(mensagem)) {
-      return;
+  /** Texto do aviso: usa a contagem de produtos da lista já carregada. */
+  get avisoRemocao(): string {
+    const n = this.produtosDaCategoria;
+
+    if (n > 0) {
+      return n === 1
+        ? 'Esta categoria tem 1 produto. Ele também será desativado. Deseja continuar?'
+        : `Esta categoria tem ${n} produtos. Eles também serão desativados. Deseja continuar?`;
     }
 
+    // Se a lista de produtos não carregou, não dá para afirmar que está vazia.
+    return this.produtosCarregados
+      ? 'Deseja continuar?'
+      : 'Os produtos desta categoria, se houver, também serão desativados. Deseja continuar?';
+  }
+
+  confirmarRemocao(): void {
+    const categoria = this.categoriaParaRemover;
+    if (!categoria || this.removendo) return;
+
+    this.removendo = true;
+
     this.categoriaService.desativar(categoria.id).subscribe({
-      next: () => this.carregar(), // recarrega categorias e produtos, já que os produtos saem da lista
-      error: () => (this.mensagemErro = `Não foi possível remover "${categoria.nome}".`)
+      next: () => {
+        this.removendo = false;
+        this.categoriaParaRemover = null;
+        this.carregar();
+        // Os produtos da categoria deixam de aparecer: atualiza a lista.
+        this.carregarProdutos();
+      },
+      error: (erro) => {
+        this.removendo = false;
+        this.categoriaParaRemover = null;
+        this.mensagemErro = erro.status === 403
+          ? 'Você não tem permissão para remover categorias.'
+          : `Não foi possível remover "${categoria.nome}".`;
+      }
     });
   }
 }
