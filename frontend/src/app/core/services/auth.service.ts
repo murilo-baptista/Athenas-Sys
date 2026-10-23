@@ -82,7 +82,26 @@ export class AuthService {
   }
 
   isAutenticado(): boolean {
-    return !!this.getToken();
+    return !!this.getToken() && !this.tokenExpirado();
+  }
+
+  /**
+   * true se o token JWT já passou da validade (claim "exp").
+   * Se o token não puder ser lido, considera que não está vencido e deixa o
+   * back-end decidir.
+   */
+  tokenExpirado(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+
+    try {
+      const payload = token.split('.')[1];
+      const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      const exp = JSON.parse(json).exp;
+      return typeof exp === 'number' && exp * 1000 <= Date.now();
+    } catch {
+      return false;
+    }
   }
 
   /**
