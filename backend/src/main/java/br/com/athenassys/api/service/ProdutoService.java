@@ -111,4 +111,12 @@ public class ProdutoService {
         produto.reativar();
         return produto;
     }
+
+    public Page<DadosListagemProduto> listarInativos(
+            Long idRestaurante,
+            Pageable paginacao) {
+
+        return produtoRepository.findAllByRestauranteIdAndAtivoFalse(idRestaurante, paginacao)
+                .map(DadosListagemProduto::new);
+    }
 }

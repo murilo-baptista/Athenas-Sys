@@ -107,4 +107,12 @@ public class FuncionarioService {
         funcionario.reativar();
         return funcionario;
     }
+
+    public Page<DadosListagemFuncionario> listarInativos(
+            Long idRestaurante,
+            Pageable paginacao) {
+
+        return funcionarioRepository.findAllByRestauranteIdAndAtivoFalse(idRestaurante, paginacao)
+                .map(DadosListagemFuncionario::new);
+    }
 }

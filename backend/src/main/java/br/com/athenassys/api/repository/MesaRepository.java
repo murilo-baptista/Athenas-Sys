@@ -13,4 +13,6 @@ public interface MesaRepository extends JpaRepository<Mesa, Long> {
     Optional<Mesa> findByIdAndRestauranteId(Long idMesa, Long idRestaurante);
 
     Optional<Mesa> findByNumeroAndRestauranteId(Integer numero, Long idRestaurante);
+
+    Page<Mesa> findAllByRestauranteIdAndAtivoFalse(Long idRestaurante, Pageable paginacao);
 }

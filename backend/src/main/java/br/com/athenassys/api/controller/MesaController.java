@@ -108,4 +108,12 @@ public class MesaController {
         var mesa = service.reativar(idMesa, idRestaurante);
         return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
     }
+
+    @GetMapping("/inativas")
+    public ResponseEntity<Page<DadosListagemMesa>> listarInativas(
+            @PathVariable Long idRestaurante,
+            Pageable paginacao) {
+
+        return ResponseEntity.ok(service.listarInativas(idRestaurante, paginacao));
+    }
 }
