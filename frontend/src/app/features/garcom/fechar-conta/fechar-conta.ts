@@ -8,7 +8,6 @@ import { MesaService } from '../../../core/services/mesa.service';
 import { PedidoService } from '../../../core/services/pedido.service';
 import { ItemPedidoService } from '../../../core/services/item-pedido.service';
 import { ProdutoService } from '../../../core/services/produto.service';
-import { AuthService } from '../../../core/services/auth.service';
 
 import { MesaListagem } from '../../../core/models/mesa.model';
 import { ProdutoListagem } from '../../../core/models/produto.model';
@@ -24,17 +23,20 @@ interface LinhaConta {
 }
 
 /**
- * "Fechar conta" SEM depender do back (o item 4 da V3 foi descartado).
+ * "Conta da mesa" (somente leitura) para o garçom.
  *
- * O back não tem status de Pedido nem rota /fechar. Então esta tela:
- *  1. soma os itens (não cancelados) dos pedidos da mesa, no próprio front;
- *  2. só deixa fechar quando todos os itens foram entregues;
- *  3. libera a mesa com o PATCH /mesas/{id}/desocupar, que já existe.
+ * O item 4 da V3 (status do Pedido e fechar conta) foi descartado no back, e
+ * liberar a mesa (PATCH /mesas/{id}/desocupar) é permitido só para GERENTE e
+ * RECEPCAO (ver SecurityConfig.java). Por isso esta tela NÃO libera a mesa: a
+ * recepção continua fazendo isso pelo mapa de mesas.
  *
- * Como o Pedido não tem status, o front não sabe quais pedidos da mesa já
- * foram pagos. Para isso, guarda no navegador a hora do último fechamento de
- * cada mesa (localStorage) e só soma os pedidos feitos depois dela. Se não
- * houver marca, soma apenas os pedidos de hoje.
+ * O que ela faz: soma, no próprio front, os itens (não cancelados) dos pedidos
+ * feitos hoje para a mesa escolhida. Só usa rotas que o GARCOM já pode chamar
+ * (GET mesas, GET pedidos, GET itens, GET produtos).
+ *
+ * Limitação: o Pedido não tem status, então o front não sabe quais pedidos
+ * da mesa já foram pagos por clientes anteriores. Por isso a conta considera
+ * apenas os pedidos de hoje.
  */
 @Component({
   selector: 'app-fechar-conta',
@@ -54,18 +56,14 @@ export class FecharContaComponent implements OnInit {
   carregandoMesas = false;
   carregandoConta = false;
   contaCompleta = false;
-  confirmando = false;
-  fechando = false;
 
   mensagemErro = '';
-  mensagemSucesso = '';
 
   constructor(
     private mesaService: MesaService,
     private pedidoService: PedidoService,
     private itemPedidoService: ItemPedidoService,
-    private produtoService: ProdutoService,
-    private authService: AuthService
+    private produtoService: ProdutoService
   ) {}
 
   ngOnInit(): void {
@@ -73,14 +71,10 @@ export class FecharContaComponent implements OnInit {
     this.carregarMesas();
   }
 
-  // Dados da tela 
+  // ===================== Dados da tela =====================
 
   get mesasOcupadas(): MesaListagem[] {
     return this.mesas.filter(m => m.status === 'OCUPADA');
-  }
-
-  get mesaAtual(): MesaListagem | undefined {
-    return this.mesas.find(m => m.id === this.mesaSelecionada);
   }
 
   get total(): number {
@@ -89,14 +83,6 @@ export class FecharContaComponent implements OnInit {
 
   get itensNaoEntregues(): number {
     return this.linhas.filter(l => l.status !== 'ENTREGUE').length;
-  }
-
-  podeFechar(): boolean {
-    return !!this.mesaSelecionada
-      && !this.carregandoConta
-      && this.contaCompleta
-      && this.itensNaoEntregues === 0
-      && !this.fechando;
   }
 
   statusRotulo(status: StatusItemPedido): string {
@@ -109,7 +95,7 @@ export class FecharContaComponent implements OnInit {
     }
   }
 
-  // Carregamento 
+  // ===================== Carregamento =====================
 
   carregarMesas(): void {
     this.carregandoMesas = true;
@@ -127,14 +113,19 @@ export class FecharContaComponent implements OnInit {
 
   aoSelecionarMesa(idMesa: number | null): void {
     this.mesaSelecionada = idMesa;
-    this.confirmando = false;
     this.mensagemErro = '';
-    this.mensagemSucesso = '';
     this.linhas = [];
     this.contaCompleta = false;
 
     if (idMesa) {
       this.carregarConta(idMesa);
+    }
+  }
+
+  atualizar(): void {
+    if (this.mesaSelecionada) {
+      this.mensagemErro = '';
+      this.carregarConta(this.mesaSelecionada);
     }
   }
 
@@ -145,17 +136,17 @@ export class FecharContaComponent implements OnInit {
       next: pedidos => {
         if (idMesa !== this.mesaSelecionada) return;
 
-        const inicio = this.inicioDaConta(idMesa);
-        const doPeriodo = pedidos.filter(p => p.dataHora >= inicio);
+        const inicioDeHoje = this.inicioDeHoje();
+        const doDia = pedidos.filter(p => p.dataHora >= inicioDeHoje);
 
-        if (doPeriodo.length === 0) {
+        if (doDia.length === 0) {
           this.linhas = [];
           this.contaCompleta = true;
           this.carregandoConta = false;
           return;
         }
 
-        const chamadas = doPeriodo.map(pedido =>
+        const chamadas = doDia.map(pedido =>
           this.itemPedidoService.listarPorPedido(pedido.id).pipe(
             map(itens => itens
               .filter(item => item.status !== 'CANCELADO')
@@ -176,7 +167,7 @@ export class FecharContaComponent implements OnInit {
 
           this.carregandoConta = false;
 
-          // Se algum pedido falhou ao carregar, o total estaria errado: não deixa fechar.
+          // Se algum pedido falhou ao carregar, o total estaria errado: não mostra.
           if (listas.some(l => l === null)) {
             this.contaCompleta = false;
             this.mensagemErro = 'Não foi possível carregar todos os itens da conta. Tente novamente.';
@@ -187,84 +178,20 @@ export class FecharContaComponent implements OnInit {
           this.contaCompleta = true;
         });
       },
-      error: () => {
+      error: (erro) => {
         if (idMesa !== this.mesaSelecionada) return;
         this.carregandoConta = false;
-        this.mensagemErro = 'Não foi possível carregar a conta da mesa.';
-      }
-    });
-  }
-
-  // Fechar conta 
-
-  pedirConfirmacao(): void {
-    if (!this.podeFechar()) return;
-    this.confirmando = true;
-  }
-
-  cancelarConfirmacao(): void {
-    this.confirmando = false;
-  }
-
-  confirmarFechamento(): void {
-    if (!this.podeFechar() || !this.mesaSelecionada) return;
-
-    const idMesa = this.mesaSelecionada;
-    const numero = this.mesaAtual?.numero ?? idMesa;
-
-    this.fechando = true;
-    this.mensagemErro = '';
-
-    this.mesaService.desocuparMesa(idMesa).subscribe({
-      next: () => {
-        this.registrarFechamento(idMesa);
-        this.fechando = false;
-        this.confirmando = false;
-        this.mesaSelecionada = null;
-        this.linhas = [];
-        this.contaCompleta = false;
-        this.mensagemSucesso = `Conta da Mesa ${numero} fechada. Mesa liberada.`;
-        this.carregarMesas();
-      },
-      error: (erro) => {
-        this.fechando = false;
-        this.confirmando = false;
         this.mensagemErro = erro.status === 403
-          ? 'Você não tem permissão para fechar esta conta.'
-          : 'Não foi possível fechar a conta. Tente novamente.';
+          ? 'Você não tem permissão para ver esta conta.'
+          : 'Não foi possível carregar a conta da mesa.';
       }
     });
   }
 
-  // Marca do último fechamento 
-
-  /** Data/hora local no mesmo formato do back (sem fuso), para comparar texto com texto. */
-  private formatarLocal(data: Date): string {
+  /** Início do dia (hora local) no mesmo formato do back, para comparar texto com texto. */
+  private inicioDeHoje(): string {
+    const agora = new Date();
     const p = (n: number) => String(n).padStart(2, '0');
-    return `${data.getFullYear()}-${p(data.getMonth() + 1)}-${p(data.getDate())}`
-      + `T${p(data.getHours())}:${p(data.getMinutes())}:${p(data.getSeconds())}`;
-  }
-
-  private chaveFechamento(idMesa: number): string {
-    return `athenas:fechamento:${this.authService.getRestauranteId()}:${idMesa}`;
-  }
-
-  private inicioDaConta(idMesa: number): string {
-    const inicioDeHoje = this.formatarLocal(new Date()).slice(0, 10) + 'T00:00:00';
-    try {
-      const marca = localStorage.getItem(this.chaveFechamento(idMesa));
-      if (marca && marca > inicioDeHoje) return marca;
-    } catch {
-      // localStorage indisponível: usa só os pedidos de hoje
-    }
-    return inicioDeHoje;
-  }
-
-  private registrarFechamento(idMesa: number): void {
-    try {
-      localStorage.setItem(this.chaveFechamento(idMesa), this.formatarLocal(new Date()));
-    } catch {
-      // sem localStorage, o próximo cálculo volta a considerar os pedidos de hoje
-    }
+    return `${agora.getFullYear()}-${p(agora.getMonth() + 1)}-${p(agora.getDate())}T00:00:00`;
   }
 }
