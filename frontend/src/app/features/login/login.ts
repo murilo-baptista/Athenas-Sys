@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { BannerAthenasComponent } from '../../shared/components/banner-athenas/banner-athenas';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BannerAthenasComponent],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
