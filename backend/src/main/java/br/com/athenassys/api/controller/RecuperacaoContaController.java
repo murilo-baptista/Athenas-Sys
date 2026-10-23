@@ -3,7 +3,6 @@ package br.com.athenassys.api.controller;
 import br.com.athenassys.api.dto.recuperacao.DadosConfirmacaoReativacao;
 import br.com.athenassys.api.dto.recuperacao.DadosConfirmacaoRecuperacao;
 import br.com.athenassys.api.dto.recuperacao.DadosSolicitacaoCodigo;
-import br.com.athenassys.api.exception.CodigoInvalidoException;
 import br.com.athenassys.api.service.RecuperacaoContaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class RecuperacaoContaController {
 
     @PostMapping("/recuperar-senha/confirmar")
     @Transactional
-    public ResponseEntity<Void> confirmarRecuperacao(@RequestBody @Valid DadosConfirmacaoRecuperacao dados) throws CodigoInvalidoException {
+    public ResponseEntity<Void> confirmarRecuperacao(@RequestBody @Valid DadosConfirmacaoRecuperacao dados) {
 
         service.confirmarRecuperacao(dados.email(), dados.codigo(), dados.novaSenha());
         return ResponseEntity.noContent().build();
@@ -45,7 +44,7 @@ public class RecuperacaoContaController {
 
     @PostMapping("/reativar-conta/confirmar")
     @Transactional
-    public ResponseEntity<Void> confirmarReativacao(@RequestBody @Valid DadosConfirmacaoReativacao dados) throws CodigoInvalidoException {
+    public ResponseEntity<Void> confirmarReativacao(@RequestBody @Valid DadosConfirmacaoReativacao dados) {
 
         service.confirmarReativacao(dados.email(), dados.codigo());
         return ResponseEntity.noContent().build();
