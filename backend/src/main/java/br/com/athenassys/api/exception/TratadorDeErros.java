@@ -200,6 +200,13 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ex.getMessage());
     }
 
+    //Trata erro 400 para código de recuperação inválido
+    @ExceptionHandler(CodigoInvalidoException.class)
+    public ResponseEntity<DadosErro> tratarCodigoInvalido(CodigoInvalidoException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new DadosErro("codigo", ex.getMessage()));
+    }
+
     //Trata qualquer tipo de erro para evitar vazamento de dados e informações internas, tornando o erro em 500
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> tratarErroNaoTratado(Exception ex) {
