@@ -1,5 +1,6 @@
 /*Importação do Tailwind CSS*/
 @import "tailwindcss";
+@import "./estilos-tema.css";
 
 /*Cor de fundo*/
 .cor-fundo {

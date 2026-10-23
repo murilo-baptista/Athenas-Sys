@@ -1,0 +1,20 @@
+/* ===== Tema visual do Athenas (V3) ===== */
+:root {
+  --athenas-verde: #3f5e4b;
+  --athenas-vermelho: #b50900;
+  --athenas-azul: #2c3f70;
+
+  --escala-card: 1.12;   /* tamanho do quadro e das letras: 1 = original */
+  --borda-card: 3px;     /* espessura da linha dourada */
+}
+
+/* Quadro principal de todas as telas */
+body :is(
+  .login-card, .auth-card, .wizard-card, .recuperar-card, .reativar-card,
+  .menu-card, .garcom-card, .kds-card, .dash-card, .mapa-card,
+  .pagina .card
+) {
+  zoom: var(--escala-card);
+  border: var(--borda-card) solid #C9A46A;
+  box-shadow: 0 6px 18px rgba(123, 15, 18, 0.18), 0 2px 4px rgba(0, 0, 0, 0.08);
+}
