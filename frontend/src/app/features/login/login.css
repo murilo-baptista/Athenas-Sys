@@ -95,15 +95,10 @@
 .banner-logo {
   width: 200px;
   height: 200px;
-  padding: 14px;
-  box-sizing: border-box;
   object-fit: contain;
-  border-radius: 50%;
-  background-color: #fff8ee;
-  border: 3px solid var(--cor-dourado);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   margin-bottom: 14px;
   flex-shrink: 0;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
 }
 
 .banner-title {
