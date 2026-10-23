@@ -25,6 +25,7 @@
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .btn-primario { background-color: var(--cor-bordo); color: var(--cor-creme); border: 1px solid var(--cor-bordo); }
 .btn-secundario { background-color: transparent; color: var(--cor-bordo); border: 1px solid var(--cor-bordo); }
+.btn-perigo { background-color: var(--cor-perigo); color: var(--cor-creme); border: 1px solid var(--cor-perigo); }
 .link-acao { background: none; border: 0; padding: 0; font-family: inherit; font-size: 0.75rem; text-decoration: underline; color: var(--cor-bordo); cursor: pointer; }
 .link-perigo { color: var(--cor-perigo); }
 .acoes { display: flex; gap: 1rem; }
@@ -36,3 +37,10 @@
 .container { max-width: 48rem; margin: 0 auto; padding: 2.5rem 1.5rem; }
 .form-linha { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: flex-end; }
 .campo-grande { flex: 1; min-width: 220px; }
+
+/* Modal de confirmação ao remover */
+.modal-fundo { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 1rem; background-color: rgba(0, 0, 0, 0.45); }
+.modal { width: 100%; max-width: 26rem; box-sizing: border-box; border: 1px solid var(--cor-dourado); border-radius: 0.5rem; padding: 1.5rem; background-color: var(--cor-creme); box-shadow: 0 10px 30px rgba(90, 11, 13, 0.25); }
+.modal-titulo { font-size: 0.875rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.025em; color: var(--cor-bordo); margin: 0 0 0.75rem; }
+.modal-texto { font-size: 0.9375rem; line-height: 1.5; color: var(--cor-texto); margin: 0 0 1.25rem; }
+.modal-acoes { display: flex; justify-content: flex-end; gap: 0.75rem; }
