@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { BannerAthenasComponent } from '../../shared/components/banner-athenas/banner-athenas';
 
 @Component({
   selector: 'app-autenticacao',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BannerAthenasComponent],
   templateUrl: './autenticacao.html',
   styleUrl: './autenticacao.css'
 })
