@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { BannerAthenasComponent } from '../../shared/components/banner-athenas/banner-athenas';
 
 interface AreaConfig {
   cargo: string;
@@ -10,7 +11,7 @@ interface AreaConfig {
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BannerAthenasComponent],
   templateUrl: './menu.html',
   styleUrl: './menu.css'
 })
