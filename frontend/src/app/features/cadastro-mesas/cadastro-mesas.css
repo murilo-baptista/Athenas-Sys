@@ -3,7 +3,6 @@
    Paleta: bordô #7B0F12 | dourado #C9A46A | creme #FFF8EE
    ========================================================== */
 
-
 :host {
   --cor-creme: #FFF8EE;
   --cor-bordo: #7B0F12;
@@ -15,11 +14,9 @@
   font-family: 'Georgia', 'Times New Roman', serif;
 }
 
-
 * {
   box-sizing: border-box;
 }
-
 
 .wizard-page {
   height: 100vh;
@@ -29,7 +26,6 @@
   flex-direction: column;
   overflow: hidden;
 }
-
 
 /* ---------- Faixas decorativas (idênticas à página de autenticação) ---------- */
 .greek-border {
@@ -43,7 +39,6 @@
   position: relative;
 }
 
-
 /* ---------- Layout principal (mesmo esqueleto da página de autenticação) ---------- */
 .wizard-content {
   flex: 1;
@@ -52,13 +47,11 @@
   min-height: 0;
 }
 
-
 /* ---------- Lado esquerdo: banner (idêntico à página de autenticação) ---------- */
 .left-panel {
   display: flex;
   flex-shrink: 0;
 }
-
 
 .banner {
   position: relative;
@@ -70,14 +63,12 @@
   overflow: hidden;
 }
 
-
 .banner-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
-
 
 .banner-content {
   position: absolute;
@@ -89,24 +80,19 @@
   padding: 44px 20px 0;
 }
 
-
-.banner-logo-placeholder {
+.banner-logo {
   width: 116px;
   height: 116px;
+  padding: 8px;
+  box-sizing: border-box;
+  object-fit: contain;
   border-radius: 50%;
-  background-color: var(--cor-dourado);
-  opacity: 0.85;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--cor-bordo);
-  font-size: 14px;
-  font-family: Arial, sans-serif;
-  line-height: 1.3;
+  background-color: #fff8ee;
+  border: 2px solid var(--cor-dourado);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   margin-bottom: 14px;
   flex-shrink: 0;
 }
-
 
 .banner-title {
   color: var(--cor-dourado);
@@ -117,7 +103,6 @@
   margin: -10px 0 4px;
   flex-shrink: 0;
 }
-
 
 .banner-subtitle {
   color: var(--cor-dourado);
@@ -130,7 +115,6 @@
   flex-shrink: 0;
 }
 
-
 /* ---------- Direita: fundo com templo desbotado + card do wizard ---------- */
 .wizard-right {
   flex: 1;
@@ -141,7 +125,6 @@
   justify-content: center;
   padding: 40px 24px;
 }
-
 
 .temple-watermark {
   position: absolute;
@@ -157,7 +140,6 @@
   z-index: 0;
 }
 
-
 .wizard-card {
   position: relative;
   z-index: 1;
@@ -172,7 +154,6 @@
   box-shadow: 0 12px 34px rgba(90, 11, 13, 0.12);
 }
 
-
 /* ---------- Indicador de etapas (steps) ---------- */
 .steps-indicator {
   display: flex;
@@ -181,7 +162,6 @@
   gap: 0;
   margin-bottom: 14px;
 }
-
 
 .step-circle {
   width: 30px;
@@ -199,20 +179,17 @@
   color: var(--cor-dourado);
 }
 
-
 .step-circle.is-done {
   background-color: var(--cor-dourado);
   border-color: var(--cor-dourado);
   color: var(--cor-creme);
 }
 
-
 .step-circle.is-current {
   background-color: var(--cor-bordo);
   border-color: var(--cor-bordo);
   color: var(--cor-creme);
 }
-
 
 .step-line {
   width: 56px;
@@ -221,7 +198,6 @@
   opacity: 0.6;
   flex-shrink: 0;
 }
-
 
 .step-caption {
   text-align: center;
@@ -233,11 +209,9 @@
   margin-bottom: 14px;
 }
 
-
 .step-caption strong {
   color: var(--cor-bordo);
 }
-
 
 /* ---------- Títulos ---------- */
 .wizard-title {
@@ -249,7 +223,6 @@
   text-align: center;
 }
 
-
 .wizard-subtitle {
   color: var(--cor-texto-secundario);
   font-size: 14.5px;
@@ -258,7 +231,6 @@
   font-family: 'Georgia', serif;
   text-align: center;
 }
-
 
 .wizard-card .divider {
   display: block;
@@ -269,25 +241,21 @@
   object-fit: contain;
 }
 
-
 /* ---------- Formulário ---------- */
 .wizard-form {
   display: flex;
   flex-direction: column;
 }
 
-
 .field-row {
   display: flex;
   gap: 18px;
 }
 
-
 .field-row .field-block {
   flex: 1;
   min-width: 0;
 }
-
 
 .field-label {
   display: block;
@@ -299,14 +267,12 @@
   margin-bottom: 6px;
 }
 
-
 .input-group {
   position: relative;
   display: flex;
   align-items: center;
   margin-bottom: 18px;
 }
-
 
 .input-field {
   width: 100%;
@@ -321,16 +287,13 @@
   outline: none;
 }
 
-
 .input-field::placeholder {
   color: #9C8F7E;
 }
 
-
 .input-field:focus {
   border-color: var(--cor-bordo);
 }
-
 
 /* ---------- Botão "adicionar à lista" ---------- */
 .add-button {
@@ -349,17 +312,14 @@
   transition: background-color 0.15s ease;
 }
 
-
 .add-button:hover {
   background-color: rgba(201, 164, 106, 0.12);
 }
-
 
 .add-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-
 
 /* ---------- Lista de itens adicionados ---------- */
 .added-label {
@@ -371,7 +331,6 @@
   margin-bottom: 10px;
 }
 
-
 .added-list {
   display: flex;
   flex-direction: column;
@@ -379,7 +338,6 @@
   margin-bottom: 8px;
   min-height: 4px;
 }
-
 
 .added-item {
   display: flex;
@@ -394,13 +352,11 @@
   color: var(--cor-texto-secundario);
 }
 
-
 .added-item .item-name {
   font-family: 'Georgia', serif;
   font-size: 15px;
   color: var(--cor-texto-secundario);
 }
-
 
 .badge {
   display: inline-block;
@@ -414,7 +370,6 @@
   white-space: nowrap;
 }
 
-
 .helper-note {
   font-family: Arial, sans-serif;
   font-size: 12.5px;
@@ -423,14 +378,12 @@
   text-align: left;
 }
 
-
 /* ---------- Botões de rodapé ---------- */
 .wizard-footer {
   display: flex;
   gap: 16px;
   margin-top: 6px;
 }
-
 
 .btn {
   flex: 1;
@@ -445,35 +398,29 @@
   border: none;
 }
 
-
 .btn-outline {
   background-color: transparent;
   border: 1.4px solid var(--cor-bordo);
   color: var(--cor-bordo);
 }
 
-
 .btn-outline:hover {
   background-color: rgba(123, 15, 18, 0.06);
 }
-
 
 .btn-solid {
   background-color: var(--cor-bordo);
   color: var(--cor-creme);
 }
 
-
 .btn-solid:hover {
   background-color: var(--cor-bordo-escuro);
 }
-
 
 .btn-solid:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-
 
 /* ---------- Responsividade ---------- */
 @media (max-width: 900px) {
@@ -481,21 +428,17 @@
     display: none;
   }
 
-
   .wizard-right {
     padding: 24px 16px;
   }
-
 
   .wizard-card {
     padding: 26px 22px 30px;
   }
 
-
   .temple-watermark {
     width: 130%;
   }
-
 
   .field-row {
     flex-direction: column;
