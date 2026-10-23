@@ -25,7 +25,7 @@
 
     <form *ngIf="etapa === 'CODIGO'" (ngSubmit)="confirmarCodigo()" #formCodigo="ngForm">
       <label class="field-label" for="codigo">CÓDIGO RECEBIDO</label>
-      <input id="codigo" name="codigo" type="text" [(ngModel)]="codigo" required
+      <input id="codigo" name="codigo" type="password" [(ngModel)]="codigo" required
         placeholder="Digite o código">
 
       <button type="submit" class="btn-principal" [disabled]="carregando">
