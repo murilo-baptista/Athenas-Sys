@@ -1,7 +1,7 @@
 package br.com.athenassys.api.service;
 
 import br.com.athenassys.api.client.OpenCnpjClient;
-import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
+import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoSenha;
 import br.com.athenassys.api.dto.restaurante.DadosAtualizacaoRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosCadastroRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosListagemRestaurante;
@@ -79,7 +79,7 @@ public class RestauranteService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
     }
 
-    public Restaurante alterarSenha(DadosAlteracaoChave dados, Long idRestaurante) {
+    public Restaurante alterarSenha(DadosAlteracaoSenha dados, Long idRestaurante) {
 
         var restaurante = repository
                 .findById(idRestaurante)

@@ -1,5 +1,6 @@
 package br.com.athenassys.api.dto.restaurante;
 
+import br.com.athenassys.api.validation.SenhaForte;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -27,6 +28,7 @@ public record DadosCadastroRestaurante(
         String cnpj,
 
         @NotBlank
+        @SenhaForte
         String senha
 ) {
 }
