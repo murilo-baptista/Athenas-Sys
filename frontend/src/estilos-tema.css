@@ -27,6 +27,17 @@ body :is(
   box-shadow: 0 8px 22px rgba(123, 15, 18, 0.22), 0 2px 5px rgba(0, 0, 0, 0.10) !important;
 }
 
+/* Cartões centralizados (cadastros, autenticação, login, menu, recuperar e
+   reativar): se o quadro não couber na tela, ele rola POR DENTRO da caixa.
+   A divisão pela escala existe porque o zoom aumenta a altura renderizada. */
+body :is(.wizard-card, .auth-card, .login-card, .menu-card, .recuperar-card, .reativar-card) {
+  max-height: calc((100vh - 130px) / var(--escala-card)) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scrollbar-width: thin;
+  scrollbar-color: #C9A46A transparent;
+}
+
 /* ==========================================================
    2) Olhinho de mostrar/ocultar senha e código
    ========================================================== */
