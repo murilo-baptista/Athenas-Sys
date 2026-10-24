@@ -83,15 +83,10 @@
 .banner-logo {
   width: 116px;
   height: 116px;
-  padding: 8px;
-  box-sizing: border-box;
   object-fit: contain;
-  border-radius: 50%;
-  background-color: #fff8ee;
-  border: 2px solid var(--cor-dourado);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   margin-bottom: 14px;
   flex-shrink: 0;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
 }
 
 .banner-title {
