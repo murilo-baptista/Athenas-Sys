@@ -158,6 +158,19 @@ body :is(.wizard-card, .auth-card, .login-card, .menu-card, .recuperar-card, .re
 .dash-indicador-titulo { color: var(--athenas-azul) !important; }
 .dash-indicador-valor { color: var(--athenas-verde) !important; }
 
+/* Tudo abaixo do título "VISÃO GERAL DO RESTAURANTE" em Poppins */
+.dash-card .dash-erro,
+.dash-card .dash-status,
+.dash-card .dash-grid,
+.dash-card .dash-grid *,
+.dash-card .dash-atalhos,
+.dash-card .dash-atalhos *,
+.dash-card .btn-sair {
+  font-family: var(--fonte-poppins) !important;
+}
+.dash-indicador-titulo { font-weight: 500 !important; letter-spacing: 0.5px; }
+.dash-indicador-valor { font-weight: 600 !important; }
+
 /* ==========================================================
    6) Áreas do gerente (Restaurante, Funcionários, Mesas,
       Cardápio, Histórico) e Reservas: moldura, Poppins
