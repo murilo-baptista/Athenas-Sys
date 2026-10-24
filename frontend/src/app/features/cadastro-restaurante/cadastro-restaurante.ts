@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RestauranteService } from '../../core/services/restaurante.service';
 import { AuthService } from '../../core/services/auth.service';
+import { BannerAthenasComponent } from '../../shared/components/banner-athenas/banner-athenas';
 
 interface CadastroRestauranteForm {
   nome: string;
@@ -17,7 +18,7 @@ interface CadastroRestauranteForm {
 @Component({
   selector: 'app-cadastro-restaurante',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BannerAthenasComponent],
   templateUrl: './cadastro-restaurante.html',
   styleUrl: './cadastro-restaurante.css'
 })
