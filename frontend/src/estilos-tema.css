@@ -124,7 +124,13 @@ body :is(.wizard-card, .auth-card, .login-card, .menu-card, .recuperar-card, .re
   position: relative;
   z-index: 1;
 }
-.dash-page .top-bar { height: 54px !important; }
+/* A barra do topo do painel mantém os 70px originais para o avatar (62px)
+   aparecer inteiro; a moldura grega acompanha essa altura. */
+body:has(.dash-page) .moldura-topo { height: 70px !important; }
+body:has(.dash-page) .moldura-pilar {
+  top: 70px !important;
+  height: calc(100% - 92px) !important;
+}
 .dash-card { background: #FFF8EE !important; }
 
 .dash-atalho {
