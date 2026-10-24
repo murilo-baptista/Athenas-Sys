@@ -80,3 +80,11 @@ a {
 .botao-contorno:hover {
   background-color: rgba(248, 208, 144, 0.12);
 }
+.botao-indisponivel {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.botao-contorno.botao-indisponivel:hover {
+  background-color: transparent;
+}

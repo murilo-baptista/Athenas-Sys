@@ -94,4 +94,15 @@
     padding: 10px 18px;
     font-size: 16px;
   }
+
+  .botao-baixar--indisponivel {
+  font-family: inherit;
+  cursor: not-allowed;
+  opacity: 0.55;
+  filter: grayscale(0.4);
+    }
+
+.botao-baixar--indisponivel:hover {
+  filter: grayscale(0.4);
+}
 }

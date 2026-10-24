@@ -71,8 +71,15 @@
         <p>
           Tenha o sistema completo no seu dispositivo e comece a transformar a gestão do seu restaurante.
         </p>
-        <a [href]="site.linkDownload" class="botao botao-contorno" download>Download</a>
-        <small>Compatível com computadores, tablets e celulares.</small>
+                @if (site.downloadDisponivel) {
+          <a [href]="site.linkDownload" class="botao botao-contorno" download>Download</a>
+          <small>Compatível com computadores, tablets e celulares.</small>
+        } @else {
+          <button type="button" class="botao botao-contorno botao-indisponivel" disabled aria-disabled="true">
+            Download
+          </button>
+          <small>Em breve: o download estará disponível assim que a versão final do sistema for publicada.</small>
+        }
       </div>
     </div>
     <img src="assets/imagens/foto-garcom.png" alt="Garçom atendendo um cliente com um tablet" class="baixe__foto">
