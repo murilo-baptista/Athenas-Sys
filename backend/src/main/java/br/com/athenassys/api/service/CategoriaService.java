@@ -95,4 +95,12 @@ public class CategoriaService {
         categoria.reativar();
         return categoria;
     }
+
+    public Page<DadosListagemCategoria> listarInativas(
+            Long idRestaurante,
+            Pageable paginacao) {
+
+        return categoriaRepository.findAllByRestauranteIdAndAtivoFalse(idRestaurante, paginacao)
+                .map(DadosListagemCategoria::new);
+    }
 }

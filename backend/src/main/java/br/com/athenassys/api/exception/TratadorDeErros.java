@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -140,6 +141,14 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
+    //Trata erro 409 para Entidades desativadas
+    @ExceptionHandler(EntidadeDesativadaException.class)
+    public ResponseEntity<DadosEntidadeDesativada> tratarErroEntidadeDesativada(EntidadeDesativadaException ex) {
+
+        var corpo = new DadosEntidadeDesativada(ex.getCodigo(), ex.getEntidade(), ex.getId(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(corpo);
+    }
+
     //Trata erro 409 de dados violados, principalmente para tratar campos únicos duplicados
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> tratarViolacaoIntegridade(DataIntegrityViolationException ex) {
@@ -205,6 +214,14 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
     public ResponseEntity<DadosErro> tratarCodigoInvalido(CodigoInvalidoException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new DadosErro("codigo", ex.getMessage()));
+    }
+
+    //Trata erro 403 para login com conta desativada
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<DadosErro> tratarContaDesativada(DisabledException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                new DadosErro("email", "Esta conta foi desativada!")
+        );
     }
 
     //Trata qualquer tipo de erro para evitar vazamento de dados e informações internas, tornando o erro em 500

@@ -106,4 +106,12 @@ public class MesaService {
         mesa.reativar();
         return mesa;
     }
+
+    public Page<DadosListagemMesa> listarInativas(
+            Long idRestaurante,
+            Pageable paginacao) {
+
+        return mesaRepository.findAllByRestauranteIdAndAtivoFalse(idRestaurante, paginacao)
+                .map(DadosListagemMesa::new);
+    }
 }

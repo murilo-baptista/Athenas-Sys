@@ -100,4 +100,12 @@ public class FuncionarioController {
         var funcionario = service.reativar(idFuncionario, idRestaurante);
         return ResponseEntity.ok(new DadosDetalhamentoFuncionario(funcionario));
     }
+
+    @GetMapping("/inativos")
+    public ResponseEntity<Page<DadosListagemFuncionario>> listarInativos(
+            @PathVariable Long idRestaurante,
+            Pageable paginacao) {
+
+        return ResponseEntity.ok(service.listarInativos(idRestaurante, paginacao));
+    }
 }

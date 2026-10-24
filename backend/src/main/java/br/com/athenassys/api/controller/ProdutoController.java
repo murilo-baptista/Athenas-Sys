@@ -88,4 +88,12 @@ public class ProdutoController {
         var produto = service.reativar(idProduto, idRestaurante);
         return ResponseEntity.ok(new DadosDetalhamentoProduto(produto));
     }
+
+    @GetMapping("/inativos")
+    public ResponseEntity<Page<DadosListagemProduto>> listarInativos(
+            @PathVariable Long idRestaurante,
+            Pageable paginacao) {
+
+        return ResponseEntity.ok(service.listarInativos(idRestaurante, paginacao));
+    }
 }
