@@ -78,12 +78,17 @@ body :is(
 /* ==========================================================
    4) Recepção (mapa de mesas)
    ========================================================== */
+/* "MESAS" e "Gerenciar reservas" centralizados, com a mesma fonte */
+.mapa-card .mapa-card-header {
+  justify-content: center !important;
+  gap: 36px;
+}
 .mapa-card .mapa-card-header .link-reservas {
   flex: none !important;
   width: auto !important;
   min-width: 0 !important;
-  padding: 7px 16px !important;
-  font-size: 13px !important;
+  padding: 9px 20px !important;
+  font-size: 15px !important;   /* igual ao "MESAS" (.titulo-secao) */
 }
 .mapa-card .mesas-tabela,
 .mapa-card .mesas-tabela *,
