@@ -13,11 +13,14 @@ import { Component } from '@angular/core';
   template: `
     <img src="assets/imagens/banner-bordo.jpeg" alt="Athenas - Gestão inteligente para restaurantes" class="banner-img">
     <div class="banner-content">
-      <img src="assets/imagens/logo-transparente.png" alt="Athenas Sys" class="banner-logo">
-      <div class="banner-texto">
-        <h2 class="banner-title">Athenas</h2>
-        <span class="banner-sys">Sys</span>
-        <p class="banner-subtitle">Gestão inteligente<br>para restaurantes</p>
+      <!-- Parte de cima do banner, até o divisor dourado da imagem -->
+      <div class="banner-topo">
+        <img src="assets/imagens/logo-transparente.png" alt="Athenas Sys" class="banner-logo">
+        <div class="banner-texto">
+          <h2 class="banner-title">Athenas</h2>
+          <span class="banner-sys">Sys</span>
+          <p class="banner-subtitle">Gestão inteligente<br>para restaurantes</p>
+        </div>
       </div>
     </div>
   `,
@@ -44,11 +47,17 @@ import { Component } from '@angular/core';
     .banner-content {
       position: absolute;
       inset: 0;
+    }
+
+    /* Vai do topo do banner até o divisor dourado da imagem. */
+    .banner-topo {
+      height: var(--posicao-divisor);
+      box-sizing: border-box;
+      padding-top: 2.5vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      padding: 2.5vh 20px 0;
     }
 
     .banner-logo {
@@ -60,18 +69,18 @@ import { Component } from '@angular/core';
       filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
     }
 
-    /* Nome + "Sys" + frase ficam ACIMA do divisor dourado da imagem,
-       sem encostar na deusa que aparece logo abaixo dele. */
+    /* Nome + "Sys" + frase ficam EXATAMENTE no meio do espaço entre a
+       logo e o divisor dourado, e nunca encostam na deusa. */
     .banner-texto {
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: calc(var(--posicao-divisor) - 10px);
-      transform: translateY(-100%);
+      flex: 1;
+      min-height: 0;
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       padding: 0 16px;
+      box-sizing: border-box;
     }
 
     .banner-title {
