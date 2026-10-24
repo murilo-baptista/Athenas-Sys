@@ -86,6 +86,10 @@ body :is(.wizard-card, .auth-card, .login-card, .menu-card, .recuperar-card, .re
   font-family: var(--fonte-poppins) !important;
 }
 
+/* Barra do topo do garçom com 70px, igual às outras áreas, para a foto
+   de perfil (62px) não ser cortada. */
+.garcom-page .top-bar { height: 70px !important; }
+
 /* ==========================================================
    4) Recepção (mapa de mesas)
    ========================================================== */
