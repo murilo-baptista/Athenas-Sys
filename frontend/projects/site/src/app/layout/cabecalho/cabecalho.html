@@ -1,0 +1,15 @@
+<header class="cabecalho">
+  <a routerLink="/" class="logo-link" aria-label="Athenas System - início">
+    <img src="assets/imagens/logo-athenas-horizontal-branca.png" alt="Athenas System" class="logo">
+  </a>
+
+  <nav class="menu" aria-label="Navegação principal">
+    <a routerLink="/" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }">Início</a>
+    <a routerLink="/como-funciona" routerLinkActive="ativo">Como funciona</a>
+  </nav>
+
+  <a [href]="site.linkDownload" class="botao-baixar" download>
+    Baixar agora
+    <img src="assets/imagens/icone-de-download-em-creme.png" alt="" class="icone-baixar">
+  </a>
+</header>
