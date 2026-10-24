@@ -1,6 +1,6 @@
 package br.com.athenassys.api.controller;
 
-import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
+import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoSenha;
 import br.com.athenassys.api.dto.restaurante.*;
 import br.com.athenassys.api.enums.Cargo;
 import br.com.athenassys.api.model.Funcionario;
@@ -80,7 +80,7 @@ public class RestauranteController {
     @Transactional
     public ResponseEntity<String> alterarSenha(
             @PathVariable Long idRestaurante,
-            @RequestBody @Valid DadosAlteracaoChave dados,
+            @RequestBody @Valid DadosAlteracaoSenha dados,
             @AuthenticationPrincipal Funcionario funcionario) {
 
         if (funcionario == null) {
