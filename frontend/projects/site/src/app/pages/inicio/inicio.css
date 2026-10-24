@@ -231,6 +231,8 @@
 
 /* ---------- 6. Quem somos ---------- */
 .tcc {
+  position: relative;
+  overflow: hidden;
   background-color: var(--bege-claro);
 }
 
@@ -271,8 +273,11 @@
 }
 
 .tcc__coluna {
-  justify-self: end;
-  width: 150px;
+  position: absolute;
+  top: 0;
+  right: 5%;
+  height: 100%;
+  width: auto;
 }
 
 /* ---------- Telas menores ---------- */
