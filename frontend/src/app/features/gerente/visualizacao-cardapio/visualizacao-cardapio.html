@@ -8,13 +8,13 @@
       <h1 class="titulo">Cardápio</h1>
 
       <div class="exportar">
-        <button type="button" (click)="salvarImagem()" [disabled]="!podeExportar()" class="btn btn-contorno">
+        <button type="button" (click)="salvarImagem()" [disabled]="!podeExportar()" class="btn btn-azul">
           {{ exportando ? 'Gerando...' : 'Salvar como imagem' }}
         </button>
-        <button type="button" (click)="salvarPdf()" [disabled]="!podeExportar()" class="btn btn-contorno">
+        <button type="button" (click)="salvarPdf()" [disabled]="!podeExportar()" class="btn btn-azul">
           {{ exportando ? 'Gerando...' : 'Salvar como PDF' }}
         </button>
-        <button type="button" (click)="alternarQrCode()" class="btn btn-contorno">
+        <button type="button" (click)="alternarQrCode()" class="btn btn-azul">
           {{ mostrarQrCode ? 'Esconder QR Code' : 'Mostrar QR Code' }}
         </button>
       </div>
