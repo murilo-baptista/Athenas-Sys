@@ -137,20 +137,44 @@ body:has(.dash-page) .moldura-pilar {
 }
 .dash-card { background: #FFF8EE !important; }
 
+/* Botões de atalho: azuis, e bege (creme) ao passar o mouse.
+   4 por linha, todos do mesmo tamanho; a última linha fica centralizada. */
+.dash-card .dash-atalhos {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 14px !important;
+}
 .dash-atalho {
+  box-sizing: border-box !important;
+  flex: 0 0 calc((100% - 3 * 14px) / 4) !important;
+  min-height: 68px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   font-family: var(--fonte-poppins) !important;
   font-size: 1.05rem !important;
   font-weight: 500 !important;
-  padding: 12px 20px !important;
+  padding: 12px 16px !important;
   border: 2px solid var(--athenas-azul) !important;
   border-radius: 10px !important;
-  color: var(--athenas-azul) !important;
-  background-color: #FFF8EE !important;
-  transition: background-color 0.15s ease, color 0.15s ease;
-}
-.dash-atalho:hover {
-  background-color: var(--athenas-azul) !important;
   color: #FFF8EE !important;
+  background-color: var(--athenas-azul) !important;
+  text-decoration: none !important;
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+.dash-atalho:hover,
+.dash-atalho:focus-visible {
+  background-color: #FFF8EE !important;
+  color: var(--athenas-azul) !important;
+  box-shadow: 0 4px 10px rgba(44, 63, 112, 0.25);
+}
+@media (max-width: 1100px) {
+  .dash-atalho { flex-basis: calc((100% - 2 * 14px) / 3) !important; }
+}
+@media (max-width: 700px) {
+  .dash-atalho { flex-basis: calc((100% - 14px) / 2) !important; }
 }
 .dash-page .btn-atualizar {
   background: var(--athenas-verde) !important;
