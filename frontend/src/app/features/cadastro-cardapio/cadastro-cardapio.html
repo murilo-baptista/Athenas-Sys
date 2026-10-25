@@ -1,0 +1,119 @@
+<div class="wizard-page">
+
+  <div class="greek-border top"></div>
+
+  <div class="wizard-content">
+
+    <div class="left-panel">
+      <app-banner-athenas></app-banner-athenas>
+    </div>
+
+    <div class="wizard-right">
+      <img src="assets/imagens/templo-grego-g.png" alt="" class="temple-watermark">
+
+      <div class="wizard-card">
+
+        <div class="steps-indicator">
+          <div class="step-circle is-done">✓</div>
+          <div class="step-line"></div>
+          <div class="step-circle is-done">✓</div>
+          <div class="step-line"></div>
+          <div class="step-circle is-done">✓</div>
+          <div class="step-line"></div>
+          <div class="step-circle is-current">4</div>
+        </div>
+        <p class="step-caption">ETAPA 4 DE 4 · <strong>CARDÁPIO</strong></p>
+
+        <h1 class="wizard-title">MONTE SEU CARDÁPIO</h1>
+        <p class="wizard-subtitle">Cadastre as categorias e os produtos do seu<br>restaurante. Você pode adicionar mais depois.</p>
+
+        <img src="assets/imagens/divisor-g.png" alt="" class="divider">
+
+        <form class="wizard-form" (ngSubmit)="finalizar()">
+
+          <!-- Categoria -->
+          <label class="field-label" for="nome-categoria">NOVA CATEGORIA</label>
+          <div class="input-group">
+            <input type="text" id="nome-categoria" class="input-field" placeholder="Ex: Bebidas"
+                   name="nomeCategoria" [(ngModel)]="nomeCategoria">
+          </div>
+
+          <button type="button" class="add-button" [disabled]="!nomeCategoria.trim() || salvandoCategoria" (click)="adicionarCategoria()">
+            {{ salvandoCategoria ? 'ADICIONANDO...' : '+ Adicionar categoria' }}
+          </button>
+
+          <label class="added-label">CATEGORIAS ADICIONADAS</label>
+          <p class="helper-note" *ngIf="carregando">Carregando categorias...</p>
+          <div class="added-list" *ngIf="!carregando">
+            <div class="added-item" *ngFor="let categoria of categorias">
+              <span class="item-name">{{ categoria.nome }}</span>
+            </div>
+          </div>
+          <p class="helper-note" *ngIf="!carregando && categorias.length === 0">Nenhuma categoria adicionada ainda</p>
+
+          <img src="assets/imagens/divisor-g.png" alt="" class="divider">
+
+          <!-- Produto -->
+          <label class="field-label" for="nome-produto">NOVO PRODUTO</label>
+          <div class="field-row">
+            <div class="field-block">
+              <div class="input-group">
+                <input type="text" id="nome-produto" class="input-field" placeholder="Ex: Refrigerante"
+                       name="nomeProduto" [(ngModel)]="nomeProduto">
+              </div>
+            </div>
+            <div class="field-block">
+              <div class="input-group">
+                <input type="number" id="preco-produto" class="input-field" placeholder="Ex: 8.00" step="0.01"
+                       name="precoProduto" [(ngModel)]="precoProduto">
+              </div>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-block">
+              <div class="input-group">
+                <select id="categoria-produto" class="input-field" name="categoriaSelecionada" [(ngModel)]="categoriaSelecionada">
+                  <option [ngValue]="null" disabled>Selecione a categoria</option>
+                  <option *ngFor="let categoria of categorias" [ngValue]="categoria.id">{{ categoria.nome }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="field-block">
+              <div class="input-group">
+                <input type="text" id="descricao-produto" class="input-field" placeholder="Descrição (opcional)"
+                       name="descricaoProduto" [(ngModel)]="descricaoProduto">
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="add-button" [disabled]="!nomeProduto.trim() || !precoProduto || !categoriaSelecionada || salvandoProduto" (click)="adicionarProduto()">
+            {{ salvandoProduto ? 'ADICIONANDO...' : '+ Adicionar produto à lista' }}
+          </button>
+
+          <label class="added-label">PRODUTOS ADICIONADOS</label>
+          <div class="added-list" *ngIf="!carregando">
+            <div class="added-item" *ngFor="let produto of produtos">
+              <span class="item-name">{{ produto.nome }}</span>
+              <span class="badge">{{ nomeDaCategoria(produto.idCategoria) }} &middot; R$ {{ produto.preco | number:'1.2-2' }}</span>
+            </div>
+          </div>
+          <p class="helper-note" *ngIf="!carregando && produtos.length === 0">Nenhum produto adicionado ainda</p>
+
+          <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+          <p class="helper-note">O cardápio é opcional aqui — você pode cadastrar ou editar depois, no painel do gerente.</p>
+
+          <div class="wizard-footer">
+            <button type="button" class="btn btn-outline" (click)="voltar()">← VOLTAR</button>
+            <button type="submit" class="btn btn-solid">FINALIZAR CADASTRO ✓</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="greek-border bottom"></div>
+
+</div>

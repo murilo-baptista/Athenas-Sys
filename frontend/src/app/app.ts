@@ -131,6 +131,7 @@ import { ativarOlhinhoSenha } from './core/utils/olhinho-senha';
       width: 200px;
       height: auto;
       opacity: 0.9;
+      z-index: 1; /* na frente do zig-zag de baixo, como nas áreas do garçom e da cozinha */
     }
     @media (max-width: 1000px) {
       .moldura-pilar { display: none; }

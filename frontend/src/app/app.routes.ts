@@ -7,6 +7,7 @@ import { AutenticacaoComponent } from './features/autenticacao/autenticacao';
 import { CadastroRestauranteComponent } from './features/cadastro-restaurante/cadastro-restaurante';
 import { CadastroMesasComponent } from './features/cadastro-mesas/cadastro-mesas';
 import { CadastroFuncionariosComponent } from './features/cadastro-funcionarios/cadastro-funcionarios';
+import { CadastroCardapioComponent } from './features/cadastro-cardapio/cadastro-cardapio';
 import { MapaMesasComponent } from './features/recepcao/mapa-mesas/mapa-mesas';
 import { LancamentoPedidosComponent } from './features/garcom/lancamento-pedidos/lancamento-pedidos';
 import { PainelKdsComponent } from './features/cozinha/painel-kds/painel-kds';
@@ -29,10 +30,11 @@ export const routes: Routes = [
   { path: 'recuperar-senha', component: RecuperarSenhaComponent },
   { path: 'reativar-restaurante', component: ReativarRestauranteComponent },
 
-  // 2. Cadastro (Wizard de Onboarding: Restaurante -> Mesas -> Funcionários)
+  // 2. Cadastro (Wizard de Onboarding: Restaurante -> Mesas -> Funcionários -> Cardápio)
   { path: 'cadastro-restaurante', component: CadastroRestauranteComponent },
   { path: 'cadastro-mesas', component: CadastroMesasComponent },
   { path: 'cadastro-funcionarios', component: CadastroFuncionariosComponent },
+  { path: 'cadastro-cardapio', component: CadastroCardapioComponent },
 
   // 3. Menu de seleção de área (exige restaurante logado)
   { path: 'menu', component: MenuComponent, canActivate: [authGuard] },

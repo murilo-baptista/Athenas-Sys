@@ -128,14 +128,12 @@ export class CadastroFuncionariosComponent implements OnInit {
     this.router.navigate(['/cadastro-mesas']);
   }
 
-  finalizar(): void {
+  proximo(): void {
     if (this.funcionarios.length === 0) {
       this.mensagemErro = 'Cadastre pelo menos 1 funcionário para concluir.';
       return;
     }
 
-    // Onboarding concluído: encerra a sessão temporária e leva ao login definitivo.
-    this.authService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/cadastro-cardapio']);
   }
 }
