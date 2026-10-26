@@ -1,8 +1,6 @@
 package br.com.athenassys.api.controller;
 
-import br.com.athenassys.api.dto.recuperacao.DadosConfirmacaoReativacao;
-import br.com.athenassys.api.dto.recuperacao.DadosConfirmacaoRecuperacao;
-import br.com.athenassys.api.dto.recuperacao.DadosSolicitacaoCodigo;
+import br.com.athenassys.api.dto.recuperacao.*;
 import br.com.athenassys.api.service.RecuperacaoContaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +45,21 @@ public class RecuperacaoContaController {
     public ResponseEntity<Void> confirmarReativacao(@RequestBody @Valid DadosConfirmacaoReativacao dados) {
 
         service.confirmarReativacao(dados.email(), dados.codigo());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/funcionario/recuperar-codigo/solicitar")
+    public ResponseEntity<Void> solicitarRecuperacaoCodigo(@RequestBody @Valid DadosSolicitacaoCodigoFuncionario dados) {
+
+        service.solicitarRecuperacaoCodigo(dados.usuario());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/funcionario/recuperar-codigo/confirmar")
+    @Transactional
+    public ResponseEntity<Void> confirmarRecuperacaoCodigo(@RequestBody @Valid DadosConfirmacaoCodigoFuncionario dados) {
+
+        service.confirmarRecuperacaoCodigo(dados.usuario(), dados.codigo(), dados.novoCodigo());
         return ResponseEntity.noContent().build();
     }
 }

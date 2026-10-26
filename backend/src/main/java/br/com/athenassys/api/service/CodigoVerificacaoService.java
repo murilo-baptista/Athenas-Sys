@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class CodigoVerificacaoService {
 
-    public enum Finalidade { RECUPERAR_SENHA, REATIVAR }
+    public enum Finalidade { RECUPERAR_SENHA, RECUPERAR_CODIGO, REATIVAR }
 
     private final int MAXIMO_TENTATIVAS = 5;
     private final Duration VALIDADE = Duration.ofMinutes(10);
