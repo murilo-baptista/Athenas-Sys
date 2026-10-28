@@ -22,6 +22,7 @@ export class CadastroCardapioComponent implements OnInit {
   nomeCategoria = '';
   categorias: CategoriaListagem[] = [];
   salvandoCategoria = false;
+  removendoCategoriaId: number | null = null;
 
   // ---------- Produto ----------
   nomeProduto = '';
@@ -87,6 +88,42 @@ export class CadastroCardapioComponent implements OnInit {
       error: () => {
         this.salvandoCategoria = false;
         this.mensagemErro = 'Não foi possível adicionar essa categoria. Tente novamente.';
+      }
+    });
+  }
+
+  removerCategoria(categoria: CategoriaListagem): void {
+    if (this.removendoCategoriaId !== null) return;
+
+    // No back, desativar a categoria também desativa os produtos dela: avisa antes
+    const quantidade = this.produtos.filter(p => p.idCategoria === categoria.id).length;
+    if (quantidade > 0) {
+      const textoProdutos = quantidade === 1 ? '1 produto' : `${quantidade} produtos`;
+      const confirmou = window.confirm(
+        `Esta categoria tem ${textoProdutos}. Eles também serão desativados. Deseja continuar?`
+      );
+      if (!confirmou) return;
+    }
+
+    this.mensagemErro = '';
+    this.removendoCategoriaId = categoria.id;
+
+    this.categoriaService.desativar(categoria.id).subscribe({
+      next: () => {
+        this.categorias = this.categorias.filter(c => c.id !== categoria.id);
+        if (this.categoriaSelecionada === categoria.id) {
+          this.categoriaSelecionada = null;
+        }
+        this.removendoCategoriaId = null;
+
+        // Os produtos da categoria deixam de aparecer: recarrega a lista
+        this.produtoService.listarPorRestaurante().subscribe({
+          next: (produtos) => (this.produtos = produtos)
+        });
+      },
+      error: () => {
+        this.removendoCategoriaId = null;
+        this.mensagemErro = 'Não foi possível remover essa categoria. Tente novamente.';
       }
     });
   }
