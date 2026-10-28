@@ -30,6 +30,7 @@ export class CadastroCardapioComponent implements OnInit {
   categoriaSelecionada: number | null = null;
   produtos: ProdutoListagem[] = [];
   salvandoProduto = false;
+  removendoProdutoId: number | null = null;
 
   carregando = false;
   mensagemErro = '';
@@ -116,6 +117,24 @@ export class CadastroCardapioComponent implements OnInit {
       error: () => {
         this.salvandoProduto = false;
         this.mensagemErro = 'Não foi possível adicionar esse produto. Tente novamente.';
+      }
+    });
+  }
+
+  removerProduto(produto: ProdutoListagem): void {
+    if (this.removendoProdutoId !== null) return;
+
+    this.mensagemErro = '';
+    this.removendoProdutoId = produto.id;
+
+    this.produtoService.desativar(produto.id).subscribe({
+      next: () => {
+        this.produtos = this.produtos.filter(p => p.id !== produto.id);
+        this.removendoProdutoId = null;
+      },
+      error: () => {
+        this.removendoProdutoId = null;
+        this.mensagemErro = 'Não foi possível remover esse produto. Tente novamente.';
       }
     });
   }
