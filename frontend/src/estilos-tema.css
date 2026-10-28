@@ -262,11 +262,14 @@ body:has(.dash-page) .moldura-pilar {
   background-color: transparent !important;
 }
 .pagina .link-acao { color: var(--athenas-azul) !important; }
-.pagina .link-perigo,
+.pagina .link-perigo { color: var(--athenas-vermelho) !important; }
+/* Botão de ação perigosa (ex.: "Remover" do modal): fundo vermelho, texto bege */
 .pagina .btn-perigo {
-  color: var(--athenas-vermelho) !important;
+  background-color: var(--athenas-vermelho) !important;
   border-color: var(--athenas-vermelho) !important;
+  color: #FFF8EE !important;
 }
+.pagina .btn-perigo:hover:not(:disabled) { filter: brightness(0.9); }
 .pagina .msg-erro { color: var(--athenas-vermelho) !important; }
 .pagina .msg-sucesso { color: var(--athenas-verde) !important; }
 .pagina .zona-risco { border-color: var(--athenas-vermelho) !important; }
