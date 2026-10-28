@@ -102,4 +102,14 @@
 
   </div>
 
+    <!-- Já existe um funcionário desativado com esse nome: pergunta se reativa -->
+  <app-modal-reativacao
+    *ngIf="reativacao"
+    titulo="Funcionário desativado"
+    [mensagem]="mensagemReativacao"
+    [processando]="reativando"
+    (confirmar)="confirmarReativacao()"
+    (cancelar)="cancelarReativacao()">
+  </app-modal-reativacao>
+
 </div>
