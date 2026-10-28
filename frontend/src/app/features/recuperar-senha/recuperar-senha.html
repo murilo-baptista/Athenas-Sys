@@ -39,6 +39,8 @@
       <button type="submit" class="btn-principal" [disabled]="carregando">
         {{ carregando ? 'CONFIRMANDO...' : 'CONFIRMAR' }}
       </button>
+
+      <button type="button" class="btn-voltar" (click)="pedirNovoCodigo()">Pedir um novo código</button>
     </form>
 
     <button type="button" class="btn-voltar" (click)="voltarParaLogin()">Voltar para o login</button>
