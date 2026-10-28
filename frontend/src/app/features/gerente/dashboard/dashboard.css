@@ -155,26 +155,47 @@
   font-weight: 700;
 }
 
+/* ---------- Atalhos: azul por padrão, bege no hover ---------- */
 .dash-atalhos {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 18px;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .dash-atalho {
-  padding: 8px 14px;
-  border: 1px solid var(--cor-dourado);
+  --atalho-azul: #2C3F70;
+  --atalho-bege: #F2E4CE;
+
+  /* 4 por linha; a última linha se estica para ocupar a largura toda */
+  flex: 1 1 calc((100% - 36px) / 4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 16px;
+  border: 2px solid var(--atalho-azul);
   border-radius: 8px;
-  color: var(--cor-bordo);
+  background-color: var(--atalho-azul);
+  color: #FFF8EE;
   font-size: 0.82rem;
   font-weight: 600;
+  text-align: center;
   text-decoration: none;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.dash-atalho:hover {
-  background-color: var(--cor-creme);
+.dash-atalho:hover,
+.dash-atalho:focus-visible {
+  background-color: var(--atalho-bege);
+  color: var(--atalho-azul);
+}
+
+@media (max-width: 800px) {
+  .dash-atalho { flex-basis: calc((100% - 12px) / 2); }
+}
+
+@media (max-width: 480px) {
+  .dash-atalho { flex-basis: 100%; }
 }
 
 .btn-sair {
