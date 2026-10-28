@@ -23,6 +23,7 @@ export class CadastroMesasComponent implements OnInit {
 
   carregando = false;
   salvando = false;
+  removendoId: number | null = null;
   mensagemErro = '';
 
   private restauranteId!: number;
@@ -79,6 +80,24 @@ export class CadastroMesasComponent implements OnInit {
       error: () => {
         this.salvando = false;
         this.mensagemErro = 'Não foi possível adicionar essa mesa. Tente novamente.';
+      }
+    });
+  }
+
+  removerMesa(mesa: MesaListagem): void {
+    if (this.removendoId !== null) return;
+
+    this.mensagemErro = '';
+    this.removendoId = mesa.id;
+
+    this.mesaService.desativar(mesa.id).subscribe({
+      next: () => {
+        this.mesas = this.mesas.filter(m => m.id !== mesa.id);
+        this.removendoId = null;
+      },
+      error: () => {
+        this.removendoId = null;
+        this.mensagemErro = 'Não foi possível remover essa mesa. Tente novamente.';
       }
     });
   }

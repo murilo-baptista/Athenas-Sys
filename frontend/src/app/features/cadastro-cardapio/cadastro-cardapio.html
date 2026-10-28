@@ -47,6 +47,7 @@
           <div class="added-list" *ngIf="!carregando">
             <div class="added-item" *ngFor="let categoria of categorias">
               <span class="item-name">{{ categoria.nome }}</span>
+              <button type="button" class="remove-btn" (click)="removerCategoria(categoria)" [disabled]="removendoCategoriaId === categoria.id" aria-label="Remover categoria">✕</button>
             </div>
           </div>
           <p class="helper-note" *ngIf="!carregando && categorias.length === 0">Nenhuma categoria adicionada ainda</p>
@@ -95,7 +96,10 @@
           <div class="added-list" *ngIf="!carregando">
             <div class="added-item" *ngFor="let produto of produtos">
               <span class="item-name">{{ produto.nome }}</span>
-              <span class="badge">{{ nomeDaCategoria(produto.idCategoria) }} &middot; R$ {{ produto.preco | number:'1.2-2' }}</span>
+              <div class="item-info">
+                <span class="badge">{{ nomeDaCategoria(produto.idCategoria) }} &middot; R$ {{ produto.preco | number:'1.2-2' }}</span>
+                <button type="button" class="remove-btn" (click)="removerProduto(produto)" [disabled]="removendoProdutoId === produto.id" aria-label="Remover produto">✕</button>
+              </div>
             </div>
           </div>
           <p class="helper-note" *ngIf="!carregando && produtos.length === 0">Nenhum produto adicionado ainda</p>

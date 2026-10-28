@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
  * Usado em login, autenticação, menu e nas três telas de cadastro, para que
  * todas fiquem idênticas.
  *
- * Imagem da logo: assets/imagens/logo-transparente.png
+ * Imagem da logo: assets/imagens/logo-simples-dourada.png
  */
 @Component({
   selector: 'app-banner-athenas',
@@ -15,7 +15,7 @@ import { Component } from '@angular/core';
     <div class="banner-content">
       <!-- Parte de cima do banner, até o divisor dourado da imagem -->
       <div class="banner-topo">
-        <img src="assets/imagens/logo-transparente.png" alt="Athenas Sys" class="banner-logo">
+        <img src="assets/imagens/logo-simples-dourado.png" alt="Athenas Sys" class="banner-logo">
         <div class="banner-texto">
           <h2 class="banner-title">Athenas</h2>
           <span class="banner-sys">Sys</span>

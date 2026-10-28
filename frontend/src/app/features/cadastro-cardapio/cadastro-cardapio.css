@@ -451,3 +451,65 @@
   margin: 10px 0;
   text-align: center;
 }
+
+/* ---------- Botão de remover item da lista ---------- */
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: var(--cor-bordo);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+}
+
+.remove-btn:hover:not(:disabled) {
+  background-color: rgba(123, 15, 18, 0.12);
+}
+
+.remove-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ---------- Botão de remover item da lista ---------- */
+.item-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: var(--cor-bordo);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+}
+
+.remove-btn:hover:not(:disabled) {
+  background-color: rgba(123, 15, 18, 0.12);
+}
+
+.remove-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
