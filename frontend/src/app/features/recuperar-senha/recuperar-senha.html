@@ -28,7 +28,7 @@
     <form *ngIf="etapa === 'CODIGO'" (ngSubmit)="confirmarCodigo()" #formCodigo="ngForm">
       <label class="field-label" for="codigo">CÓDIGO DE AUTENTICAÇÃO</label>
       <input id="codigo" name="codigo" type="password" [(ngModel)]="codigo" required
-        placeholder="Digite o código de autenticação recebido por e-mail">
+        placeholder="Digite o código recebido por e-mail">
 
       <label class="field-label" for="novaSenha">NOVA SENHA</label>
       <input id="novaSenha" name="novaSenha" type="password" [(ngModel)]="novaSenha" required>
