@@ -1,0 +1,22 @@
+<div class="modal-fundo" (click)="cancelar.emit()">
+  <div
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titulo-reativacao"
+    (click)="$event.stopPropagation()">
+
+    <p class="modal-titulo" id="titulo-reativacao">{{ titulo }}</p>
+
+    <p class="modal-texto">{{ mensagem }}</p>
+
+    <div class="modal-acoes">
+      <button type="button" class="btn btn-secundario" [disabled]="processando" (click)="cancelar.emit()">
+        Não, voltar
+      </button>
+      <button type="button" class="btn btn-primario" [disabled]="processando" (click)="confirmar.emit()">
+        {{ processando ? 'Reativando...' : 'Sim, reativar' }}
+      </button>
+    </div>
+  </div>
+</div>
