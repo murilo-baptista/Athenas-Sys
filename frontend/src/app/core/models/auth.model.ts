@@ -11,10 +11,10 @@ export interface LoginRestauranteResponse {
   nomeRestaurante: string;
 }
 
+/** O restaurante vem do token: o back não aceita mais restauranteId aqui. */
 export interface LoginFuncionarioRequest {
   usuario: string;
   codigo: string;
-  restauranteId: number;
 }
 
 export interface LoginFuncionarioResponse {

@@ -73,7 +73,7 @@
         <!-- Formulário inline de troca de código -->
         <div *ngIf="idAlterandoCodigo === funcionario.id" class="troca-codigo">
           <p class="nota nota-topo">
-            O código atual não é exibido por segurança. Informe o novo código e a senha de "{{ funcionario.nome }}" para confirmar.
+            O código atual não é exibido por segurança. Informe o novo código e o código atual de "{{ funcionario.nome }}" para confirmar.
           </p>
 
           <div class="grid grid-duas">
@@ -82,8 +82,8 @@
               <input type="text" [(ngModel)]="formCodigo.chaveNova" placeholder="Ex: 5678" class="input">
             </div>
             <div class="campo">
-              <label>Senha do funcionário</label>
-              <input type="password" [(ngModel)]="formCodigo.chaveAtual" placeholder="Confirmação de senha" class="input">
+              <label>Código atual do funcionário</label>
+              <input type="password" [(ngModel)]="formCodigo.chaveAtual" placeholder="Confirmação do código atual" class="input">
             </div>
           </div>
 

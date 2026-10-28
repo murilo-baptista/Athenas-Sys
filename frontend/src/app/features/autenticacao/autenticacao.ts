@@ -62,8 +62,7 @@ export class AutenticacaoComponent implements OnInit {
 
     this.authService.loginFuncionario({
       usuario: this.usuario,
-      codigo: this.senha,
-      restauranteId
+      codigo: this.senha
     }).subscribe({
       next: (resposta) => {
         this.carregando = false;
@@ -78,10 +77,19 @@ export class AutenticacaoComponent implements OnInit {
       },
       error: (erro) => {
         this.carregando = false;
-        this.mensagemErro = erro.status === 401
-          ? 'Usuário ou código inválidos.'
-          : 'Não foi possível autenticar agora. Tente novamente.';
+        if (erro.status === 401) {
+          this.mensagemErro = 'Usuário ou código inválidos.';
+        } else if (erro.status === 429) {
+          this.mensagemErro = 'Muitas tentativas. Aguarde alguns minutos e tente novamente.';
+        } else {
+          this.mensagemErro = 'Não foi possível autenticar agora. Tente novamente.';
+        }
       }
     });
+  }
+
+  onEsqueciCodigo(event: Event): void {
+    event.preventDefault();
+    this.router.navigate(['/recuperar-codigo']);
   }
 }

@@ -145,7 +145,7 @@ export class ConfigFuncionariosComponent implements OnInit {
 
   confirmarAlteracaoCodigo(funcionario: Funcionario): void {
     if (!this.formCodigo.chaveNova.trim() || !this.formCodigo.chaveAtual.trim()) {
-      this.mensagemErro = 'Preencha o novo código e a senha do funcionário.';
+      this.mensagemErro = 'Preencha o novo código e o código atual do funcionário.';
       return;
     }
 
@@ -164,7 +164,7 @@ export class ConfigFuncionariosComponent implements OnInit {
       },
       error: () => {
         this.salvandoCodigo = false;
-        this.mensagemErro = 'Não foi possível alterar o código. Verifique a senha informada.';
+        this.mensagemErro = 'Não foi possível alterar o código. Verifique o código atual informado.';
       }
     });
   }

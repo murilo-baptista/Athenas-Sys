@@ -41,12 +41,16 @@ export class AuthService {
   }
 
   loginFuncionario(dados: LoginFuncionarioRequest): Observable<LoginFuncionarioResponse> {
+    // O back usa o restaurante do token. O id da sessão continua guardado
+    // só para montar as URLs (/restaurantes/{idRestaurante}/...).
+    const restauranteId = this.getRestauranteId() as number;
+
     return this.http.post<LoginFuncionarioResponse>(`${this.baseUrl}/funcionario/login`, dados).pipe(
       tap(resposta => {
         this.salvarSessao({
           token: resposta.token,
           tipo: 'FUNCIONARIO',
-          restauranteId: dados.restauranteId,
+          restauranteId,
           funcionarioId: resposta.funcionarioId,
           nomeFuncionario: resposta.nomeFuncionario,
           cargo: resposta.cargo
