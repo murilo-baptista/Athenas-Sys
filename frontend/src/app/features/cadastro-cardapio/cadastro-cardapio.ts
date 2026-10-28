@@ -8,6 +8,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { CategoriaListagem } from '../../core/models/categoria.model';
 import { ProdutoListagem } from '../../core/models/produto.model';
 import { BannerAthenasComponent } from '../../shared/components/banner-athenas/banner-athenas';
+import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 
 @Component({
   selector: 'app-cadastro-cardapio',
@@ -85,9 +86,9 @@ export class CadastroCardapioComponent implements OnInit {
         this.nomeCategoria = '';
         this.salvandoCategoria = false;
       },
-      error: () => {
+      error: (erro) => {
         this.salvandoCategoria = false;
-        this.mensagemErro = 'Não foi possível adicionar essa categoria. Tente novamente.';
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível adicionar essa categoria. Tente novamente.');
       }
     });
   }
@@ -151,9 +152,9 @@ export class CadastroCardapioComponent implements OnInit {
         this.precoProduto = null;
         this.salvandoProduto = false;
       },
-      error: () => {
+      error: (erro) => {
         this.salvandoProduto = false;
-        this.mensagemErro = 'Não foi possível adicionar esse produto. Tente novamente.';
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível adicionar esse produto. Tente novamente.');
       }
     });
   }
