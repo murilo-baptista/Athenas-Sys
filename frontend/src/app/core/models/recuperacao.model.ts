@@ -18,14 +18,19 @@ export interface ConfirmarCodigoReativacaoRequest {
 }
 
 /* ---- Recuperação do código (PIN) do funcionário ----
-   PROVISÓRIO: o back ainda não publicou este contrato. Ajustar os nomes
-   quando o Murilo enviar (dto/recuperacao na develop). */
+   Contrato definitivo do back (RecuperacaoContaController):
+   DadosSolicitacaoCodigoFuncionario e DadosConfirmacaoCodigoFuncionario. */
+
+/** POST /auth/funcionario/recuperar-codigo/solicitar */
 export interface SolicitarRecuperacaoCodigoRequest {
   usuario: string;
 }
 
+/** POST /auth/funcionario/recuperar-codigo/confirmar */
 export interface ConfirmarRecuperacaoCodigoRequest {
   usuario: string;
-  codigoAutenticacao: string;
+  /** Código recebido por e-mail (no back o campo se chama apenas "codigo"). */
+  codigo: string;
+  /** Novo código de acesso do funcionário. */
   novoCodigo: string;
 }
