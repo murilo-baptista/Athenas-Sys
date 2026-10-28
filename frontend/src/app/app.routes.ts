@@ -21,6 +21,7 @@ import { ConfigRestauranteComponent } from './features/gerente/config-restaurant
 import { VisualizacaoCardapioComponent } from './features/gerente/visualizacao-cardapio/visualizacao-cardapio';
 import { ConfigMesasComponent } from './features/gerente/config-mesas/config-mesas';
 import { HistoricoPedidosComponent } from './features/gerente/historico-pedidos/historico-pedidos';
+import { RecuperarCodigoComponent } from './features/recuperar-codigo/recuperar-codigo';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -41,6 +42,7 @@ export const routes: Routes = [
 
   // 4. Autenticação do funcionário para a área escolhida (exige restaurante logado)
   { path: 'autenticacao', component: AutenticacaoComponent, canActivate: [authGuard] },
+  { path: 'recuperar-codigo', component: RecuperarCodigoComponent, canActivate: [authGuard] },
 
   // 5. Telas operacionais (exigem funcionário autenticado com o cargo correto)
   { path: 'recepcao', component: MapaMesasComponent, canActivate: [funcionarioGuard], data: { cargo: 'RECEPCAO' } },

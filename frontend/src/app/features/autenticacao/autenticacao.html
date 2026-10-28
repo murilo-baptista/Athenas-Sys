@@ -41,7 +41,7 @@
               <input type="checkbox" name="lembrar" [(ngModel)]="lembrarMe">
               <span>Lembre-me</span>
             </label>
-            <a href="#" class="forgot-link">Esqueceu sua senha ou usuário?</a>
+            <a href="#" class="forgot-link" (click)="onEsqueciCodigo($event)">Esqueci meu código</a>
           </div>
 
           <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>
