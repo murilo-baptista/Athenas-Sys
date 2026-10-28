@@ -72,4 +72,14 @@
     </div>
   </div>
 
+    <!-- Já existe uma categoria desativada com esse nome: pergunta se reativa -->
+  <app-modal-reativacao
+    *ngIf="reativacao"
+    titulo="Categoria desativada"
+    [mensagem]="mensagemReativacao"
+    [processando]="reativando"
+    (confirmar)="confirmarReativacao()"
+    (cancelar)="cancelarReativacao()">
+  </app-modal-reativacao>
+
 </div>
