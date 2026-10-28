@@ -20,26 +20,26 @@ export class CategoriaService {
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
-  private get restauranteId(): number {
-    return this.auth.getRestauranteId()!;
+  private get idRestaurante(): number {
+    return this.auth.getIdRestaurante()!;
   }
 
   listarPorRestaurante(): Observable<CategoriaListagem[]> {
     const params = new HttpParams().set('size', TAMANHO_PAGINA_MAXIMA);
     return this.http
-      .get<Page<CategoriaListagem>>(`${this.baseUrl}/${this.restauranteId}/categorias`, { params })
+      .get<Page<CategoriaListagem>>(`${this.baseUrl}/${this.idRestaurante}/categorias`, { params })
       .pipe(map(pagina => pagina.content));
   }
 
   criar(dados: DadosCadastroCategoria): Observable<CategoriaDetalhamento> {
-    return this.http.post<CategoriaDetalhamento>(`${this.baseUrl}/${this.restauranteId}/categorias`, dados);
+    return this.http.post<CategoriaDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/categorias`, dados);
   }
 
   atualizar(categoriaId: number, dados: DadosAtualizacaoCategoria): Observable<CategoriaDetalhamento> {
-    return this.http.put<CategoriaDetalhamento>(`${this.baseUrl}/${this.restauranteId}/categorias/${categoriaId}`, dados);
+    return this.http.put<CategoriaDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/categorias/${categoriaId}`, dados);
   }
 
   desativar(categoriaId: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${this.restauranteId}/categorias/${categoriaId}`);
+    return this.http.delete<void>(`${this.baseUrl}/${this.idRestaurante}/categorias/${categoriaId}`);
   }
 }

@@ -27,7 +27,7 @@ export interface LoginFuncionarioResponse {
 export interface SessaoUsuario {
   token: string;
   tipo: 'RESTAURANTE' | 'FUNCIONARIO';
-  restauranteId: number;
+  idRestaurante: number;
   nomeRestaurante?: string;
   funcionarioId?: number;
   nomeFuncionario?: string;

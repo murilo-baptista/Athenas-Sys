@@ -13,27 +13,27 @@ export class FuncionarioService {
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
-  private get restauranteId(): number {
-    return this.auth.getRestauranteId()!;
+  private get idRestaurante(): number {
+    return this.auth.getIdRestaurante()!;
   }
 
   listarPorRestaurante(): Observable<Funcionario[]> {
-    return this.http.get<Page<Funcionario>>(`${this.baseUrl}/${this.restauranteId}/funcionarios`).pipe(map(r => r.content));
+    return this.http.get<Page<Funcionario>>(`${this.baseUrl}/${this.idRestaurante}/funcionarios`).pipe(map(r => r.content));
   }
 
   criar(dados: CriarFuncionarioRequest): Observable<Funcionario> {
-    return this.http.post<Funcionario>(`${this.baseUrl}/${this.restauranteId}/funcionarios`, dados);
+    return this.http.post<Funcionario>(`${this.baseUrl}/${this.idRestaurante}/funcionarios`, dados);
   }
 
   atualizar(id: number, dados: AtualizarFuncionarioRequest): Observable<Funcionario> {
-      return this.http.put<Funcionario>(`${this.baseUrl}/${this.restauranteId}/funcionarios/${id}`, dados);
+      return this.http.put<Funcionario>(`${this.baseUrl}/${this.idRestaurante}/funcionarios/${id}`, dados);
     }
 
   remover(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${this.restauranteId}/funcionarios/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}/${this.idRestaurante}/funcionarios/${id}`);
   }
 
   alterarCodigo(id: number, dados: AlterarCodigoRequest): Observable<void> {
-    return this.http.patch<void>(`${this.baseUrl}/${this.restauranteId}/funcionarios/${id}/alterarCodigo`, dados);
+    return this.http.patch<void>(`${this.baseUrl}/${this.idRestaurante}/funcionarios/${id}/alterarCodigo`, dados);
   }
 }

@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit {
   }
 
   private carregarResumo(): void {
-    if (!this.authService.getRestauranteId()) {
+    if (!this.authService.getIdRestaurante()) {
       this.router.navigate(['/login']);
       return;
     }

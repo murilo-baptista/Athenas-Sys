@@ -55,14 +55,14 @@ export class ConfigRestauranteComponent implements OnInit {
   }
 
   private carregar(): void {
-    const restauranteId = this.authService.getRestauranteId();
-    if (!restauranteId) {
+    const idRestaurante = this.authService.getIdRestaurante();
+    if (!idRestaurante) {
       this.router.navigate(['/login']);
       return;
     }
 
     this.carregando = true;
-    this.restauranteService.buscarPorId(restauranteId).subscribe({
+    this.restauranteService.buscarPorId(idRestaurante).subscribe({
       next: (restaurante) => {
         this.restaurante = restaurante;
         this.form = {

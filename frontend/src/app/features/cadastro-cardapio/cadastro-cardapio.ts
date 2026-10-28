@@ -44,7 +44,7 @@ export class CadastroCardapioComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (!this.authService.getRestauranteId()) {
+    if (!this.authService.getIdRestaurante()) {
       this.router.navigate(['/cadastro-restaurante']);
       return;
     }

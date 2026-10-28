@@ -39,7 +39,7 @@ export class CadastroFuncionariosComponent implements OnInit {
   salvando = false;
   mensagemErro = '';
 
-  private restauranteId!: number;
+  private idRestaurante!: number;
 
   constructor(
     private router: Router,
@@ -48,12 +48,12 @@ export class CadastroFuncionariosComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = this.authService.getRestauranteId();
+    const id = this.authService.getIdRestaurante();
     if (!id) {
       this.router.navigate(['/cadastro-restaurante']);
       return;
     }
-    this.restauranteId = id;
+    this.idRestaurante = id;
     this.carregarFuncionarios();
   }
 

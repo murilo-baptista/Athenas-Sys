@@ -20,12 +20,12 @@ export class MapaMesasComponent implements OnInit {
 
   mesaExpandidaIndex: number | null = null;
 
-  private restauranteId!: number;
+  private idRestaurante!: number;
 
   constructor(private mesaService: MesaService, private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.restauranteId = this.authService.getRestauranteId()!;
+    this.idRestaurante = this.authService.getIdRestaurante()!;
     this.carregarMesas();
   }
 

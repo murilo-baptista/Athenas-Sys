@@ -33,7 +33,7 @@ export class AuthService {
         this.salvarSessao({
           token: resposta.token,
           tipo: 'RESTAURANTE',
-          restauranteId: resposta.restauranteId,
+          idRestaurante: resposta.restauranteId,
           nomeRestaurante: resposta.nomeRestaurante
         });
       })
@@ -43,14 +43,14 @@ export class AuthService {
   loginFuncionario(dados: LoginFuncionarioRequest): Observable<LoginFuncionarioResponse> {
     // O back usa o restaurante do token. O id da sessão continua guardado
     // só para montar as URLs (/restaurantes/{idRestaurante}/...).
-    const restauranteId = this.getRestauranteId() as number;
+    const idRestaurante = this.getIdRestaurante() as number;
 
     return this.http.post<LoginFuncionarioResponse>(`${this.baseUrl}/funcionario/login`, dados).pipe(
       tap(resposta => {
         this.salvarSessao({
           token: resposta.token,
           tipo: 'FUNCIONARIO',
-          restauranteId,
+          idRestaurante,
           funcionarioId: resposta.funcionarioId,
           nomeFuncionario: resposta.nomeFuncionario,
           cargo: resposta.cargo
@@ -77,8 +77,8 @@ export class AuthService {
     return this.getSessao()?.token ?? null;
   }
 
-  getRestauranteId(): number | null {
-    return this.getSessao()?.restauranteId ?? null;
+  getIdRestaurante(): number | null {
+    return this.getSessao()?.idRestaurante ?? null;
   }
 
   getCargoFuncionario(): string | null {
@@ -113,11 +113,11 @@ export class AuthService {
    * válido na resposta do cadastro (POST /restaurantes), então a sessão do
    * wizard (mesas e funcionários) já nasce autenticada.
    */
-  iniciarSessaoAposCadastro(token: string, restauranteId: number, nomeRestaurante: string): void {
+  iniciarSessaoAposCadastro(token: string, idRestaurante: number, nomeRestaurante: string): void {
     this.salvarSessao({
       token,
       tipo: 'RESTAURANTE',
-      restauranteId,
+      idRestaurante,
       nomeRestaurante
     });
   }

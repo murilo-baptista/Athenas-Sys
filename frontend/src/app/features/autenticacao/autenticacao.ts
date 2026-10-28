@@ -37,8 +37,8 @@ export class AutenticacaoComponent implements OnInit {
       this.destino = params.get('destino') ?? '/login';
     });
 
-    const restauranteId = this.authService.getRestauranteId();
-    if (!restauranteId) {
+    const idRestaurante = this.authService.getIdRestaurante();
+    if (!idRestaurante) {
       // Sem restaurante logado não há como autenticar um funcionário.
       this.router.navigate(['/login']);
     }
@@ -47,8 +47,8 @@ export class AutenticacaoComponent implements OnInit {
   onEntrar(): void {
     this.mensagemErro = '';
 
-    const restauranteId = this.authService.getRestauranteId();
-    if (!restauranteId) {
+    const idRestaurante = this.authService.getIdRestaurante();
+    if (!idRestaurante) {
       this.mensagemErro = 'Sessão do restaurante expirada. Faça login novamente.';
       return;
     }

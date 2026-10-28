@@ -29,38 +29,38 @@ export class MesaService {
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
-  private get restauranteId(): number {
-    return this.auth.getRestauranteId()!;
+  private get idRestaurante(): number {
+    return this.auth.getIdRestaurante()!;
   }
 
   listarPorRestaurante(): Observable<MesaListagem[]> {
     const params = new HttpParams().set('size', TAMANHO_PAGINA_MAXIMA);
     return this.http
-      .get<Page<MesaListagem>>(`${this.baseUrl}/${this.restauranteId}/mesas`, { params })
+      .get<Page<MesaListagem>>(`${this.baseUrl}/${this.idRestaurante}/mesas`, { params })
       .pipe(map(pagina => pagina.content));
   }
 
   detalhar(mesaId: number): Observable<MesaDetalhamento> {
-    return this.http.get<MesaDetalhamento>(`${this.baseUrl}/${this.restauranteId}/mesas/${mesaId}`);
+    return this.http.get<MesaDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/mesas/${mesaId}`);
   }
 
   criar(dados: DadosCadastroMesa): Observable<MesaDetalhamento> {
-    return this.http.post<MesaDetalhamento>(`${this.baseUrl}/${this.restauranteId}/mesas`, dados);
+    return this.http.post<MesaDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/mesas`, dados);
   }
 
   atualizar(mesaId: number, dados: DadosAtualizacaoMesa): Observable<MesaDetalhamento> {
-    return this.http.put<MesaDetalhamento>(`${this.baseUrl}/${this.restauranteId}/mesas/${mesaId}`, dados);
+    return this.http.put<MesaDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/mesas/${mesaId}`, dados);
   }
 
   desativar(mesaId: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${this.restauranteId}/mesas/${mesaId}`);
+    return this.http.delete<void>(`${this.baseUrl}/${this.idRestaurante}/mesas/${mesaId}`);
   }
 
   ocuparMesa(mesaId: number): Observable<MesaDetalhamento> {
-    return this.http.patch<MesaDetalhamento>(`${this.baseUrl}/${this.restauranteId}/mesas/${mesaId}/ocupar`, {});
+    return this.http.patch<MesaDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/mesas/${mesaId}/ocupar`, {});
   }
 
   desocuparMesa(mesaId: number): Observable<MesaDetalhamento> {
-    return this.http.patch<MesaDetalhamento>(`${this.baseUrl}/${this.restauranteId}/mesas/${mesaId}/desocupar`, {});
+    return this.http.patch<MesaDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/mesas/${mesaId}/desocupar`, {});
   }
 }

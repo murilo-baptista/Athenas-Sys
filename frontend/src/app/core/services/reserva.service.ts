@@ -24,30 +24,30 @@ export class ReservaService {
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
-  private get restauranteId(): number {
-    return this.auth.getRestauranteId()!;
+  private get idRestaurante(): number {
+    return this.auth.getIdRestaurante()!;
   }
 
   listarPorRestaurante(): Observable<ReservaListagem[]> {
     const params = new HttpParams().set('size', TAMANHO_PAGINA_MAXIMA);
     return this.http
-      .get<Page<ReservaListagem>>(`${this.baseUrl}/${this.restauranteId}/reservas`, { params })
+      .get<Page<ReservaListagem>>(`${this.baseUrl}/${this.idRestaurante}/reservas`, { params })
       .pipe(map(pagina => pagina.content));
   }
 
   criar(dados: DadosCadastroReserva): Observable<ReservaDetalhamento> {
-    return this.http.post<ReservaDetalhamento>(`${this.baseUrl}/${this.restauranteId}/reservas`, dados);
+    return this.http.post<ReservaDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/reservas`, dados);
   }
 
   atualizar(reservaId: number, dados: DadosAtualizacaoReserva): Observable<ReservaDetalhamento> {
-    return this.http.put<ReservaDetalhamento>(`${this.baseUrl}/${this.restauranteId}/reservas/${reservaId}`, dados);
+    return this.http.put<ReservaDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/reservas/${reservaId}`, dados);
   }
 
   concluir(reservaId: number): Observable<ReservaDetalhamento> {
-    return this.http.patch<ReservaDetalhamento>(`${this.baseUrl}/${this.restauranteId}/reservas/${reservaId}/concluir`, {});
+    return this.http.patch<ReservaDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/reservas/${reservaId}/concluir`, {});
   }
 
   cancelar(reservaId: number): Observable<ReservaDetalhamento> {
-    return this.http.patch<ReservaDetalhamento>(`${this.baseUrl}/${this.restauranteId}/reservas/${reservaId}/cancelar`, {});
+    return this.http.patch<ReservaDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/reservas/${reservaId}/cancelar`, {});
   }
 }

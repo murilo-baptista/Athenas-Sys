@@ -20,26 +20,26 @@ export class ProdutoService {
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
-  private get restauranteId(): number {
-    return this.auth.getRestauranteId()!;
+  private get idRestaurante(): number {
+    return this.auth.getIdRestaurante()!;
   }
 
   listarPorRestaurante(): Observable<ProdutoListagem[]> {
     const params = new HttpParams().set('size', TAMANHO_PAGINA_MAXIMA);
     return this.http
-      .get<Page<ProdutoListagem>>(`${this.baseUrl}/${this.restauranteId}/produtos`, { params })
+      .get<Page<ProdutoListagem>>(`${this.baseUrl}/${this.idRestaurante}/produtos`, { params })
       .pipe(map(pagina => pagina.content));
   }
 
   criar(dados: DadosCadastroProduto): Observable<ProdutoDetalhamento> {
-    return this.http.post<ProdutoDetalhamento>(`${this.baseUrl}/${this.restauranteId}/produtos`, dados);
+    return this.http.post<ProdutoDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/produtos`, dados);
   }
 
   atualizar(produtoId: number, dados: DadosAtualizacaoProduto): Observable<ProdutoDetalhamento> {
-    return this.http.put<ProdutoDetalhamento>(`${this.baseUrl}/${this.restauranteId}/produtos/${produtoId}`, dados);
+    return this.http.put<ProdutoDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/produtos/${produtoId}`, dados);
   }
 
   desativar(produtoId: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${this.restauranteId}/produtos/${produtoId}`);
+    return this.http.delete<void>(`${this.baseUrl}/${this.idRestaurante}/produtos/${produtoId}`);
   }
 }

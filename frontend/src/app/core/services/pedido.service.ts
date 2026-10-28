@@ -26,8 +26,8 @@ export class PedidoService {
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
-  private get restauranteId(): number {
-    return this.auth.getRestauranteId()!;
+  private get idRestaurante(): number {
+    return this.auth.getIdRestaurante()!;
   }
 
   listar(idMesa?: number, idFuncionario?: number): Observable<PedidoListagem[]> {
@@ -39,19 +39,19 @@ export class PedidoService {
       params = params.set('idFuncionario', idFuncionario);
     }
     return this.http
-      .get<Page<PedidoListagem>>(`${this.baseUrl}/${this.restauranteId}/pedidos`, { params })
+      .get<Page<PedidoListagem>>(`${this.baseUrl}/${this.idRestaurante}/pedidos`, { params })
       .pipe(map(pagina => pagina.content));
   }
 
   detalhar(pedidoId: number): Observable<PedidoDetalhamento> {
-    return this.http.get<PedidoDetalhamento>(`${this.baseUrl}/${this.restauranteId}/pedidos/${pedidoId}`);
+    return this.http.get<PedidoDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/pedidos/${pedidoId}`);
   }
 
   criar(dados: DadosCadastroPedido): Observable<PedidoDetalhamento> {
-    return this.http.post<PedidoDetalhamento>(`${this.baseUrl}/${this.restauranteId}/pedidos`, dados);
+    return this.http.post<PedidoDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/pedidos`, dados);
   }
 
   atualizar(pedidoId: number, dados: DadosAtualizacaoPedido): Observable<PedidoDetalhamento> {
-    return this.http.put<PedidoDetalhamento>(`${this.baseUrl}/${this.restauranteId}/pedidos/${pedidoId}`, dados);
+    return this.http.put<PedidoDetalhamento>(`${this.baseUrl}/${this.idRestaurante}/pedidos/${pedidoId}`, dados);
   }
 }

@@ -22,12 +22,12 @@ export class ItemPedidoService {
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
-  private get restauranteId(): number {
-    return this.auth.getRestauranteId()!;
+  private get idRestaurante(): number {
+    return this.auth.getIdRestaurante()!;
   }
 
   private itensUrl(pedidoId: number): string {
-    return `${this.baseUrl}/${this.restauranteId}/pedidos/${pedidoId}/itens`;
+    return `${this.baseUrl}/${this.idRestaurante}/pedidos/${pedidoId}/itens`;
   }
 
   listarPorPedido(pedidoId: number): Observable<ItemPedidoListagem[]> {
