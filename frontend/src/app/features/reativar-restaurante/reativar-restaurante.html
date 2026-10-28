@@ -7,7 +7,7 @@
       Esta conta está desativada. Informe o e-mail do restaurante para receber um código.
     </p>
     <p class="card-subtitle" *ngIf="etapa === 'CODIGO'">
-      Digite o código recebido para reativar a conta.
+      Digite o código de autenticação para reativar a conta.
     </p>
 
     <p class="msg-info" *ngIf="mensagemInfo">{{ mensagemInfo }}</p>
@@ -24,13 +24,15 @@
     </form>
 
     <form *ngIf="etapa === 'CODIGO'" (ngSubmit)="confirmarCodigo()" #formCodigo="ngForm">
-      <label class="field-label" for="codigo">CÓDIGO RECEBIDO</label>
-      <input id="codigo" name="codigo" type="text" [(ngModel)]="codigo" required
-        placeholder="Digite o código">
+      <label class="field-label" for="codigo">CÓDIGO DE AUTENTICAÇÃO</label>
+      <input id="codigo" name="codigo" type="password" [(ngModel)]="codigo" required
+        placeholder="Digite o código recebido por e-mail">
 
       <button type="submit" class="btn-principal" [disabled]="carregando">
         {{ carregando ? 'CONFIRMANDO...' : 'REATIVAR CONTA' }}
       </button>
+
+      <button type="button" class="btn-voltar" (click)="pedirNovoCodigo()">Pedir um novo código</button>
     </form>
 
     <button type="button" class="btn-voltar" (click)="voltarParaLogin()">Voltar para o login</button>

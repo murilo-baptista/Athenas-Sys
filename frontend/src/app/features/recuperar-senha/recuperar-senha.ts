@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RecuperacaoService } from '../../core/services/recuperacao.service';
+import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 
 type Etapa = 'EMAIL' | 'CODIGO';
 
@@ -32,6 +33,7 @@ export class RecuperarSenhaComponent {
 
   solicitarCodigo(): void {
     this.mensagemErro = '';
+    this.mensagemInfo = '';
 
     if (!this.email.trim()) {
       this.mensagemErro = 'Informe o e-mail do restaurante.';
@@ -45,9 +47,9 @@ export class RecuperarSenhaComponent {
         this.mensagemInfo = 'Se o e-mail estiver cadastrado, enviamos um código.';
         this.etapa = 'CODIGO';
       },
-      error: () => {
+      error: (erro) => {
         this.carregando = false;
-        this.mensagemErro = 'Não foi possível enviar o código agora. Tente novamente em instantes.';
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível enviar o código agora. Tente novamente em instantes.');
       }
     });
   }
@@ -76,9 +78,19 @@ export class RecuperarSenhaComponent {
       },
       error: (erro) => {
         this.carregando = false;
-        this.mensagemErro = erro.error?.mensagem || 'Não foi possível confirmar o código.';
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível confirmar o código.');
       }
     });
+  }
+
+  /** Volta ao passo do e-mail para pedir um código novo. */
+  pedirNovoCodigo(): void {
+    this.etapa = 'EMAIL';
+    this.codigo = '';
+    this.novaSenha = '';
+    this.confirmacaoSenha = '';
+    this.mensagemErro = '';
+    this.mensagemInfo = '';
   }
 
   voltarParaLogin(): void {

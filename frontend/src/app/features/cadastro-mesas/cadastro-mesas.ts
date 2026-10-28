@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { MesaService } from '../../core/services/mesa.service';
 import { AuthService } from '../../core/services/auth.service';
 import { MesaListagem } from '../../core/models/mesa.model';
+import { BannerAthenasComponent } from '../../shared/components/banner-athenas/banner-athenas';
 
 @Component({
   selector: 'app-cadastro-mesas',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BannerAthenasComponent],
   templateUrl: './cadastro-mesas.html',
   styleUrl: './cadastro-mesas.css'
 })

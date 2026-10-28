@@ -54,7 +54,7 @@
                   class="seta-btn"
                   (click)="toggleMesa(i)"
                   [attr.aria-label]="mesaExpandidaIndex === i ? 'Recolher mesa' : 'Expandir mesa'">
-                  {{ mesaExpandidaIndex === i ? '^' : 'V' }}
+                  <svg class="seta-icone" [class.aberta]="mesaExpandidaIndex === i" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg>
                 </button>
               </td>
             </tr>

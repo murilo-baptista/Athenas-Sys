@@ -1,18 +1,31 @@
-/**
- Contrato ainda não definido pelo back-end (item 5 da V3) — estes campos são um palpite, baseado no que o PDF descreve. Ajustar quando o back enviar o contrato definitivo.
- */
+/** Contrato definitivo do back (RecuperacaoContaController). */
+
 export interface SolicitarCodigoRequest {
   email: string;
 }
 
+/** POST /auth/recuperar-senha/confirmar */
 export interface ConfirmarCodigoRequest {
   email: string;
   codigo: string;
   novaSenha: string;
 }
 
-/** Reativação do restaurante não troca senha, só confirma o código. */
+/** POST /auth/reativar-conta/confirmar (reativar não troca senha) */
 export interface ConfirmarCodigoReativacaoRequest {
   email: string;
   codigo: string;
+}
+
+/* ---- Recuperação do código (PIN) do funcionário ----
+   PROVISÓRIO: o back ainda não publicou este contrato. Ajustar os nomes
+   quando o Murilo enviar (dto/recuperacao na develop). */
+export interface SolicitarRecuperacaoCodigoRequest {
+  usuario: string;
+}
+
+export interface ConfirmarRecuperacaoCodigoRequest {
+  usuario: string;
+  codigoAutenticacao: string;
+  novoCodigo: string;
 }

@@ -1,49 +1,37 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, delay, throwError } from 'rxjs';
-import { ConfirmarCodigoRequest, ConfirmarCodigoReativacaoRequest, SolicitarCodigoRequest } from '../models/recuperacao.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import {
+  ConfirmarCodigoReativacaoRequest,
+  ConfirmarCodigoRequest,
+  SolicitarCodigoRequest
+} from '../models/recuperacao.model';
 
 /**
- * ===================== SERVIÇO TEMPORÁRIO (FAKE) =====================
- * O back-end ainda não tem rota de recuperação de senha (item 5 da V3,
- * "em andamento" no PDF do Murilo). Este service simula as duas chamadas
- * para a tela poder ser construída e testada agora.
- *
- * QUANDO O BACK ENTREGAR A ROTA DE VERDADE:
- * - Trocar os dois métodos abaixo por chamadas reais com HttpClient,
- *   no mesmo padrão dos outros services (ver mesa.service.ts).
- * - Nenhuma tela precisa mudar, só este arquivo.
- * =======================================================================
+ * Chamadas públicas (sem token) de recuperação de senha e reativação.
+ * Todas respondem 204 sem corpo. O back nunca revela se o e-mail existe.
  */
 @Injectable({ providedIn: 'root' })
 export class RecuperacaoService {
 
-  /** Simula: "Se o e-mail existir, enviamos um código." Sempre responde sucesso, sem revelar se o e-mail existe de verdade (é assim que o PDF pede). */
+  private readonly baseUrl = `${environment.apiUrl}/auth`;
+
+  constructor(private http: HttpClient) {}
+
   solicitarCodigo(dados: SolicitarCodigoRequest): Observable<void> {
-    return of(undefined).pipe(delay(600));
+    return this.http.post<void>(`${this.baseUrl}/recuperar-senha/solicitar`, dados);
   }
 
-  /**
-   * Simula a confirmação do código. Enquanto o back não existe, o código
-   * fixo "000000" é aceito como válido, para dar pra testar a tela.
-   * Qualquer outro valor simula "código incorreto".
-   */
   confirmarCodigo(dados: ConfirmarCodigoRequest): Observable<void> {
-    if (dados.codigo !== '000000') {
-      return throwError(() => ({ status: 400, error: { mensagem: 'Código incorreto.' } })).pipe(delay(400));
-    }
-    return of(undefined).pipe(delay(600));
+    return this.http.post<void>(`${this.baseUrl}/recuperar-senha/confirmar`, dados);
   }
 
-  /** Mesmo mecanismo de "esqueci minha senha", usado para reativar um restaurante desativado. */
   solicitarCodigoReativacao(dados: SolicitarCodigoRequest): Observable<void> {
-    return of(undefined).pipe(delay(600));
+    return this.http.post<void>(`${this.baseUrl}/reativar-conta/solicitar`, dados);
   }
 
-  /** Confirma o código de reativação. Código fixo "000000" simula sucesso, igual à recuperação de senha. */
   confirmarReativacao(dados: ConfirmarCodigoReativacaoRequest): Observable<void> {
-    if (dados.codigo !== '000000') {
-      return throwError(() => ({ status: 400, error: { mensagem: 'Código incorreto.' } })).pipe(delay(400));
-    }
-    return of(undefined).pipe(delay(600));
+    return this.http.post<void>(`${this.baseUrl}/reativar-conta/confirmar`, dados);
   }
 }

@@ -149,7 +149,7 @@ export class ConfigRestauranteComponent implements OnInit {
     if (!this.restaurante?.id) return;
 
     const confirmacao = confirm(
-      `Tem certeza que deseja desativar o restaurante "${this.restaurante.nome}"? Esta ação não pode ser desfeita por aqui.`
+      `Tem certeza que deseja desativar o restaurante "${this.restaurante.nome}"? Para reativá-lo depois, será preciso um código enviado ao e-mail cadastrado.`
     );
     if (!confirmacao) return;
 

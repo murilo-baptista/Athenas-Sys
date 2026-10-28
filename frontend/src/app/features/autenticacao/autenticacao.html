@@ -7,13 +7,7 @@
 
     <!-- Lado esquerdo: banner Athenas (idêntico à página menu) -->
     <div class="left-panel">
-      <div class="banner">
-        <img src="assets/imagens/banner-bordo.jpeg" alt="Athenas - Gestão inteligente para restaurantes" class="banner-img">
-        <div class="banner-content">
-          <img src="assets/imagens/logo-transparente.png" alt="Athenas - Gestão inteligente para restaurantes" class="banner-logo">
-          <p class="banner-subtitle">Gestão inteligente<br>para restaurantes</p>
-        </div>
-      </div>
+      <app-banner-athenas></app-banner-athenas>
     </div>
 
     <!-- Direita: fundo com templo desbotado + card de autenticação -->
@@ -47,7 +41,7 @@
               <input type="checkbox" name="lembrar" [(ngModel)]="lembrarMe">
               <span>Lembre-me</span>
             </label>
-            <a href="#" class="forgot-link">Esqueceu sua senha ou usuário?</a>
+            <a href="#" class="forgot-link" (click)="onEsqueciCodigo($event)">Esqueci meu código</a>
           </div>
 
           <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>

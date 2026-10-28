@@ -7,7 +7,7 @@
       Informe o e-mail do restaurante para receber um código.
     </p>
     <p class="card-subtitle" *ngIf="etapa === 'CODIGO'">
-      Digite o código recebido e defina a nova senha.
+      Digite o código de autenticação e defina a nova senha.
     </p>
 
     <p class="msg-info" *ngIf="mensagemInfo">{{ mensagemInfo }}</p>
@@ -26,9 +26,9 @@
 
     <!-- Etapa 2: código + nova senha -->
     <form *ngIf="etapa === 'CODIGO'" (ngSubmit)="confirmarCodigo()" #formCodigo="ngForm">
-      <label class="field-label" for="codigo">CÓDIGO RECEBIDO</label>
-      <input id="codigo" name="codigo" type="text" [(ngModel)]="codigo" required
-        placeholder="Digite o código">
+      <label class="field-label" for="codigo">CÓDIGO DE AUTENTICAÇÃO</label>
+      <input id="codigo" name="codigo" type="password" [(ngModel)]="codigo" required
+        placeholder="Digite o código recebido por e-mail">
 
       <label class="field-label" for="novaSenha">NOVA SENHA</label>
       <input id="novaSenha" name="novaSenha" type="password" [(ngModel)]="novaSenha" required>
@@ -39,6 +39,8 @@
       <button type="submit" class="btn-principal" [disabled]="carregando">
         {{ carregando ? 'CONFIRMANDO...' : 'CONFIRMAR' }}
       </button>
+
+      <button type="button" class="btn-voltar" (click)="pedirNovoCodigo()">Pedir um novo código</button>
     </form>
 
     <button type="button" class="btn-voltar" (click)="voltarParaLogin()">Voltar para o login</button>

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { FuncionarioService } from '../../core/services/funcionario.service';
 import { AuthService } from '../../core/services/auth.service';
 import { CargoFuncionario, Funcionario } from '../../core/models/funcionario.model';
+import { BannerAthenasComponent } from '../../shared/components/banner-athenas/banner-athenas';
 
 interface CargoOption {
   label: CargoFuncionario;
@@ -15,7 +16,7 @@ interface CargoOption {
 @Component({
   selector: 'app-cadastro-funcionarios',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BannerAthenasComponent],
   templateUrl: './cadastro-funcionarios.html',
   styleUrl: './cadastro-funcionarios.css'
 })
@@ -127,14 +128,12 @@ export class CadastroFuncionariosComponent implements OnInit {
     this.router.navigate(['/cadastro-mesas']);
   }
 
-  finalizar(): void {
+  proximo(): void {
     if (this.funcionarios.length === 0) {
       this.mensagemErro = 'Cadastre pelo menos 1 funcionário para concluir.';
       return;
     }
 
-    // Onboarding concluído: encerra a sessão temporária e leva ao login definitivo.
-    this.authService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/cadastro-cardapio']);
   }
 }

@@ -10,13 +10,7 @@
       <div class="temple-bg">
         <img src="assets/imagens/templo-grego.png" alt="Templo grego" class="temple-img">
       </div>
-      <div class="banner">
-        <img src="assets/imagens/banner-bordo.jpeg" alt="Athenas - Gestão inteligente para restaurantes" class="banner-img">
-        <div class="banner-content">
-          <img src="assets/imagens/logo-transparente.png" alt="Athenas - Gestão inteligente para restaurantes" class="banner-logo">
-          <p class="banner-subtitle">Gestão inteligente<br>para restaurantes</p>
-        </div>
-      </div>
+      <app-banner-athenas></app-banner-athenas>
     </div>
 
     <!-- Lado direito: card de login -->
@@ -61,7 +55,7 @@
               <input type="checkbox" name="lembrar" [(ngModel)]="lembrarMe">
               Lembre-me
             </label>
-            <a href="#" class="forgot-link" (click)="onForgotPassword($event)">Esqueceu sua senha ou usuário?</a>
+            <a href="#" class="forgot-link" (click)="onForgotPassword($event)">Esqueceu sua senha?</a>
           </div>
 
           <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>

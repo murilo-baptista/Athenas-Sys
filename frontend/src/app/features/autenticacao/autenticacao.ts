@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { BannerAthenasComponent } from '../../shared/components/banner-athenas/banner-athenas';
 
 @Component({
   selector: 'app-autenticacao',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BannerAthenasComponent],
   templateUrl: './autenticacao.html',
   styleUrl: './autenticacao.css'
 })
@@ -61,8 +62,7 @@ export class AutenticacaoComponent implements OnInit {
 
     this.authService.loginFuncionario({
       usuario: this.usuario,
-      codigo: this.senha,
-      restauranteId
+      codigo: this.senha
     }).subscribe({
       next: (resposta) => {
         this.carregando = false;
@@ -77,10 +77,19 @@ export class AutenticacaoComponent implements OnInit {
       },
       error: (erro) => {
         this.carregando = false;
-        this.mensagemErro = erro.status === 401
-          ? 'Usuário ou código inválidos.'
-          : 'Não foi possível autenticar agora. Tente novamente.';
+        if (erro.status === 401) {
+          this.mensagemErro = 'Usuário ou código inválidos.';
+        } else if (erro.status === 429) {
+          this.mensagemErro = 'Muitas tentativas. Aguarde alguns minutos e tente novamente.';
+        } else {
+          this.mensagemErro = 'Não foi possível autenticar agora. Tente novamente.';
+        }
       }
     });
+  }
+
+  onEsqueciCodigo(event: Event): void {
+    event.preventDefault();
+    this.router.navigate(['/recuperar-codigo']);
   }
 }

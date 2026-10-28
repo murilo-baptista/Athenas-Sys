@@ -2,19 +2,19 @@
 
   <div class="container">
 
-    <a routerLink="/gerente" class="link-voltar">&larr; Painel do gerente</a>
+    <a routerLink="/gerente" class="link-voltar"><svg class="seta-voltar" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Painel do gerente</a>
 
     <div class="cabecalho">
       <h1 class="titulo">Cardápio</h1>
 
       <div class="exportar">
-        <button type="button" (click)="salvarImagem()" [disabled]="!podeExportar()" class="btn btn-contorno">
+        <button type="button" (click)="salvarImagem()" [disabled]="!podeExportar()" class="btn btn-azul">
           {{ exportando ? 'Gerando...' : 'Salvar como imagem' }}
         </button>
-        <button type="button" (click)="salvarPdf()" [disabled]="!podeExportar()" class="btn btn-contorno">
+        <button type="button" (click)="salvarPdf()" [disabled]="!podeExportar()" class="btn btn-azul">
           {{ exportando ? 'Gerando...' : 'Salvar como PDF' }}
         </button>
-        <button type="button" (click)="alternarQrCode()" class="btn btn-contorno">
+        <button type="button" (click)="alternarQrCode()" class="btn btn-azul">
           {{ mostrarQrCode ? 'Esconder QR Code' : 'Mostrar QR Code' }}
         </button>
       </div>

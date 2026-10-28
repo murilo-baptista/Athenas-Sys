@@ -1,0 +1,48 @@
+<div class="recuperar-page">
+  <div class="recuperar-card">
+
+    <h1 class="card-title">RECUPERAR CÓDIGO</h1>
+
+    <p class="card-subtitle" *ngIf="etapa === 'USUARIO'">
+      Informe o seu usuário. O pedido será enviado ao e-mail do restaurante, para o gerente conferir.
+    </p>
+    <p class="card-subtitle" *ngIf="etapa === 'CODIGO'">
+      Digite o código de autenticação que o gerente te passou e defina o novo código.
+    </p>
+
+    <p class="msg-info" *ngIf="mensagemInfo">{{ mensagemInfo }}</p>
+    <p class="msg-erro" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+
+    <form *ngIf="etapa === 'USUARIO'" (ngSubmit)="solicitar()" #formUsuario="ngForm">
+      <label class="field-label" for="usuario">USUÁRIO</label>
+      <input id="usuario" name="usuario" type="text" [(ngModel)]="usuario" required
+        placeholder="Digite seu usuário">
+
+      <button type="submit" class="btn-principal" [disabled]="carregando">
+        {{ carregando ? 'ENVIANDO...' : 'ENVIAR PEDIDO' }}
+      </button>
+    </form>
+
+    <form *ngIf="etapa === 'CODIGO'" (ngSubmit)="confirmar()" #formCodigo="ngForm">
+      <label class="field-label" for="codigoAutenticacao">CÓDIGO DE AUTENTICAÇÃO</label>
+      <input id="codigoAutenticacao" name="codigoAutenticacao" type="password"
+        [(ngModel)]="codigoAutenticacao" required placeholder="Código recebido do gerente">
+
+      <label class="field-label" for="novoCodigo">NOVO CÓDIGO DO FUNCIONÁRIO</label>
+      <input id="novoCodigo" name="novoCodigo" type="password" [(ngModel)]="novoCodigo" required>
+
+      <label class="field-label" for="confirmacaoCodigo">CONFIRMAR NOVO CÓDIGO DO FUNCIONÁRIO</label>
+      <input id="confirmacaoCodigo" name="confirmacaoCodigo" type="password"
+        [(ngModel)]="confirmacaoCodigo" required>
+
+      <button type="submit" class="btn-principal" [disabled]="carregando">
+        {{ carregando ? 'CONFIRMANDO...' : 'CONFIRMAR' }}
+      </button>
+
+      <button type="button" class="btn-voltar" (click)="digitarOutroUsuario()">Pedir um novo código</button>
+    </form>
+
+    <button type="button" class="btn-voltar" (click)="voltar()">Voltar para a autenticação</button>
+
+  </div>
+</div>

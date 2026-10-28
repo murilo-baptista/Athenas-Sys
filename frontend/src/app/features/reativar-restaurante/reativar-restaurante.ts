@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RecuperacaoService } from '../../core/services/recuperacao.service';
+import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 
 type Etapa = 'EMAIL' | 'CODIGO';
 
@@ -30,6 +31,7 @@ export class ReativarRestauranteComponent {
 
   solicitarCodigo(): void {
     this.mensagemErro = '';
+    this.mensagemInfo = '';
 
     if (!this.email.trim()) {
       this.mensagemErro = 'Informe o e-mail do restaurante.';
@@ -43,9 +45,9 @@ export class ReativarRestauranteComponent {
         this.mensagemInfo = 'Se o e-mail estiver cadastrado, enviamos um código.';
         this.etapa = 'CODIGO';
       },
-      error: () => {
+      error: (erro) => {
         this.carregando = false;
-        this.mensagemErro = 'Não foi possível enviar o código agora. Tente novamente em instantes.';
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível enviar o código agora. Tente novamente em instantes.');
       }
     });
   }
@@ -69,9 +71,16 @@ export class ReativarRestauranteComponent {
       },
       error: (erro) => {
         this.carregando = false;
-        this.mensagemErro = erro.error?.mensagem || 'Não foi possível confirmar o código.';
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível confirmar o código.');
       }
     });
+  }
+
+  pedirNovoCodigo(): void {
+    this.etapa = 'EMAIL';
+    this.codigo = '';
+    this.mensagemErro = '';
+    this.mensagemInfo = '';
   }
 
   voltarParaLogin(): void {
