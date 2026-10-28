@@ -100,6 +100,10 @@
 
           <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>
 
+                    <a href="#" class="link-reativar" *ngIf="oferecerReativar" (click)="irParaReativar($event)">
+            Seu restaurante está desativado? Reativar meu restaurante
+          </a>
+
           <div class="wizard-footer">
             <button type="button" class="btn btn-outline" (click)="voltarLogin()">VOLTAR AO LOGIN</button>
             <button type="submit" class="btn btn-solid" [disabled]="carregando">

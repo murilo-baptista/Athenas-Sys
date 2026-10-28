@@ -423,3 +423,16 @@
   margin: 10px 0;
   text-align: center;
 }
+
+.link-reativar {
+  display: block;
+  text-align: center;
+  margin: -4px 0 10px;
+  color: var(--cor-bordo);
+  font-size: 0.85rem;
+  text-decoration: underline;
+}
+
+.link-reativar:hover {
+  color: var(--cor-bordo-escuro);
+}
