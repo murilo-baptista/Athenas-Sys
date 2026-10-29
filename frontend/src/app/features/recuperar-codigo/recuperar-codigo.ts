@@ -21,7 +21,7 @@ export class RecuperarCodigoComponent {
   mensagemInfo = '';
 
   usuario = '';
-  codigoAutenticacao = '';
+  codigo = '';
   novoCodigo = '';
   confirmacaoCodigo = '';
 
@@ -48,7 +48,7 @@ export class RecuperarCodigoComponent {
       },
       error: (erro) => {
         this.carregando = false;
-        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível enviar o pedido agora. Tente novamente.');
+        this.mensagemErro = this.mensagemDoErro(erro, 'Não foi possível enviar o pedido agora. Tente novamente.');
       }
     });
   }
@@ -56,7 +56,7 @@ export class RecuperarCodigoComponent {
   confirmar(): void {
     this.mensagemErro = '';
 
-    if (!this.codigoAutenticacao.trim() || !this.novoCodigo || !this.confirmacaoCodigo) {
+    if (!this.codigo.trim() || !this.novoCodigo || !this.confirmacaoCodigo) {
       this.mensagemErro = 'Preencha o código de autenticação e o novo código.';
       return;
     }
@@ -68,7 +68,7 @@ export class RecuperarCodigoComponent {
     this.carregando = true;
     this.recuperacaoCodigoService.confirmar({
       usuario: this.usuario.trim(),
-      codigoAutenticacao: this.codigoAutenticacao.trim(),
+      codigo: this.codigo.trim(),
       novoCodigo: this.novoCodigo
     }).subscribe({
       next: () => {
@@ -77,14 +77,14 @@ export class RecuperarCodigoComponent {
       },
       error: (erro) => {
         this.carregando = false;
-        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível confirmar o código.');
+        this.mensagemErro = this.mensagemDoErro(erro, 'Não foi possível confirmar o código.');
       }
     });
   }
 
   digitarOutroUsuario(): void {
     this.etapa = 'USUARIO';
-    this.codigoAutenticacao = '';
+    this.codigo = '';
     this.novoCodigo = '';
     this.confirmacaoCodigo = '';
     this.mensagemErro = '';
@@ -93,5 +93,17 @@ export class RecuperarCodigoComponent {
 
   voltar(): void {
     this.location.back();
+  }
+
+  /**
+   * O back só aceita esta operação com a sessão do RESTAURANTE. Se a sessão
+   * atual for de um funcionário, ele responde 403: orienta a refazer o login.
+   * Código incorreto/vencido (400) e limite de tentativas (429) vêm do back.
+   */
+  private mensagemDoErro(erro: any, padrao: string): string {
+    if (erro?.status === 403) {
+      return 'Esta ação exige a sessão do restaurante. Volte ao login do restaurante e tente de novo.';
+    }
+    return mensagemDeErro(erro, padrao);
   }
 }

@@ -24,9 +24,9 @@
     </form>
 
     <form *ngIf="etapa === 'CODIGO'" (ngSubmit)="confirmar()" #formCodigo="ngForm">
-      <label class="field-label" for="codigoAutenticacao">CÓDIGO DE AUTENTICAÇÃO</label>
-      <input id="codigoAutenticacao" name="codigoAutenticacao" type="password"
-        [(ngModel)]="codigoAutenticacao" required placeholder="Código recebido do gerente">
+      <label class="field-label" for="codigo">CÓDIGO DE AUTENTICAÇÃO</label>
+      <input id="codigo" name="codigo" type="password"
+        [(ngModel)]="codigo" required placeholder="Código recebido do gerente">
 
       <label class="field-label" for="novoCodigo">NOVO CÓDIGO DO FUNCIONÁRIO</label>
       <input id="novoCodigo" name="novoCodigo" type="password" [(ngModel)]="novoCodigo" required>
