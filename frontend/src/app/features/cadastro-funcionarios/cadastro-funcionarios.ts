@@ -6,6 +6,7 @@ import { FuncionarioService } from '../../core/services/funcionario.service';
 import { AuthService } from '../../core/services/auth.service';
 import { CargoFuncionario, Funcionario } from '../../core/models/funcionario.model';
 import { BannerAthenasComponent } from '../../shared/components/banner-athenas/banner-athenas';
+import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 
 interface CargoOption {
   label: CargoFuncionario;
@@ -100,9 +101,9 @@ export class CadastroFuncionariosComponent implements OnInit {
         this.senhaFuncionario = '';
         this.salvando = false;
       },
-      error: () => {
+      error: (erro) => {
         this.salvando = false;
-        this.mensagemErro = 'Não foi possível adicionar esse funcionário. Tente novamente.';
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível adicionar esse funcionário. Tente novamente.');
       }
     });
   }

@@ -6,6 +6,7 @@ import { MesaService } from '../../core/services/mesa.service';
 import { AuthService } from '../../core/services/auth.service';
 import { MesaListagem } from '../../core/models/mesa.model';
 import { BannerAthenasComponent } from '../../shared/components/banner-athenas/banner-athenas';
+import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 
 @Component({
   selector: 'app-cadastro-mesas',
@@ -77,9 +78,9 @@ export class CadastroMesasComponent implements OnInit {
         this.capacidadeMesa = null;
         this.salvando = false;
       },
-      error: () => {
+      error: (erro) => {
         this.salvando = false;
-        this.mensagemErro = 'Não foi possível adicionar essa mesa. Tente novamente.';
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível adicionar essa mesa. Tente novamente.');
       }
     });
   }
