@@ -6,6 +6,15 @@ export interface Funcionario {
   cargo: CargoFuncionario;
 }
 
+/** Resposta de reativar (DadosDetalhamentoFuncionario). */
+export interface FuncionarioDetalhamento {
+  id: number;
+  idRestaurante: number;
+  nome: string;
+  cargo: CargoFuncionario;
+  ativo: boolean;
+}
+
 export interface CriarFuncionarioRequest {
   nome: string;
   codigo: string;

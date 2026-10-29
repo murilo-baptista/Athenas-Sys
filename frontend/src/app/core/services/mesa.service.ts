@@ -55,6 +55,11 @@ export class MesaService {
   desativar(mesaId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${this.restauranteId}/mesas/${mesaId}`);
   }
+  
+    /** Só GERENTE. */
+  reativar(mesaId: number): Observable<MesaDetalhamento> {
+    return this.http.patch<MesaDetalhamento>(`${this.baseUrl}/${this.restauranteId}/mesas/${mesaId}/reativar`, {});
+  }
 
   ocuparMesa(mesaId: number): Observable<MesaDetalhamento> {
     return this.http.patch<MesaDetalhamento>(`${this.baseUrl}/${this.restauranteId}/mesas/${mesaId}/ocupar`, {});

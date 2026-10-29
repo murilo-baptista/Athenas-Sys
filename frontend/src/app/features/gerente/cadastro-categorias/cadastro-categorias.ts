@@ -6,11 +6,14 @@ import { CategoriaService } from '../../../core/services/categoria.service';
 import { ProdutoService } from '../../../core/services/produto.service';
 import { CategoriaListagem } from '../../../core/models/categoria.model';
 import { ProdutoListagem } from '../../../core/models/produto.model';
+import { EntidadeDesativada, ehEntidadeDesativada } from '../../../core/models/entidade-desativada.model';
+import { mensagemDeErro } from '../../../core/utils/mensagem-erro';
+import { ModalReativacaoComponent } from '../../../shared/components/modal-reativacao/modal-reativacao';
 
 @Component({
   selector: 'app-cadastro-categorias',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, ModalReativacaoComponent],
   templateUrl: './cadastro-categorias.html',
   styleUrl: './cadastro-categorias.css'
 })
@@ -30,6 +33,10 @@ export class CadastroCategoriasComponent implements OnInit {
   categoriaParaRemover: CategoriaListagem | null = null;
   produtosDaCategoria = 0;
   removendo = false;
+
+  // Reativação de categoria desativada (item 3 da V3)
+  reativacao: EntidadeDesativada | null = null;
+  reativando = false;
 
   constructor(
     private categoriaService: CategoriaService,
@@ -99,11 +106,53 @@ export class CadastroCategoriasComponent implements OnInit {
         this.cancelarEdicao();
         this.carregar();
       },
-      error: () => {
+      error: (erro) => {
         this.salvando = false;
-        this.mensagemErro = 'Não foi possível salvar a categoria.';
+
+        // 409 ENTIDADE_DESATIVADA: já existe uma categoria com esse nome, desativada.
+        if (!this.idEmEdicao && ehEntidadeDesativada(erro)) {
+          this.reativacao = erro.error;
+          return;
+        }
+
+        // Demais casos (inclui 409 de nome duplicado ativo, que vem como lista).
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível salvar a categoria.');
       }
     });
+  }
+
+  // ===================== Reativar categoria desativada =====================
+
+  get mensagemReativacao(): string {
+    return `Já existe uma categoria "${this.nome.trim()}" desativada. Deseja reativá-la?`;
+  }
+
+  confirmarReativacao(): void {
+    const alvo = this.reativacao;
+    if (!alvo || this.reativando) return;
+
+    this.reativando = true;
+
+    this.categoriaService.reativar(alvo.id).subscribe({
+      next: () => {
+        this.reativando = false;
+        this.reativacao = null;
+        this.cancelarEdicao();
+        // Reativar a categoria não reativa os produtos dela: cada um volta separadamente.
+        this.carregar();
+      },
+      error: (erro) => {
+        this.reativando = false;
+        this.reativacao = null;
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível reativar a categoria.');
+      }
+    });
+  }
+
+  /** "Não": volta ao formulário, para o usuário escolher outro nome. */
+  cancelarReativacao(): void {
+    if (this.reativando) return;
+    this.reativacao = null;
   }
 
   // ===================== Remover categoria =====================

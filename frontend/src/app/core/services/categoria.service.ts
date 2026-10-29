@@ -42,4 +42,9 @@ export class CategoriaService {
   desativar(categoriaId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${this.restauranteId}/categorias/${categoriaId}`);
   }
+
+    /** Só GERENTE. Reativar a categoria NÃO reativa os produtos dela. */
+  reativar(categoriaId: number): Observable<CategoriaDetalhamento> {
+    return this.http.patch<CategoriaDetalhamento>(`${this.baseUrl}/${this.restauranteId}/categorias/${categoriaId}/reativar`, {});
+  }
 }

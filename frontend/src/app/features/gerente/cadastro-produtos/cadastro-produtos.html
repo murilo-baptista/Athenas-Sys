@@ -77,4 +77,14 @@
 
   </div>
 
+  <!-- Já existe um produto desativado com esse nome: pergunta se reativa -->
+  <app-modal-reativacao
+    *ngIf="reativacao"
+    titulo="Produto desativado"
+    [mensagem]="mensagemReativacao"
+    [processando]="reativando"
+    (confirmar)="confirmarReativacao()"
+    (cancelar)="cancelarReativacao()">
+  </app-modal-reativacao>
+
 </div>

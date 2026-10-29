@@ -2,8 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { of, switchMap, tap } from 'rxjs';
 import { MesaService } from '../../../core/services/mesa.service';
-import { MesaListagem } from '../../../core/models/mesa.model';
+import { DadosCadastroMesa, MesaDetalhamento, MesaListagem } from '../../../core/models/mesa.model';
+import { EntidadeDesativada, ehEntidadeDesativada } from '../../../core/models/entidade-desativada.model';
+import { mensagemDeErro } from '../../../core/utils/mensagem-erro';
+import { ModalReativacaoComponent } from '../../../shared/components/modal-reativacao/modal-reativacao';
 
 interface FormularioMesa {
   numero: number | null;
@@ -13,7 +17,7 @@ interface FormularioMesa {
 @Component({
   selector: 'app-config-mesas',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, ModalReativacaoComponent],
   templateUrl: './config-mesas.html',
   styleUrl: './config-mesas.css'
 })
@@ -26,6 +30,11 @@ export class ConfigMesasComponent implements OnInit {
 
   idEmEdicao: number | null = null;
   form: FormularioMesa = this.formVazio();
+
+  // Reativação de mesa desativada (item 3 da V3)
+  reativacao: EntidadeDesativada | null = null;
+  dadosPendentes: DadosCadastroMesa | null = null;
+  reativando = false;
 
   constructor(private mesaService: MesaService) {}
 
@@ -82,11 +91,77 @@ export class ConfigMesasComponent implements OnInit {
         this.cancelarEdicao();
         this.carregar();
       },
-      error: () => {
+      error: (erro) => {
         this.salvando = false;
-        this.mensagemErro = 'Não foi possível salvar a mesa. Verifique se o número já não está em uso.';
+
+        // 409 ENTIDADE_DESATIVADA: já existe uma mesa com esse número, desativada.
+        if (!this.idEmEdicao && ehEntidadeDesativada(erro)) {
+          this.reativacao = erro.error;
+          this.dadosPendentes = dados;
+          return;
+        }
+
+        // Demais casos (inclui 409 de número duplicado ativo, que vem como lista).
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível salvar a mesa.');
       }
     });
+  }
+
+  // ===================== Reativar mesa desativada =====================
+
+  get mensagemReativacao(): string {
+    return `Já existe a mesa ${this.form.numero} desativada. Deseja reativá-la? ` +
+      'Se você informou uma capacidade diferente da antiga, ela será atualizada.';
+  }
+
+  confirmarReativacao(): void {
+    const alvo = this.reativacao;
+    const dados = this.dadosPendentes;
+    if (!alvo || !dados || this.reativando) return;
+
+    this.reativando = true;
+    let reativada = false;
+
+    this.mesaService.reativar(alvo.id).pipe(
+      tap(() => (reativada = true)),
+      // Se o formulário trouxe dados diferentes dos antigos, envia o PUT em seguida.
+      switchMap(antiga => this.mudou(antiga, dados)
+        ? this.mesaService.atualizar(alvo.id, dados)
+        : of(antiga))
+    ).subscribe({
+      next: () => {
+        this.reativando = false;
+        this.reativacao = null;
+        this.dadosPendentes = null;
+        this.cancelarEdicao();
+        this.carregar();
+      },
+      error: (erro) => {
+        this.reativando = false;
+        this.reativacao = null;
+        this.dadosPendentes = null;
+
+        if (reativada) {
+          this.carregar();
+          this.mensagemErro = 'A mesa foi reativada, mas não foi possível atualizar a capacidade. ' +
+            mensagemDeErro(erro, 'Edite-a na lista.');
+          return;
+        }
+
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível reativar a mesa.');
+      }
+    });
+  }
+
+  /** "Não": volta ao formulário, para o usuário escolher outro número. */
+  cancelarReativacao(): void {
+    if (this.reativando) return;
+    this.reativacao = null;
+    this.dadosPendentes = null;
+  }
+
+  private mudou(antiga: MesaDetalhamento, dados: DadosCadastroMesa): boolean {
+    return antiga.capacidade !== dados.capacidade;
   }
 
   remover(mesa: MesaListagem): void {
@@ -94,7 +169,7 @@ export class ConfigMesasComponent implements OnInit {
 
     this.mesaService.desativar(mesa.id).subscribe({
       next: () => this.carregar(),
-      error: () => (this.mensagemErro = `Não foi possível remover a mesa ${mesa.numero}.`)
+      error: (erro) => (this.mensagemErro = mensagemDeErro(erro, `Não foi possível remover a mesa ${mesa.numero}.`))
     });
   }
 }
