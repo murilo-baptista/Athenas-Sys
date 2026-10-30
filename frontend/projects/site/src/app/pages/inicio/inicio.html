@@ -1,0 +1,109 @@
+<!-- 1. Logo em destaque -->
+<section class="hero-logo">
+  <img src="assets/imagens/logo-athenas-transparente.png"
+       alt="Athenas System - gestão inteligente para restaurantes" class="hero-logo__img">
+</section>
+
+<!-- 2. Chamada principal -->
+<section class="hero-foto">
+  <div class="hero-foto__texto">
+    <h1>Mais organização<br>para o seu <span>restaurante</span>.</h1>
+    <p>
+      O <strong>Athenas</strong> é um sistema completo de gestão que conecta todas as áreas do seu
+      restaurante, do atendimento à cozinha, com praticidade, agilidade e controle.
+    </p>
+    <a routerLink="/como-funciona" class="botao botao-bordo">
+      Conheça o sistema <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- 3. Funcionalidades -->
+<section class="funcionalidades">
+  <div class="funcionalidades__grade">
+    <div class="funcionalidades__texto">
+      <p class="rotulo">Funcionalidades</p>
+      <h2>Tudo que você precisa,<br>em um só lugar.</h2>
+      <p class="funcionalidades__paragrafo">
+        O <strong>Athenas</strong> integra os principais processos do seu restaurante, facilitando a
+        rotina da sua equipe e melhorando a experiência dos seus clientes.
+      </p>
+    </div>
+
+    <div class="cards">
+      @for (item of funcionalidades; track item.titulo) {
+        <article class="card">
+          <img [src]="'assets/imagens/' + item.icone" alt="">
+          <h3>{{ item.titulo }}</h3>
+          <p>{{ item.texto }}</p>
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- 4. Como funciona (resumo) -->
+<section class="resumo">
+  <div class="resumo__grade">
+    <div class="resumo__texto">
+      <p class="rotulo">Como funciona</p>
+      <h2>Simples, intuitivo<br>e eficiente.</h2>
+      <p class="resumo__paragrafo">
+        O <strong>Athenas</strong> foi pensado para ser fácil de usar, com uma interface moderna e
+        objetiva. Veja abaixo como cada área do sistema se conecta no dia a dia do restaurante.
+      </p>
+      <a routerLink="/como-funciona" class="botao botao-contorno">
+        Ver mais detalhes <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <img src="assets/imagens/tablet-computador.png"
+         alt="Telas do Athenas em um computador e em um tablet" class="resumo__imagem">
+  </div>
+</section>
+
+<!-- 5. Baixe o Athenas -->
+<section class="baixe">
+  <div class="baixe__conteudo">
+    <div class="baixe__caixa">
+      <img src="assets/imagens/icone-download-dourado.png" alt="" class="baixe__icone">
+      <div>
+        <h2>Baixe o Athenas</h2>
+        <p>
+          Tenha o sistema completo no seu dispositivo e comece a transformar a gestão do seu restaurante.
+        </p>
+        @if (site.downloadDisponivel) {
+          <a [href]="site.linkDownload" class="botao botao-contorno" download>Download</a>
+        } @else {
+          <button type="button" class="botao botao-contorno botao-indisponivel" disabled aria-disabled="true">
+            Download
+          </button>
+        }
+        <small>Compatível com computadores, tablets e celulares.</small>
+      </div>
+    </div>
+    <img src="assets/imagens/foto-garcom.png" alt="Garçom atendendo um cliente com um tablet" class="baixe__foto">
+  </div>
+</section>
+
+<!-- 6. Quem somos -->
+<section class="tcc">
+  <div class="tcc__grade">
+    <img src="assets/imagens/emblema-athena.png" alt="Emblema da deusa Atena" class="tcc__emblema">
+
+    <div class="tcc__texto">
+      <p class="rotulo">Quem somos</p>
+      <h2>Um projeto de TCC</h2>
+      <p>
+        O Athenas é um projeto desenvolvido como Trabalho de Conclusão de Curso (TCC) por uma equipe
+        de estudantes, com o objetivo de apresentar uma solução prática e funcional para a gestão de
+        restaurantes.
+      </p>
+      <p>
+        Nosso foco é unir tecnologia, organização e praticidade para facilitar o dia a dia de pequenos
+        e médios estabelecimentos do setor alimentício.
+      </p>
+    </div>
+
+    <img src="assets/imagens/coluna-dourada-tracos.png" alt="" class="tcc__coluna">
+  </div>
+</section>
