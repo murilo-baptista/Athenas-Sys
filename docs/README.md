@@ -29,7 +29,7 @@ O projeto tem como objetivo aplicar, na prática, conhecimentos adquiridos ao lo
 - Ao cadastrar algo que já existe desativado, o sistema oferece a reativação;
 - Listagem de inativos (atualmente somente pela API do backend, sem tela de inativos);
 - Autenticação (login) de restaurantes e funcionários com token JWT;
-- Criptografia de senhas via hash BCrypt e senha forte (8 a 72 caracteres, maiúscula, minúscula, número e caracter especial);
+- Criptografia de senhas via hash BCrypt e senha forte (8 a 72 caracteres, maiúscula, minúscula, número e caractere especial);
 - Validação de CNPJ por meio de API externa (OpenCNPJ);
 - Restrição de acessos conforme o cargo (GERENTE, RECEPCAO, GARCOM e COZINHA) e o tipo de usuário (RESTAURANTE ou FUNCIONARIO);
 - Isolamento entre restaurantes com comparação do ID da URL com o ID do token;
@@ -54,6 +54,11 @@ O projeto tem como objetivo aplicar, na prática, conhecimentos adquiridos ao lo
 
 Clone o repositório, abra-o no terminal, e siga os passos a seguir conforme o que desejar.
 
+### Banco de Dados
+
+1. Abrir a sua ferramenta de gerenciamento de banco de dados relacionais MySQL (recomendado o MySQL Workbench)
+2. Executar o script localizado em `database/schema.sql`
+
 ### Backend
 
 1. `cd backend`
@@ -65,11 +70,6 @@ Clone o repositório, abra-o no terminal, e siga os passos a seguir conforme o q
 2. `npm install`
 3. `ng serve` para abrir o sistema (abre em: http://localhost:4200)
 4. `ng serve site --port 4300` para abrir o site de divulgação (abre em: http://localhost:4300)
-
-### Banco de Dados
-
-1. Abrir a sua ferramenta de gerenciamento de banco de dados relacionais MySQL (recomendado o MySQL Workbench)
-2. Executar o script localizado em `database/schema.sql`
 
 ## Variáveis de Ambiente
 
@@ -88,16 +88,17 @@ Para definí-las no IntelliJ, clique em:
 | DB_NAME        | Nome do banco de dados                  | athenas_sys                    | Sim          |
 | DB_USER        | Usuário de login no banco de dados      | root                           | Sim          |
 | DB_PASSWORD    | Senha do banco de dados                 | Senha@123                      | Sim          |
-| JWT_SECRET     | Assinatura dos tokens JWT               | 12345678                       | Sim          |
+| JWT_SECRET     | Assinatura dos tokens JWT               | (32 caracteres aleatórios)     | Sim          |
 | MAIL_HOST      | Domínio de e-mail                       | smtp.gmail.com                 | Sim          |
 | MAIL_PORT      | Porta do domínio de e-mail              | 587                            | Sim          |
 | MAIL_USER      | Usuário de e-mail para envio            | athenassystem@gmail.com        | Sim          |
-| MAIL_PASSWORD  | Senha de aplicativo do e-mail           | ofbv uehc osjv ayen            | Sim          |
+| MAIL_PASSWORD  | Senha de aplicativo do e-mail           | xxxx xxxx xxxx xxxx            | Sim          |
 | MAIL_FROM      | Remetente para o envio de e-mail        | nao-responda@athenassys.com.br | Não          |
 | EMAIL_SIMULADO | Simular e-mail                          | false                          | Sim          |
 
-## Equipe
+Deixar `EMAIL_SIMULADO=true` fará o sistema rodar sem servidor de email
 
+## Equipe
 
 - Ana Luiza Maciel da Silva
 - Lorena Boechat Silva Marques
