@@ -52,7 +52,7 @@ O projeto tem como objetivo aplicar, na prática, conhecimentos adquiridos ao lo
 
 ## Como executar
 
-Clone o repositório, abra-o no terminal, e siga os passos a seguir conforme o que desejar.
+Clone o repositório e siga os passos a seguir conforme o que desejar (Recomenda-se fazer nesta ordem).
 
 ### Banco de Dados
 
@@ -61,10 +61,13 @@ Clone o repositório, abra-o no terminal, e siga os passos a seguir conforme o q
 
 ### Backend
 
-1. `cd backend`
-2. `mvnw.cmd spring-boot:run` (a API sobe em http://localhost:8080/api)
+1. Configure as [variáveis de ambiente](#variáveis-de-ambiente)
+2. rode `cd backend` no terminal
+2. rode `mvnw.cmd spring-boot:run`  no terminal (a API sobe em: http://localhost:8080/api)
 
 ### Frontend
+
+Rode no terminal:
 
 1. `cd frontend`
 2. `npm install`
@@ -75,28 +78,31 @@ Clone o repositório, abra-o no terminal, e siga os passos a seguir conforme o q
 
 As variáveis de ambiente são chaves necessárias para o funcionamento correto do sistema.
 
-Para definí-las no IntelliJ, clique em:
+Para defini-las no IntelliJ, clique em:
 1. Botão com 3 barras laterais ("Main Menu") no canto superior esquerdo
 2. Botão "Run"
 3. Botão "Edit Configurations..."
 4. Botão "Modify Options" (ou pressione "alt + E")
 5. Adicione as variáveis de ambiente no campo de texto que abrir
 
-| Nome           | Função                                  | Exemplo                        | Obrigatório? |
-|----------------|-----------------------------------------|--------------------------------|--------------|
-| DB_HOST        | Serviço de hospedagem do banco de dados | localhost                      | Sim          |
-| DB_NAME        | Nome do banco de dados                  | athenas_sys                    | Sim          |
-| DB_USER        | Usuário de login no banco de dados      | root                           | Sim          |
-| DB_PASSWORD    | Senha do banco de dados                 | Senha@123                      | Sim          |
-| JWT_SECRET     | Assinatura dos tokens JWT               | (32 caracteres aleatórios)     | Sim          |
-| MAIL_HOST      | Domínio de e-mail                       | smtp.gmail.com                 | Sim          |
-| MAIL_PORT      | Porta do domínio de e-mail              | 587                            | Sim          |
-| MAIL_USER      | Usuário de e-mail para envio            | athenassystem@gmail.com        | Sim          |
-| MAIL_PASSWORD  | Senha de aplicativo do e-mail           | xxxx xxxx xxxx xxxx            | Sim          |
-| MAIL_FROM      | Remetente para o envio de e-mail        | nao-responda@athenassys.com.br | Não          |
-| EMAIL_SIMULADO | Simular e-mail                          | false                          | Sim          |
+| Nome           | Função                                  | Exemplo                        |
+|----------------|-----------------------------------------|--------------------------------|
+| DB_HOST        | Serviço de hospedagem do banco de dados | localhost                      |
+| DB_NAME        | Nome do banco de dados                  | athenas_sys                    |
+| DB_USER        | Usuário de login no banco de dados      | root                           |
+| DB_PASSWORD    | Senha do banco de dados                 | Senha@123                      |
+| JWT_SECRET     | Assinatura dos tokens JWT               | (32 caracteres aleatórios)     |
+| MAIL_HOST      | Domínio de e-mail                       | smtp.gmail.com                 |
+| MAIL_PORT      | Porta do domínio de e-mail              | 587                            |
+| MAIL_USER      | Usuário de e-mail para envio            | athenassystem@gmail.com        |
+| MAIL_PASSWORD  | Senha de aplicativo do e-mail           | xxxx xxxx xxxx xxxx            |
+| MAIL_FROM      | Remetente para o envio de e-mail        | nao-responda@athenassys.com.br |
+| EMAIL_SIMULADO | Simular e-mail                          | false                          |
 
-Deixar `EMAIL_SIMULADO=true` fará o sistema rodar sem servidor de email
+Todas as variáveis já têm valor padrão definido no `application.properties`, 
+menos a `JWT_SECRET`, e sem ela, a API não funciona, nem chega a rodar.
+
+Deixar `EMAIL_SIMULADO=true` fará o sistema rodar sem servidor de e-mail, isso significa que as variáveis `MAIL_` tornam-se dispensáveis.
 
 ## Equipe
 
@@ -104,7 +110,6 @@ Deixar `EMAIL_SIMULADO=true` fará o sistema rodar sem servidor de email
 - Lorena Boechat Silva Marques
 - Maria Isabella Souza Santos
 - Murilo Baptista de Oliveira
-
 
 ## Status do Projeto
 
