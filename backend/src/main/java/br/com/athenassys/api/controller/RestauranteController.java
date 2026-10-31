@@ -43,13 +43,6 @@ public class RestauranteController {
                 .body(new DadosDetalhamentoTokenRestaurante(dadosRestaurante, token));
     }
 
-    @GetMapping
-    public ResponseEntity<Page<DadosListagemRestaurante>> listar(
-            Pageable paginacao) {
-
-        return ResponseEntity.ok(service.listar(paginacao));
-    }
-
     @PutMapping("/{idRestaurante}")
     @Transactional
     public ResponseEntity<DadosDetalhamentoRestaurante> atualizar(
