@@ -2,8 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { of, switchMap, tap } from 'rxjs';
 import { FuncionarioService } from '../../../core/services/funcionario.service';
-import { CargoFuncionario, Funcionario } from '../../../core/models/funcionario.model';
+import { CargoFuncionario, Funcionario, FuncionarioDetalhamento } from '../../../core/models/funcionario.model';
+import { EntidadeDesativada, ehEntidadeDesativada } from '../../../core/models/entidade-desativada.model';
+import { mensagemDeErro } from '../../../core/utils/mensagem-erro';
+import { ModalReativacaoComponent } from '../../../shared/components/modal-reativacao/modal-reativacao';
 
 interface FormularioFuncionario {
   nome: string;
@@ -19,7 +23,7 @@ interface FormularioCodigo {
 @Component({
   selector: 'app-config-funcionarios',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, ModalReativacaoComponent],
   templateUrl: './config-funcionarios.html',
   styleUrl: './config-funcionarios.css'
 })
@@ -39,6 +43,11 @@ export class ConfigFuncionariosComponent implements OnInit {
   salvandoCodigo = false;
 
   cargos: CargoFuncionario[] = ['GERENTE', 'RECEPCAO', 'GARCOM', 'COZINHA'];
+
+  // Reativação de funcionário desativado (item 3 da V3)
+  reativacao: EntidadeDesativada | null = null;
+  cargoPendente: CargoFuncionario | null = null;
+  reativando = false;
 
   constructor(private funcionarioService: FuncionarioService) {}
 
@@ -98,6 +107,8 @@ export class ConfigFuncionariosComponent implements OnInit {
     this.salvando = true;
     this.mensagemErro = '';
 
+    const cargo = this.form.cargo;
+
     const requisicao$ = this.idEmEdicao
       ? this.funcionarioService.atualizar(this.idEmEdicao, {
           nome: this.form.nome.trim(),
@@ -115,11 +126,80 @@ export class ConfigFuncionariosComponent implements OnInit {
         this.cancelarEdicao();
         this.carregar();
       },
-      error: () => {
+      error: (erro) => {
         this.salvando = false;
-        this.mensagemErro = 'Não foi possível salvar o funcionário. Verifique se o código já não está em uso.';
+
+        // 409 ENTIDADE_DESATIVADA: já existe um funcionário com esse nome, desativado.
+        if (!this.idEmEdicao && ehEntidadeDesativada(erro)) {
+          this.reativacao = erro.error;
+          this.cargoPendente = cargo;
+          return;
+        }
+
+        // Demais casos (inclui 409 de nome duplicado ativo, que vem como lista).
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível salvar o funcionário.');
       }
     });
+  }
+
+  // ===================== Reativar funcionário desativado =====================
+
+  get mensagemReativacao(): string {
+    return `Já existe um funcionário "${this.form.nome.trim()}" desativado. Deseja reativá-lo? ` +
+      'Ele volta com o código de acesso que já tinha (o código digitado agora não é usado). ' +
+      'Se você escolheu um cargo diferente do antigo, o cargo será atualizado.';
+  }
+
+  confirmarReativacao(): void {
+    const alvo = this.reativacao;
+    const cargo = this.cargoPendente;
+    if (!alvo || !cargo || this.reativando) return;
+
+    const nome = this.form.nome.trim();
+
+    this.reativando = true;
+    let reativado = false;
+
+    this.funcionarioService.reativar(alvo.id).pipe(
+      tap(() => (reativado = true)),
+      // Se o cargo escolhido é diferente do antigo, envia o PUT em seguida.
+      switchMap(antigo => this.mudou(antigo, cargo)
+        ? this.funcionarioService.atualizar(alvo.id, { nome: antigo.nome, cargo })
+        : of(antigo))
+    ).subscribe({
+      next: () => {
+        this.reativando = false;
+        this.reativacao = null;
+        this.cargoPendente = null;
+        this.cancelarEdicao();
+        this.carregar();
+      },
+      error: (erro) => {
+        this.reativando = false;
+        this.reativacao = null;
+        this.cargoPendente = null;
+
+        if (reativado) {
+          this.carregar();
+          this.mensagemErro = `"${nome}" foi reativado, mas não foi possível atualizar o cargo. ` +
+            mensagemDeErro(erro, 'Edite-o na lista.');
+          return;
+        }
+
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível reativar o funcionário.');
+      }
+    });
+  }
+
+  /** "Não": volta ao formulário, para o usuário escolher outro nome. */
+  cancelarReativacao(): void {
+    if (this.reativando) return;
+    this.reativacao = null;
+    this.cargoPendente = null;
+  }
+
+  private mudou(antigo: FuncionarioDetalhamento, cargo: CargoFuncionario): boolean {
+    return antigo.cargo !== cargo;
   }
 
   remover(funcionario: Funcionario): void {
@@ -127,7 +207,7 @@ export class ConfigFuncionariosComponent implements OnInit {
 
     this.funcionarioService.remover(funcionario.id).subscribe({
       next: () => this.carregar(),
-      error: () => (this.mensagemErro = `Não foi possível remover "${funcionario.nome}".`)
+      error: (erro) => (this.mensagemErro = mensagemDeErro(erro, `Não foi possível remover "${funcionario.nome}".`))
     });
   }
 
@@ -145,7 +225,7 @@ export class ConfigFuncionariosComponent implements OnInit {
 
   confirmarAlteracaoCodigo(funcionario: Funcionario): void {
     if (!this.formCodigo.chaveNova.trim() || !this.formCodigo.chaveAtual.trim()) {
-      this.mensagemErro = 'Preencha o novo código e a senha do funcionário.';
+      this.mensagemErro = 'Preencha o novo código e o código atual do funcionário.';
       return;
     }
 
@@ -164,7 +244,7 @@ export class ConfigFuncionariosComponent implements OnInit {
       },
       error: () => {
         this.salvandoCodigo = false;
-        this.mensagemErro = 'Não foi possível alterar o código. Verifique a senha informada.';
+        this.mensagemErro = 'Não foi possível alterar o código. Verifique o código atual informado.';
       }
     });
   }

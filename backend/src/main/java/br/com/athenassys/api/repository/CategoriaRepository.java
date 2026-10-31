@@ -11,4 +11,8 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
     Page<Categoria> findAllByRestauranteIdAndAtivoTrue(Long idRestaurante, Pageable paginacao);
 
     Optional<Categoria> findByIdAndRestauranteId(Long idCategoria, Long idRestaurante);
+
+    Optional<Categoria> findByNomeAndRestauranteId(String nome, Long idRestaurante);
+
+    Page<Categoria> findAllByRestauranteIdAndAtivoFalse(Long idRestaurante, Pageable paginacao);
 }

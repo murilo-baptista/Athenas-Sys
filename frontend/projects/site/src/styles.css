@@ -1,0 +1,90 @@
+:root {
+  --bordo: #7b0f12;
+  --vermelho: #b50900;
+  --verde: #3f5e4b;
+  --verde-escuro: #20392d;
+  --azul: #2c3f70;
+  --creme: #fff8ee;
+  --bege: #f2e4ce;
+  --bege-claro: #ffeed6;
+  --bronze: #b07840;
+  --dourado: #f8d090;
+  --dourado-medio: #c8a068;
+  --texto: #2b2420;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  color: var(--texto);
+  background-color: var(--creme);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+}
+
+h1, h2, h3 {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+a {
+  color: inherit;
+}
+
+/* Botões usados em várias páginas */
+.botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 30px;
+  border-radius: 40px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 20px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: filter 0.15s ease, background-color 0.15s ease;
+}
+
+.botao-bordo {
+  background-color: var(--bordo);
+  color: var(--creme);
+  border: 2px solid var(--bordo);
+}
+
+.botao-bordo:hover {
+  filter: brightness(1.2);
+}
+
+.botao-contorno {
+  background-color: transparent;
+  color: var(--dourado);
+  border: 2px solid var(--dourado);
+}
+
+.botao-contorno:hover {
+  background-color: rgba(248, 208, 144, 0.12);
+}
+.botao-indisponivel {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.botao-contorno.botao-indisponivel:hover {
+  background-color: transparent;
+}

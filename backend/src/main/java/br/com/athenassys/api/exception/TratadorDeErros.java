@@ -10,7 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,7 +35,7 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
             "uk_restaurantes_cnpj", new DadosErro("cnpj", "Já existe um restaurante cadastrado com esse CNPJ."),
             "uk_restaurantes_email", new DadosErro("email", "Já existe um restaurante cadastrado com esse e-mail."),
             "uk_mesas_restaurante_numero", new DadosErro("numero", "Já existe uma mesa cadastrada com esse número neste restaurante."),
-            "uk_funcionarios_restaurante_codigo", new DadosErro("codigo", "Já existe um funcionário cadastrado com esse código neste restaurante."),
+            "uk_funcionarios_restaurante_nome", new DadosErro("nome", "Já existe um funcionário cadastrado com esse nome neste restaurante."),
             "uk_categorias_restaurante_nome", new DadosErro("nome", "Já existe uma categoria cadastrada com esse nome neste restaurante."),
             "uk_produtos_restaurante_nome", new DadosErro("nome", "Já existe um produto cadastrado com esse nome neste restaurante.")
     );
@@ -138,6 +141,14 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
+    //Trata erro 409 para Entidades desativadas
+    @ExceptionHandler(EntidadeDesativadaException.class)
+    public ResponseEntity<DadosEntidadeDesativada> tratarErroEntidadeDesativada(EntidadeDesativadaException ex) {
+
+        var corpo = new DadosEntidadeDesativada(ex.getCodigo(), ex.getEntidade(), ex.getId(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(corpo);
+    }
+
     //Trata erro 409 de dados violados, principalmente para tratar campos únicos duplicados
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Object> tratarViolacaoIntegridade(DataIntegrityViolationException ex) {
@@ -177,6 +188,40 @@ public class TratadorDeErros extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ChaveIncorretaException.class)
     public ResponseEntity<String> tratarErroSenhaIncorreta(ChaveIncorretaException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+    }
+
+    //Trata erro 401 para erros de autenticação
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<String> tratarFalhaAutenticacao(AuthenticationException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("Usuário inexistente ou senha inválida");
+    }
+
+    //Trata erro 403 para erro de acesso negado
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<String> tratarAcessoNegado(AccessDeniedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Acesso negado.");
+    }
+
+    //Trata erro 429 para muitas tentativas (mais que 5 dentro de 15 minutos)
+    @ExceptionHandler(TentativasExcedidasException.class)
+    public ResponseEntity<String> tratarTentativasExcedidas(TentativasExcedidasException ex) {
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(ex.getMessage());
+    }
+
+    //Trata erro 400 para código de recuperação inválido
+    @ExceptionHandler(CodigoInvalidoException.class)
+    public ResponseEntity<DadosErro> tratarCodigoInvalido(CodigoInvalidoException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new DadosErro("codigo", ex.getMessage()));
+    }
+
+    //Trata erro 403 para login com conta desativada
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<DadosErro> tratarContaDesativada(DisabledException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                new DadosErro("email", "Esta conta foi desativada!")
+        );
     }
 
     //Trata qualquer tipo de erro para evitar vazamento de dados e informações internas, tornando o erro em 500

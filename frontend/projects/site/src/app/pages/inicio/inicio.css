@@ -1,0 +1,314 @@
+:host {
+  display: block;
+}
+
+/* ---------- 1. Logo em destaque ---------- */
+.hero-logo {
+  min-height: 619px;
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bege);
+}
+
+.hero-logo__img {
+  height: 540px;
+  width: auto;
+}
+
+/* ---------- 2. Chamada principal ---------- */
+.hero-foto {
+  min-height: 678px;
+  display: flex;
+  align-items: center;
+  background:
+    linear-gradient(90deg, rgba(13, 20, 13, 0.78) 0%, rgba(13, 20, 13, 0.45) 60%, rgba(13, 20, 13, 0.25) 100%),
+    url('/assets/imagens/foto-restaurante.png') center / cover no-repeat;
+}
+
+.hero-foto__texto {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 60px 56px;
+}
+
+.hero-foto h1 {
+  max-width: 640px;
+  color: #f8e8d0;
+  font-size: 56px;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.hero-foto h1 span {
+  color: var(--bronze);
+}
+
+.hero-foto p {
+  max-width: 600px;
+  margin: 40px 0 36px;
+  color: #f8f0e0;
+  font-size: 20px;
+}
+
+.hero-foto strong {
+  color: var(--bronze);
+  font-weight: 400;
+}
+
+/* ---------- 3. Funcionalidades ---------- */
+.funcionalidades {
+  background-color: var(--creme);
+}
+
+.funcionalidades__grade {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 56px;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.funcionalidades .rotulo {
+  margin-bottom: 14px;
+  color: var(--vermelho);
+  font-size: 22px;
+}
+
+.funcionalidades h2 {
+  color: var(--bordo);
+  font-size: 34px;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.funcionalidades__paragrafo {
+  max-width: 420px;
+  margin-top: 28px;
+  font-size: 18px;
+}
+
+.funcionalidades strong {
+  color: var(--bordo);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  text-align: center;
+}
+
+.card img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.card h3 {
+  margin: 8px 0 10px;
+  color: var(--bronze);
+  font-family: 'Poppins', sans-serif;
+  font-size: 19px;
+  font-weight: 300;
+}
+
+.card p {
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* ---------- 4. Como funciona (resumo) ---------- */
+.resumo {
+  background-color: var(--verde-escuro);
+  color: var(--creme);
+}
+
+.resumo__grade {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 70px 56px;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.resumo .rotulo {
+  margin-bottom: 14px;
+  font-size: 22px;
+}
+
+.resumo h2 {
+  color: var(--dourado-medio);
+  font-size: 38px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.resumo__paragrafo {
+  max-width: 480px;
+  margin: 30px 0 34px;
+  font-size: 19px;
+}
+
+.resumo strong {
+  color: var(--dourado-medio);
+  font-weight: 400;
+}
+
+.resumo .botao-contorno {
+  color: var(--dourado-medio);
+  border-color: var(--dourado-medio);
+}
+
+.resumo__imagem {
+  width: 100%;
+  max-width: 640px;
+  justify-self: end;
+}
+
+/* ---------- 5. Baixe o Athenas ---------- */
+.baixe {
+  padding: 70px 0;
+  background-color: var(--creme);
+}
+
+.baixe__conteudo {
+  position: relative;
+  max-width: 1280px;
+  min-height: 520px;
+  margin: 0 auto;
+  padding: 0 56px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.baixe__caixa {
+  width: 78%;
+  padding: 44px 48px 40px;
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  column-gap: 24px;
+  background-color: var(--bordo);
+  color: var(--creme);
+}
+
+.baixe__icone {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+}
+
+.baixe h2 {
+  color: var(--dourado);
+  font-size: 34px;
+}
+
+.baixe p {
+  max-width: 460px;
+  margin: 14px 0 26px;
+  font-size: 19px;
+}
+
+.baixe small {
+  display: block;
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+.baixe__foto {
+  position: absolute;
+  right: 56px;
+  bottom: 0;
+  height: 520px;
+  width: auto;
+}
+
+/* ---------- 6. Quem somos ---------- */
+.tcc {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bege-claro);
+}
+
+.tcc__grade {
+  max-width: 1280px;
+  min-height: 600px;
+  margin: 0 auto;
+  padding: 60px 56px;
+  display: grid;
+  grid-template-columns: 340px 1fr 150px;
+  gap: 56px;
+  align-items: center;
+}
+
+.tcc__emblema {
+  width: 340px;
+}
+
+.tcc .rotulo {
+  margin-bottom: 12px;
+  color: var(--bronze);
+  font-size: 20px;
+}
+
+.tcc h2 {
+  margin-bottom: 24px;
+  color: #1f1a17;
+  font-size: 34px;
+}
+
+.tcc__texto p {
+  max-width: 560px;
+  font-size: 18px;
+}
+
+.tcc__texto p + p {
+  margin-top: 26px;
+}
+
+.tcc__coluna {
+  position: absolute;
+  top: 0;
+  right: 5%;
+  height: 100%;
+  width: auto;
+}
+
+/* ---------- Telas menores ---------- */
+@media (max-width: 1000px) {
+  .hero-logo { min-height: auto; }
+  .hero-logo__img { height: auto; width: min(420px, 80vw); }
+
+  .hero-foto { min-height: 520px; }
+  .hero-foto h1 { font-size: 36px; }
+  .hero-foto p { font-size: 17px; }
+  .hero-foto__texto { padding: 48px 24px; }
+
+  .funcionalidades__grade,
+  .resumo__grade {
+    grid-template-columns: 1fr;
+    padding: 40px 24px;
+  }
+
+  .cards { grid-template-columns: repeat(2, 1fr); }
+  .resumo__imagem { justify-self: center; }
+
+  .baixe__conteudo {
+    min-height: auto;
+    padding: 0 24px;
+    flex-direction: column;
+    align-items: center;
+  }
+  .baixe__caixa { width: 100%; grid-template-columns: 1fr; padding: 32px 24px; }
+  .baixe__foto { position: static; height: 360px; margin-top: 24px; }
+
+  .tcc__grade { grid-template-columns: 1fr; padding: 40px 24px; justify-items: center; }
+  .tcc__emblema { width: 240px; }
+  .tcc__coluna { display: none; }
+}

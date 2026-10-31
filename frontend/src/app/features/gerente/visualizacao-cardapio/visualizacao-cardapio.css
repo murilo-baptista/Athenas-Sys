@@ -26,6 +26,8 @@
 .exportar { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .btn-contorno { padding: 0.5rem 1rem; background-color: transparent; color: var(--cor-bordo); border: 1px solid var(--cor-dourado); }
 .btn-contorno:hover:not(:disabled) { background-color: var(--cor-fundo-suave); }
+.btn-azul { padding: 0.5rem 1rem; background-color: var(--athenas-azul, #2C3F70); color: var(--cor-creme); border: 1px solid var(--athenas-azul, #2C3F70); transition: background-color 0.15s ease, color 0.15s ease; }
+.btn-azul:hover:not(:disabled) { background-color: var(--cor-creme); color: var(--athenas-azul, #2C3F70); }
 .qr-box { display: flex; flex-direction: column; align-items: center; padding: 1.5rem; }
 .qr-nota { font-size: 0.75rem; font-style: italic; color: var(--cor-texto); text-align: center; margin: 0.75rem 0 0; }
 .area-cardapio { background-color: var(--cor-creme); padding: 1rem 0.5rem; }

@@ -1,0 +1,274 @@
+:host {
+  display: block;
+}
+
+/* ---------- Introdução ---------- */
+.intro {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--creme);
+}
+
+.intro__grade {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  min-height: 387px;
+  margin: 0 auto;
+  padding: 56px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+
+.intro .rotulo {
+  margin-bottom: 14px;
+  color: var(--vermelho);
+  font-size: 22px;
+}
+
+.intro h1 {
+  color: var(--bordo);
+  font-size: 34px;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.intro__paragrafo {
+  max-width: 430px;
+  margin-top: 28px;
+  font-size: 18px;
+}
+
+.intro strong {
+  color: var(--bordo);
+}
+
+.intro__lema {
+  position: relative;
+  justify-self: end;
+  padding-left: 36px;
+  border-left: 2px solid var(--bronze);
+}
+
+.intro__lema p {
+  color: var(--bordo);
+  font-family: 'Cinzel', serif;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.intro__lema::after {
+  content: '';
+  display: block;
+  width: 120px;
+  height: 2px;
+  margin-top: 40px;
+  background-color: var(--bronze);
+}
+
+.intro__coluna {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  z-index: 1;
+  height: 560px;
+  width: auto;
+  transform: translateX(-60%);
+}
+
+.intro__ramo {
+  position: absolute;
+  bottom: -6px;
+  left: calc(50% + 10px);
+  z-index: 2;
+  height: 190px;
+  width: auto;
+}
+
+/* ---------- Blocos de cada área ---------- */
+.bloco {
+  position: relative;
+  overflow: hidden;
+}
+
+.bloco__grade {
+  max-width: 1280px;
+  min-height: 560px;
+  margin: 0 auto;
+  padding: 64px 56px;
+  display: grid;
+  gap: 40px;
+  align-items: center;
+}
+
+.bloco__icone {
+  width: 130px;
+  height: 130px;
+  object-fit: contain;
+}
+
+.bloco h2 {
+  margin: 10px 0 22px;
+  font-size: 40px;
+}
+
+.bloco__texto p {
+  max-width: 400px;
+  font-size: 21px;
+}
+
+.bloco__imagem {
+  width: 100%;
+}
+
+.enfeite {
+  position: absolute;
+  width: auto;
+  pointer-events: none;
+}
+
+/* Mesas e Reservas (verde) */
+.bloco--mesas {
+  background-color: var(--verde-escuro);
+  color: var(--creme);
+}
+
+.bloco--mesas .bloco__grade {
+  grid-template-columns: 0.8fr 1.2fr;
+  min-height: 630px;
+}
+
+.bloco--mesas h2 {
+  color: var(--bronze);
+}
+
+.bloco--mesas .bloco__imagem {
+  max-width: 640px;
+  justify-self: center;
+}
+
+.enfeite--mesas {
+  right: 20px;
+  bottom: -20px;
+  height: 400px;
+}
+
+/* Pedidos (bege) */
+.bloco--pedidos {
+  background-color: var(--bege-claro);
+}
+
+.bloco--pedidos .bloco__grade {
+  grid-template-columns: 0.7fr 1fr 1.2fr;
+  min-height: 497px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.bloco--pedidos h2 {
+  color: var(--vermelho);
+}
+
+.bloco--pedidos .bloco__imagem {
+  max-height: 460px;
+  width: auto;
+  justify-self: center;
+}
+
+.bloco--pedidos .bloco__imagem--chef {
+  max-height: none;
+  width: 100%;
+  max-width: 520px;
+}
+
+/* Cozinha (bordô) */
+.bloco--cozinha {
+  background-color: var(--bordo);
+  color: var(--creme);
+}
+
+.bloco--cozinha .bloco__grade {
+  position: relative;
+  z-index: 2;
+  grid-template-columns: 0.8fr 1.2fr;
+  min-height: 497px;
+}
+
+.bloco--cozinha h2 {
+  color: var(--dourado);
+}
+
+.bloco--cozinha .bloco__imagem {
+  max-width: 620px;
+  justify-self: end;
+}
+
+.enfeite--cozinha {
+  top: 40px;
+  left: 36%;
+  z-index: 1;
+  height: 400px;
+}
+
+/* Gestão (creme) */
+.bloco--gestao {
+  background-color: var(--creme);
+}
+
+.bloco--gestao .bloco__grade {
+  grid-template-columns: 1.1fr 0.9fr;
+  min-height: 497px;
+}
+
+.bloco--gestao h2 {
+  color: var(--azul);
+}
+
+.bloco--gestao .bloco__imagem {
+  max-width: 640px;
+}
+
+.enfeite--coruja {
+  right: 60px;
+  bottom: 20px;
+  height: 190px;
+}
+
+/* ---------- Telas menores ---------- */
+@media (max-width: 1000px) {
+  .intro__grade,
+  .bloco__grade,
+  .bloco--mesas .bloco__grade,
+  .bloco--pedidos .bloco__grade,
+  .bloco--cozinha .bloco__grade,
+  .bloco--gestao .bloco__grade {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: 40px 24px;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .intro__lema {
+    justify-self: center;
+    margin-top: 28px;
+    padding-left: 20px;
+    text-align: left;
+  }
+
+  .intro__coluna,
+  .intro__ramo,
+  .enfeite {
+    display: none;
+  }
+
+  .bloco__texto p {
+    margin: 0 auto;
+  }
+
+  .bloco h2 {
+    font-size: 32px;
+  }
+}

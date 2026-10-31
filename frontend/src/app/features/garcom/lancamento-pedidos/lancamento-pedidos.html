@@ -25,6 +25,9 @@
         <button type="button" class="tab-btn" [class.active]="abaAtiva === 'andamento'" (click)="abaAtiva = 'andamento'; carregarAndamento()">
           PEDIDOS EM ANDAMENTO
         </button>
+        <button type="button" class="tab-btn" [class.active]="abaAtiva === 'conta'" (click)="abaAtiva = 'conta'">
+          CONTA DA MESA
+        </button>
       </div>
 
       <p class="erro-msg" *ngIf="mensagemErro">{{ mensagemErro }}</p>
@@ -137,6 +140,11 @@
 
         </div>
 
+      </div>
+
+      <!-- ===================== ABA: CONTA DA MESA ===================== -->
+      <div class="tab-panel" *ngIf="abaAtiva === 'conta'">
+        <app-fechar-conta></app-fechar-conta>
       </div>
 
     </div>

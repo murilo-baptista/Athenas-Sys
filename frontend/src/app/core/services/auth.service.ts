@@ -41,12 +41,16 @@ export class AuthService {
   }
 
   loginFuncionario(dados: LoginFuncionarioRequest): Observable<LoginFuncionarioResponse> {
+    // O back usa o restaurante do token. O id da sessão continua guardado
+    // só para montar as URLs (/restaurantes/{idRestaurante}/...).
+    const restauranteId = this.getRestauranteId() as number;
+
     return this.http.post<LoginFuncionarioResponse>(`${this.baseUrl}/funcionario/login`, dados).pipe(
       tap(resposta => {
         this.salvarSessao({
           token: resposta.token,
           tipo: 'FUNCIONARIO',
-          restauranteId: dados.restauranteId,
+          restauranteId,
           funcionarioId: resposta.funcionarioId,
           nomeFuncionario: resposta.nomeFuncionario,
           cargo: resposta.cargo
@@ -82,7 +86,26 @@ export class AuthService {
   }
 
   isAutenticado(): boolean {
-    return !!this.getToken();
+    return !!this.getToken() && !this.tokenExpirado();
+  }
+
+  /**
+   * true se o token JWT já passou da validade (claim "exp").
+   * Se o token não puder ser lido, considera que não está vencido e deixa o
+   * back-end decidir.
+   */
+  tokenExpirado(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+
+    try {
+      const payload = token.split('.')[1];
+      const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      const exp = JSON.parse(json).exp;
+      return typeof exp === 'number' && exp * 1000 <= Date.now();
+    } catch {
+      return false;
+    }
   }
 
   /**

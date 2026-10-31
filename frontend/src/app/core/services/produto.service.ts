@@ -42,4 +42,12 @@ export class ProdutoService {
   desativar(produtoId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${this.restauranteId}/produtos/${produtoId}`);
   }
+
+    /**
+   * Só GERENTE. Se a categoria do produto estiver desativada, o back responde
+   * 409 pedindo para reativar a categoria antes (mostrar a mensagem recebida).
+   */
+  reativar(produtoId: number): Observable<ProdutoDetalhamento> {
+    return this.http.patch<ProdutoDetalhamento>(`${this.baseUrl}/${this.restauranteId}/produtos/${produtoId}/reativar`, {});
+  }
 }

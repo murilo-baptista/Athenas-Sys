@@ -98,4 +98,22 @@ public class MesaController {
         var mesa = service.desocupar(idMesa, idRestaurante);
         return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
     }
+
+    @PatchMapping("/{idMesa}/reativar")
+    @Transactional
+    public ResponseEntity<DadosDetalhamentoMesa> reativar(
+            @PathVariable Long idRestaurante,
+            @PathVariable Long idMesa
+    ) {
+        var mesa = service.reativar(idMesa, idRestaurante);
+        return ResponseEntity.ok(new DadosDetalhamentoMesa(mesa));
+    }
+
+    @GetMapping("/inativas")
+    public ResponseEntity<Page<DadosListagemMesa>> listarInativas(
+            @PathVariable Long idRestaurante,
+            Pageable paginacao) {
+
+        return ResponseEntity.ok(service.listarInativas(idRestaurante, paginacao));
+    }
 }

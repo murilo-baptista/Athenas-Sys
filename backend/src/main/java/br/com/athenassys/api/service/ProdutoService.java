@@ -3,6 +3,7 @@ package br.com.athenassys.api.service;
 import br.com.athenassys.api.dto.produto.DadosAtualizacaoProduto;
 import br.com.athenassys.api.dto.produto.DadosCadastroProduto;
 import br.com.athenassys.api.dto.produto.DadosListagemProduto;
+import br.com.athenassys.api.exception.EntidadeDesativadaException;
 import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.model.Categoria;
 import br.com.athenassys.api.model.Produto;
@@ -33,6 +34,16 @@ public class ProdutoService {
         var categoria = categoriaRepository
                 .findByIdAndRestauranteId(dados.idCategoria(), idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Categoria não encontrada."));
+
+        var entidade = produtoRepository.findByNomeAndRestauranteId(dados.nome(), idRestaurante);
+
+        if (entidade.isPresent() && !Boolean.TRUE.equals(entidade.get().getAtivo())) {
+            throw new EntidadeDesativadaException(
+                    "ENTIDADE_DESATIVADA",
+                    "produto",
+                    entidade.get().getId(),
+                    "O produto " + entidade.get().getNome() + " foi removido, deseja reativar?");
+        }
 
         var produto = new Produto(dados, restaurante, categoria);
         return produtoRepository.save(produto);
@@ -79,5 +90,33 @@ public class ProdutoService {
         return produtoRepository
                 .findByIdAndRestauranteId(idProduto, idRestaurante)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado."));
+    }
+
+    public Produto reativar(Long idProduto, Long idRestaurante) {
+
+        var produto = produtoRepository
+                .findByIdAndRestauranteId(idProduto, idRestaurante)
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Produto não encontrado."));
+
+        var categoria = produto.getCategoria();
+
+        if (categoria.getAtivo() == false) {
+            throw new EntidadeDesativadaException(
+                    "ENTIDADE_DESATIVADA",
+                    "categoria",
+                    categoria.getId(),
+                    "Produto sem categoria. Para reativar este produto, certifique-se de que a categoria dele está ativa.");
+        }
+
+        produto.reativar();
+        return produto;
+    }
+
+    public Page<DadosListagemProduto> listarInativos(
+            Long idRestaurante,
+            Pageable paginacao) {
+
+        return produtoRepository.findAllByRestauranteIdAndAtivoFalse(idRestaurante, paginacao)
+                .map(DadosListagemProduto::new);
     }
 }

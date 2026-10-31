@@ -1,0 +1,20 @@
+<footer class="rodape">
+  <div class="rodape__grade">
+    <img src="assets/imagens/logo-athenas-horizontal-vermelha.png" alt="Athenas System" class="logo-rodape">
+
+    <ul class="contatos">
+      <li>
+        <img src="assets/imagens/icone-email.png" alt="">
+        <a [href]="'mailto:' + site.email">{{ site.email }}</a>
+      </li>
+      <li>
+        <img src="assets/imagens/icone-instagram.png" alt="">
+        <a [href]="site.linkInstagram" target="_blank" rel="noopener">{{ site.instagram }}</a>
+      </li>
+      <li>
+        <img src="assets/imagens/icone-telefone.png" alt="">
+        <span>{{ site.telefone }}</span>
+      </li>
+    </ul>
+  </div>
+</footer>

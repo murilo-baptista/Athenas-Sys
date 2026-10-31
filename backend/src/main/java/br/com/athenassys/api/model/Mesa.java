@@ -58,6 +58,9 @@ public class Mesa {
         this.ativo = false;
     }
 
+    public void reativar() {
+        this.ativo = true;
+    }
 
     public void ocupar() {
         this.status = StatusMesa.OCUPADA;

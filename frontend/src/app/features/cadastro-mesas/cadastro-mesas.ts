@@ -5,11 +5,13 @@ import { Router } from '@angular/router';
 import { MesaService } from '../../core/services/mesa.service';
 import { AuthService } from '../../core/services/auth.service';
 import { MesaListagem } from '../../core/models/mesa.model';
+import { BannerAthenasComponent } from '../../shared/components/banner-athenas/banner-athenas';
+import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 
 @Component({
   selector: 'app-cadastro-mesas',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BannerAthenasComponent],
   templateUrl: './cadastro-mesas.html',
   styleUrl: './cadastro-mesas.css'
 })
@@ -22,6 +24,7 @@ export class CadastroMesasComponent implements OnInit {
 
   carregando = false;
   salvando = false;
+  removendoId: number | null = null;
   mensagemErro = '';
 
   private restauranteId!: number;
@@ -75,9 +78,27 @@ export class CadastroMesasComponent implements OnInit {
         this.capacidadeMesa = null;
         this.salvando = false;
       },
-      error: () => {
+      error: (erro) => {
         this.salvando = false;
-        this.mensagemErro = 'Não foi possível adicionar essa mesa. Tente novamente.';
+        this.mensagemErro = mensagemDeErro(erro, 'Não foi possível adicionar essa mesa. Tente novamente.');
+      }
+    });
+  }
+
+  removerMesa(mesa: MesaListagem): void {
+    if (this.removendoId !== null) return;
+
+    this.mensagemErro = '';
+    this.removendoId = mesa.id;
+
+    this.mesaService.desativar(mesa.id).subscribe({
+      next: () => {
+        this.mesas = this.mesas.filter(m => m.id !== mesa.id);
+        this.removendoId = null;
+      },
+      error: () => {
+        this.removendoId = null;
+        this.mensagemErro = 'Não foi possível remover essa mesa. Tente novamente.';
       }
     });
   }

@@ -1,0 +1,58 @@
+<div class="conta-panel">
+
+  <p class="conta-erro" *ngIf="mensagemErro">{{ mensagemErro }}</p>
+
+  <label class="conta-label" for="mesaConta">MESA OCUPADA:</label>
+  <select
+    id="mesaConta"
+    class="conta-select"
+    [ngModel]="mesaSelecionada"
+    (ngModelChange)="aoSelecionarMesa($event)">
+    <option [ngValue]="null" disabled>
+      {{ carregandoMesas ? 'Carregando mesas...' : (mesasOcupadas.length === 0 ? 'Nenhuma mesa ocupada' : 'Selecione a mesa') }}
+    </option>
+    <option *ngFor="let mesa of mesasOcupadas" [ngValue]="mesa.id">Mesa {{ mesa.numero }}</option>
+  </select>
+
+  <ng-container *ngIf="mesaSelecionada">
+
+    <div class="conta-vazio" *ngIf="carregandoConta">Calculando a conta...</div>
+
+    <ng-container *ngIf="!carregandoConta && contaCompleta">
+
+      <p class="conta-nota">Pedidos de hoje desta mesa.</p>
+
+      <div class="conta-vazio" *ngIf="linhas.length === 0">
+        Nenhum item lançado hoje nesta mesa.
+      </div>
+
+      <ul class="conta-lista" *ngIf="linhas.length > 0">
+        <li class="conta-item" *ngFor="let linha of linhas">
+          <span class="conta-item-nome">{{ linha.quantidade }}x {{ linha.nomeProduto }}</span>
+          <span class="conta-item-status" [ngClass]="'st-' + linha.status.toLowerCase()">
+            {{ statusRotulo(linha.status) }}
+          </span>
+          <span class="conta-item-valor">R$ {{ linha.subtotal | number:'1.2-2' }}</span>
+        </li>
+      </ul>
+
+      <div class="conta-total">
+        <span>TOTAL</span>
+        <strong>R$ {{ total | number:'1.2-2' }}</strong>
+      </div>
+
+      <p class="conta-aviso" *ngIf="itensNaoEntregues > 0">
+        Ainda há {{ itensNaoEntregues }} {{ itensNaoEntregues === 1 ? 'item não entregue' : 'itens não entregues' }} nesta mesa.
+      </p>
+
+      <p class="conta-nota">A mesa é liberada pela recepção.</p>
+
+      <div class="conta-acoes">
+        <button type="button" class="conta-btn-atualizar" (click)="atualizar()">ATUALIZAR</button>
+      </div>
+
+    </ng-container>
+
+  </ng-container>
+
+</div>

@@ -1,15 +1,13 @@
 package br.com.athenassys.api.controller;
 
-import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
+import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoSenha;
 import br.com.athenassys.api.dto.restaurante.*;
 import br.com.athenassys.api.enums.Cargo;
 import br.com.athenassys.api.model.Funcionario;
-import br.com.athenassys.api.model.Restaurante;
 import br.com.athenassys.api.service.RestauranteService;
 import br.com.athenassys.api.service.TokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -45,13 +43,6 @@ public class RestauranteController {
                 .body(new DadosDetalhamentoTokenRestaurante(dadosRestaurante, token));
     }
 
-    @GetMapping
-    public ResponseEntity<Page<DadosListagemRestaurante>> listar(
-            Pageable paginacao) {
-
-        return ResponseEntity.ok(service.listar(paginacao));
-    }
-
     @PutMapping("/{idRestaurante}")
     @Transactional
     public ResponseEntity<DadosDetalhamentoRestaurante> atualizar(
@@ -82,7 +73,7 @@ public class RestauranteController {
     @Transactional
     public ResponseEntity<String> alterarSenha(
             @PathVariable Long idRestaurante,
-            @RequestBody @Valid DadosAlteracaoChave dados,
+            @RequestBody @Valid DadosAlteracaoSenha dados,
             @AuthenticationPrincipal Funcionario funcionario) {
 
         if (funcionario == null) {

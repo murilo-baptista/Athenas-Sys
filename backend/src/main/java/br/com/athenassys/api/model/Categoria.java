@@ -48,4 +48,8 @@ public class Categoria {
     public void desativar() {
         this.ativo = false;
     }
+
+    public void reativar() {
+        this.ativo = true;
+    }
 }

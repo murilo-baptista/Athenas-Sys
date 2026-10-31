@@ -10,14 +10,7 @@
 
     <!-- Lado esquerdo: banner Athenas (idêntico à página de autenticação) -->
     <div class="left-panel">
-      <div class="banner">
-        <img src="assets/imagens/banner-bordo.jpeg" alt="Athenas - Gestão inteligente para restaurantes" class="banner-img">
-        <div class="banner-content">
-          <div class="banner-logo-placeholder">logo<br>transparente</div>
-          <h2 class="banner-title">ATHENAS</h2>
-          <p class="banner-subtitle">Gestão inteligente<br>para restaurantes</p>
-        </div>
-      </div>
+      <app-banner-athenas></app-banner-athenas>
     </div>
 
 
@@ -36,8 +29,10 @@
           <div class="step-circle is-done">✓</div>
           <div class="step-line"></div>
           <div class="step-circle is-current">3</div>
+          <div class="step-line"></div>
+          <div class="step-circle">4</div>
         </div>
-        <p class="step-caption">ETAPA 3 DE 3 · <strong>FUNCIONÁRIOS</strong></p>
+        <p class="step-caption">ETAPA 3 DE 4 · <strong>FUNCIONÁRIOS</strong></p>
 
 
         <h1 class="wizard-title">CADASTRE SEUS FUNCIONÁRIOS</h1>
@@ -47,7 +42,7 @@
         <img src="assets/imagens/divisor-g.png" alt="" class="divider">
 
 
-        <form class="wizard-form" (ngSubmit)="finalizar()">
+        <form class="wizard-form" (ngSubmit)="proximo()">
 
 
           <label class="field-label" for="nome-funcionario">NOME DO FUNCIONÁRIO</label>
@@ -58,7 +53,7 @@
           </div>
 
 
-          <label class="field-label" for="senha-funcionario">CÓDIGO</label>
+          <label class="field-label" for="codigo-funcionario">CÓDIGO</label>
           <div class="input-group">
             <img src="assets/imagens/icone-cadeado.png" alt="" class="input-icon">
             <input type="password" id="codigo-funcionario" class="input-field" placeholder="Código de acesso"
@@ -99,7 +94,7 @@
 
           <div class="wizard-footer">
             <button type="button" class="btn btn-outline" (click)="voltar()">← VOLTAR</button>
-            <button type="submit" class="btn btn-solid" [disabled]="funcionarios.length === 0">FINALIZAR CADASTRO ✓</button>
+            <button type="submit" class="btn btn-solid" [disabled]="funcionarios.length === 0">PRÓXIMO →</button>
           </div>
 
 

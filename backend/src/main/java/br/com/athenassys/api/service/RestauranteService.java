@@ -1,18 +1,15 @@
 package br.com.athenassys.api.service;
 
 import br.com.athenassys.api.client.OpenCnpjClient;
-import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoChave;
+import br.com.athenassys.api.dto.autenticacao.DadosAlteracaoSenha;
 import br.com.athenassys.api.dto.restaurante.DadosAtualizacaoRestaurante;
 import br.com.athenassys.api.dto.restaurante.DadosCadastroRestaurante;
-import br.com.athenassys.api.dto.restaurante.DadosListagemRestaurante;
-import br.com.athenassys.api.exception.ErroCnpjException;
-import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
 import br.com.athenassys.api.exception.ChaveIncorretaException;
+import br.com.athenassys.api.exception.EntidadeNaoEncontradaException;
+import br.com.athenassys.api.exception.ErroCnpjException;
 import br.com.athenassys.api.model.Restaurante;
 import br.com.athenassys.api.repository.RestauranteRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,13 +42,6 @@ public class RestauranteService {
         return repository.save(restaurante);
     }
 
-    public Page<DadosListagemRestaurante> listar(
-            Pageable paginacao) {
-
-        return repository.findAllByAtivoTrue(paginacao)
-                .map(DadosListagemRestaurante::new);
-    }
-
     public Restaurante atualizar(DadosAtualizacaoRestaurante dados, Long idRestaurante) {
 
         var restaurante = repository
@@ -79,7 +69,7 @@ public class RestauranteService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Restaurante não encontrado."));
     }
 
-    public Restaurante alterarSenha(DadosAlteracaoChave dados, Long idRestaurante) {
+    public Restaurante alterarSenha(DadosAlteracaoSenha dados, Long idRestaurante) {
 
         var restaurante = repository
                 .findById(idRestaurante)

@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RestauranteService } from '../../core/services/restaurante.service';
 import { AuthService } from '../../core/services/auth.service';
+import { BannerAthenasComponent } from '../../shared/components/banner-athenas/banner-athenas';
+import { mensagemDeErro } from '../../core/utils/mensagem-erro';
 
 interface CadastroRestauranteForm {
   nome: string;
@@ -17,7 +19,7 @@ interface CadastroRestauranteForm {
 @Component({
   selector: 'app-cadastro-restaurante',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BannerAthenasComponent],
   templateUrl: './cadastro-restaurante.html',
   styleUrl: './cadastro-restaurante.css'
 })
@@ -35,6 +37,9 @@ export class CadastroRestauranteComponent {
   carregando = false;
   mensagemErro = '';
 
+  /** true quando o cadastro foi recusado por e-mail/CNPJ que já existe: oferece reativar. */
+  oferecerReativar = false;
+
   constructor(
     private router: Router,
     private restauranteService: RestauranteService,
@@ -45,8 +50,14 @@ export class CadastroRestauranteComponent {
     this.router.navigate(['/login']);
   }
 
+  irParaReativar(event: Event): void {
+    event.preventDefault();
+    this.router.navigate(['/reativar-restaurante']);
+  }
+
   proximo(): void {
     this.mensagemErro = '';
+    this.oferecerReativar = false;
 
     if (!this.form.nome || !this.form.email || !this.form.senha) {
       this.mensagemErro = 'Preencha nome, e-mail e senha para continuar.';
@@ -81,9 +92,18 @@ export class CadastroRestauranteComponent {
       },
       error: (erro) => {
         this.carregando = false;
-        this.mensagemErro = erro.status === 409
-          ? 'Já existe um restaurante cadastrado com esse e-mail.'
-          : 'Não foi possível concluir o cadastro. Tente novamente.';
+
+        if (erro.status === 409) {
+          // 409 com codigo = ENTIDADE_DESATIVADA: o back avisa que o restaurante existe, mas está desativado.
+          // 409 em lista: e-mail/CNPJ duplicado. Como o back ainda não diz se o dono
+          // está desativado, oferecemos o link de reativar nos dois casos.
+          this.oferecerReativar = true;
+          this.mensagemErro = erro.error?.codigo === 'ENTIDADE_DESATIVADA'
+            ? (erro.error?.mensagem || 'Já existe um restaurante com esse e-mail, mas ele está desativado.')
+            : mensagemDeErro(erro, 'Já existe um restaurante cadastrado com esse e-mail.');
+        } else {
+          this.mensagemErro = mensagemDeErro(erro, 'Não foi possível concluir o cadastro. Tente novamente.');
+        }
       }
     });
   }

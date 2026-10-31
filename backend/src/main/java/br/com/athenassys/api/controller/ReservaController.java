@@ -9,10 +9,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("restaurantes/{idRestaurante}/reservas")
@@ -41,9 +44,11 @@ public class ReservaController {
     @GetMapping
     public ResponseEntity<Page<DadosListagemReserva>> listar(
             @PathVariable Long idRestaurante,
+            @RequestParam(required = false) Long idMesa,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
             Pageable paginacao) {
 
-        return ResponseEntity.ok(service.listar(idRestaurante, paginacao));
+        return ResponseEntity.ok(service.listar(idRestaurante, idMesa, data, paginacao));
     }
 
     @PutMapping("/{idReserva}")

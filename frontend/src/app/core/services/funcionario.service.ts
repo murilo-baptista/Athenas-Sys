@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { CriarFuncionarioRequest, AtualizarFuncionarioRequest, AlterarCodigoRequest, Funcionario } from '../models/funcionario.model';
+import { CriarFuncionarioRequest, AtualizarFuncionarioRequest, AlterarCodigoRequest, Funcionario, FuncionarioDetalhamento } from '../models/funcionario.model';
 import { Page } from '../models/pagina.model';
 import { AuthService } from './auth.service';
 
@@ -31,6 +31,11 @@ export class FuncionarioService {
 
   remover(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${this.restauranteId}/funcionarios/${id}`);
+  }
+
+    /** Só GERENTE. O funcionário volta com o código de acesso que já tinha. */
+  reativar(id: number): Observable<FuncionarioDetalhamento> {
+    return this.http.patch<FuncionarioDetalhamento>(`${this.baseUrl}/${this.restauranteId}/funcionarios/${id}/reativar`, {});
   }
 
   alterarCodigo(id: number, dados: AlterarCodigoRequest): Observable<void> {

@@ -2,7 +2,7 @@
 
   <div class="container">
 
-    <a routerLink="/gerente" class="link-voltar">&larr; Painel do gerente</a>
+    <a routerLink="/gerente" class="link-voltar"><svg class="seta-voltar" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>Painel do gerente</a>
 
     <h1 class="titulo">Categorias do cardápio</h1>
 
@@ -45,5 +45,41 @@
     </div>
 
   </div>
+
+  <!-- Confirmação ao remover categoria (avisa sobre os produtos vinculados) -->
+  <div class="modal-fundo" *ngIf="categoriaParaRemover" (click)="cancelarRemocao()">
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="titulo-remover"
+      (click)="$event.stopPropagation()">
+
+      <p class="modal-titulo" id="titulo-remover">
+        Remover categoria "{{ categoriaParaRemover.nome }}"
+      </p>
+
+      <p class="modal-texto">{{ avisoRemocao }}</p>
+
+      <div class="modal-acoes">
+        <button type="button" class="btn btn-secundario" [disabled]="removendo" (click)="cancelarRemocao()">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-perigo" [disabled]="removendo" (click)="confirmarRemocao()">
+          {{ removendo ? 'Removendo...' : 'Remover' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+    <!-- Já existe uma categoria desativada com esse nome: pergunta se reativa -->
+  <app-modal-reativacao
+    *ngIf="reativacao"
+    titulo="Categoria desativada"
+    [mensagem]="mensagemReativacao"
+    [processando]="reativando"
+    (confirmar)="confirmarReativacao()"
+    (cancelar)="cancelarReativacao()">
+  </app-modal-reativacao>
 
 </div>

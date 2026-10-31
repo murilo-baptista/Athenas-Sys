@@ -10,14 +10,7 @@
 
     <!-- Lado esquerdo: banner Athenas (idêntico à página de autenticação) -->
     <div class="left-panel">
-      <div class="banner">
-        <img src="assets/imagens/banner-bordo.jpeg" alt="Athenas - Gestão inteligente para restaurantes" class="banner-img">
-        <div class="banner-content">
-          <div class="banner-logo-placeholder">logo<br>transparente</div>
-          <h2 class="banner-title">ATHENAS</h2>
-          <p class="banner-subtitle">Gestão inteligente<br>para restaurantes</p>
-        </div>
-      </div>
+      <app-banner-athenas></app-banner-athenas>
     </div>
 
 
@@ -36,8 +29,10 @@
           <div class="step-circle is-current">2</div>
           <div class="step-line"></div>
           <div class="step-circle">3</div>
+          <div class="step-line"></div>
+          <div class="step-circle">4</div>
         </div>
-        <p class="step-caption">ETAPA 2 DE 3 · <strong>MESAS DO RESTAURANTE</strong></p>
+        <p class="step-caption">ETAPA 2 DE 4 · <strong>MESAS DO RESTAURANTE</strong></p>
 
 
         <h1 class="wizard-title">CADASTRE SUAS MESAS</h1>
@@ -78,7 +73,10 @@
           <div class="added-list" *ngIf="!carregando">
             <div class="added-item" *ngFor="let mesa of mesas">
               <span class="item-name">Mesa {{ mesa.numero }}</span>
-              <span class="badge">{{ mesa.capacidade }} lugares</span>
+              <div class="item-info">
+                <span class="badge">{{ mesa.capacidade }} lugares</span>
+                <button type="button" class="remove-btn" (click)="removerMesa(mesa)" [disabled]="removendoId === mesa.id" aria-label="Remover mesa">✕</button>
+              </div>
             </div>
           </div>
           <p class="helper-note" *ngIf="!carregando && mesas.length === 0">Cadastre pelo menos 1 mesa para continuar</p>
